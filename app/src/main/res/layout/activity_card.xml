@@ -71,6 +71,7 @@
                     android:textStyle="bold" />
 
                 <TextView
+                    android:id="@+id/btnestimasi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
@@ -94,6 +95,7 @@
                     android:textStyle="bold" />
 
                 <ProgressBar
+                    android:id="@+id/progressBar"
                     style="?android:attr/progressBarStyleHorizontal"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -137,6 +139,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/btntransaction"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/transaction" />
@@ -155,6 +158,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/btncust"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/customer" />
@@ -173,6 +177,7 @@
                     android:orientation="vertical">
 
                     <ImageView
+                        android:id="@+id/btnreport"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/report" />
@@ -214,7 +219,9 @@
                 android:background="@drawable/bg_border"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
+                    android:id="@+id/btnacc"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/acc" />
@@ -233,7 +240,9 @@
                 android:background="@drawable/bg_border"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
+                    android:id="@+id/btnproduct"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/product" />
@@ -252,7 +261,9 @@
                 android:background="@drawable/bg_border"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
+                    android:id="@+id/btnplus"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:src="@drawable/plus" />
@@ -278,7 +289,9 @@
                 android:background="@drawable/bg_border"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
+                    android:id="@+id/employee"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/employee" />
@@ -297,7 +310,9 @@
                 android:background="@drawable/bg_border"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
+                    android:id="@+id/btnbranch"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/branch" />
@@ -316,7 +331,9 @@
                 android:background="@drawable/bg_border"
                 android:gravity="center"
                 android:orientation="vertical">
+
                 <ImageView
+                    android:id="@+id/btnprinter"
                     android:layout_width="50dp"
                     android:layout_height="50dp"
                     android:src="@drawable/printer" />
