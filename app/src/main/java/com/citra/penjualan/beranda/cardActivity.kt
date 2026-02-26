@@ -1,5 +1,6 @@
 package com.citra.penjualan.beranda
 
+import android.content.Intent // WAJIB ADA
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -7,6 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.R
+import com.citra.penjualan.kategori.DataKategori // IMPORT HALAMAN TUJUAN
 
 class cardActivity : AppCompatActivity() {
 
@@ -14,25 +16,32 @@ class cardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
 
+        // Inisialisasi View
         val btnEstimasi: TextView = findViewById(R.id.btnestimasi)
         val progressBar: ProgressBar = findViewById(R.id.progressBar)
 
+        // Data dummy untuk Progress Bar
         val totalPenjualan = 150000
         val targetPenjualan = 1000000
-
         btnEstimasi.text = "Rp $totalPenjualan"
 
-        val progressStatus =
-            (totalPenjualan.toFloat() / targetPenjualan.toFloat() * 100).toInt()
+        val progressStatus = (totalPenjualan.toFloat() / targetPenjualan.toFloat() * 100).toInt()
         progressBar.progress = progressStatus
 
+        // --- LOGIKA TOMBOL (CLICK LISTENERS) ---
 
-        // SETTINGS
+        // 1. TOMBOL KATEGORI (PINDAH HALAMAN)
+        findViewById<ImageView>(R.id.btnkategori).setOnClickListener {
+            val intent = Intent(this, DataKategori::class.java)
+            startActivity(intent)
+        }
+
+        // 2. MENU LAINNYA (TOAST DULU)
+
         findViewById<ImageView>(R.id.btnSettings).setOnClickListener {
             Toast.makeText(this, "Membuka Pengaturan", Toast.LENGTH_SHORT).show()
         }
 
-        // MENU BARIS ATAS
         findViewById<ImageView>(R.id.btntransaction).setOnClickListener {
             Toast.makeText(this, "Mulai Transaksi Baru", Toast.LENGTH_SHORT).show()
         }
@@ -45,8 +54,6 @@ class cardActivity : AppCompatActivity() {
             Toast.makeText(this, "Laporan Penjualan", Toast.LENGTH_SHORT).show()
         }
 
-
-        // MENU BARIS TENGAH
         findViewById<ImageView>(R.id.btnacc).setOnClickListener {
             Toast.makeText(this, "Profil Akun", Toast.LENGTH_SHORT).show()
         }
@@ -55,13 +62,6 @@ class cardActivity : AppCompatActivity() {
             Toast.makeText(this, "Daftar Produk", Toast.LENGTH_SHORT).show()
         }
 
-        // ⬇️ INI SUDAH JADI KATEGORI
-        findViewById<ImageView>(R.id.btnkategori).setOnClickListener {
-            Toast.makeText(this, "Kategori", Toast.LENGTH_SHORT).show()
-        }
-
-
-        // MENU BARIS BAWAH
         findViewById<ImageView>(R.id.employee).setOnClickListener {
             Toast.makeText(this, "Manajemen Pegawai", Toast.LENGTH_SHORT).show()
         }

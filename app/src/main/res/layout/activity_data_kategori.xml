@@ -9,7 +9,6 @@
     android:padding="16dp"
     tools:context=".kategori.DataKategori">
 
-    <!-- Search bar container -->
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="0dp"
@@ -23,7 +22,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <!-- EditText untuk search -->
         <EditText
             android:id="@+id/editSearch"
             android:layout_width="0dp"
@@ -37,7 +35,6 @@
             android:singleLine="true"
             android:imeOptions="actionSearch"/>
 
-        <!-- Icon search di kanan -->
         <ImageView
             android:id="@+id/iconSearch"
             android:layout_width="48dp"
@@ -51,7 +48,6 @@
             android:padding="8dp"/>
     </LinearLayout>
 
-    <!-- RecyclerView -->
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerKategori"
         android:layout_width="0dp"
@@ -65,7 +61,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Tombol Add kategori pake ImageView -->
     <ImageView
         android:id="@+id/iconTambah"
         android:layout_width="70dp"
@@ -78,9 +73,7 @@
         android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_marginBottom="16dp"
-        app:layout_marginEnd="16dp"/>
-
-
+        android:layout_marginBottom="16dp"
+        android:layout_marginEnd="16dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
