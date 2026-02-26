@@ -12,7 +12,19 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Penjualan">
         <activity
-            android:name=".cardActivity"
+            android:name=".kategori.Kategori"
+            android:exported="false" />
+        <activity
+            android:name=".kategori.KategoriAdapter"
+            android:exported="false" />
+        <activity
+            android:name=".kategori.ModKategori"
+            android:exported="false" />
+        <activity
+            android:name=".kategori.ItemKategori"
+            android:exported="false" />
+        <activity
+            android:name=".beranda.cardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

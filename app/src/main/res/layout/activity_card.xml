@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F7FB">
+    android:background="#FFFFFF">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -263,7 +263,7 @@
                 android:orientation="vertical">
 
                 <ImageView
-                    android:id="@+id/btnplus"
+                    android:id="@+id/btnkategori"
                     android:layout_width="65dp"
                     android:layout_height="65dp"
                     android:src="@drawable/plus" />
@@ -271,7 +271,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
-                    android:text="Tambahan" />
+                    android:text="Kategori" />
             </LinearLayout>
         </LinearLayout>
 

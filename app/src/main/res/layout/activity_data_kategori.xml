@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    tools:context=".kategori.DataKategori">
+
+    <!-- Search bar container -->
+    <LinearLayout
+        android:id="@+id/searchContainer"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:orientation="horizontal"
+        android:background="@drawable/bg_border"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:gravity="center_vertical"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <!-- EditText untuk search -->
+        <EditText
+            android:id="@+id/editSearch"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:minHeight="48dp"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            android:hint="Cari kategori..."
+            android:background="@null"
+            android:singleLine="true"
+            android:imeOptions="actionSearch"/>
+
+        <!-- Icon search di kanan -->
+        <ImageView
+            android:id="@+id/iconSearch"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="8dp"
+            android:src="@drawable/search"
+            android:contentDescription="Search Icon"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="@drawable/ripple_search"
+            android:padding="8dp"/>
+    </LinearLayout>
+
+    <!-- RecyclerView -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerKategori"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:contentDescription="Lihat kategori"
+        tools:listitem="@layout/activity_item_kategori"
+        app:layout_constraintTop_toBottomOf="@id/searchContainer"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Tombol Add kategori pake ImageView -->
+    <ImageView
+        android:id="@+id/iconTambah"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:src="@drawable/add"
+        android:contentDescription="Tambah kategori"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@drawable/ripple_search"
+        android:padding="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_marginBottom="16dp"
+        app:layout_marginEnd="16dp"/>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
