@@ -1,6 +1,6 @@
 package com.citra.penjualan.beranda
 
-import android.content.Intent // WAJIB ADA
+import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
 import android.widget.ProgressBar
@@ -8,7 +8,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.R
-import com.citra.penjualan.kategori.DataKategori // IMPORT HALAMAN TUJUAN
+import com.citra.penjualan.kategori.DataKategori
+import com.citra.penjualan.produk.DataProdukActivity // 1. IMPORT WAJIB BIAR NGGAK MERAH
 
 class cardActivity : AppCompatActivity() {
 
@@ -30,13 +31,19 @@ class cardActivity : AppCompatActivity() {
 
         // --- LOGIKA TOMBOL (CLICK LISTENERS) ---
 
-        // 1. TOMBOL KATEGORI (PINDAH HALAMAN)
+        // 1. TOMBOL PRODUK (SUDAH AKTIF PINDAH HALAMAN)
+        findViewById<ImageView>(R.id.btnproduct).setOnClickListener {
+            val intent = Intent(this, DataProdukActivity::class.java)
+            startActivity(intent)
+        }
+
+        // 2. TOMBOL KATEGORI (PINDAH HALAMAN)
         findViewById<ImageView>(R.id.btnkategori).setOnClickListener {
             val intent = Intent(this, DataKategori::class.java)
             startActivity(intent)
         }
 
-        // 2. MENU LAINNYA (TOAST DULU)
+        // --- MENU LAINNYA (BISA KAMU ISI NANTI) ---
 
         findViewById<ImageView>(R.id.btnSettings).setOnClickListener {
             Toast.makeText(this, "Membuka Pengaturan", Toast.LENGTH_SHORT).show()
@@ -56,10 +63,6 @@ class cardActivity : AppCompatActivity() {
 
         findViewById<ImageView>(R.id.btnacc).setOnClickListener {
             Toast.makeText(this, "Profil Akun", Toast.LENGTH_SHORT).show()
-        }
-
-        findViewById<ImageView>(R.id.btnproduct).setOnClickListener {
-            Toast.makeText(this, "Daftar Produk", Toast.LENGTH_SHORT).show()
         }
 
         findViewById<ImageView>(R.id.employee).setOnClickListener {

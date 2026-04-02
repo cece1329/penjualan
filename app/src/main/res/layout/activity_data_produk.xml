@@ -7,17 +7,18 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="16dp"
-    tools:context=".kategori.DataKategori">
+    android:background="#FFFFFF"
+    tools:context=".produk.DataProdukActivity">
 
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="0dp"
-        android:layout_height="48dp"
+        android:layout_height="50dp"
         android:orientation="horizontal"
-        android:background="@drawable/bg_border"
-        android:paddingStart="12dp"
-        android:paddingEnd="12dp"
         android:gravity="center_vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="8dp"
+        android:background="@drawable/bg_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -25,48 +26,44 @@
         <EditText
             android:id="@+id/editSearch"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:minHeight="48dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:hint="Cari Kategori..."
+            android:hint="Cari Produk..."
             android:background="@null"
             android:singleLine="true"
-            android:imeOptions="actionSearch"/>
+            android:imeOptions="actionSearch"
+            android:textSize="15sp"
+            android:textColor="#333333"/>
 
         <ImageView
             android:id="@+id/iconSearch"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
             android:layout_marginStart="8dp"
             android:src="@drawable/search"
             android:contentDescription="Search Icon"
             android:clickable="true"
             android:focusable="true"
-            android:background="@drawable/ripple_search"
-            android:padding="8dp"/>
+            android:padding="6dp"/>
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerKategori"
+        android:id="@+id/recyclerProduk"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        android:contentDescription="Lihat kategori"
-        tools:listitem="@layout/activity_item_kategori"
+        android:layout_marginTop="12dp"
+        tools:listitem="@layout/item_data_produk"
         app:layout_constraintTop_toBottomOf="@id/searchContainer"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
     <ImageView
-        android:id="@+id/iconTambah"
+        android:id="@+id/fabTambahProduk"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:src="@drawable/add"
-        android:contentDescription="Tambah kategori"
+        android:contentDescription="Tambah produk"
         android:clickable="true"
         android:focusable="true"
         android:background="@drawable/ripple_search"

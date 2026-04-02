@@ -2,11 +2,13 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.google.gms.google.services)
+    alias(libs.plugins.kotlin.ksp)
+    id("kotlin-parcelize")
 }
 
 android {
     namespace = "com.citra.penjualan"
-    compileSdk = 34 // Gunakan 34 agar lebih stabil daripada 36 yang masih beta
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.citra.penjualan"
@@ -14,17 +16,13 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
     }
 
@@ -36,23 +34,35 @@ android {
     kotlinOptions {
         jvmTarget = "17"
     }
+
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
-    // 1. Tambahkan BoM terlebih dahulu (sangat penting!)
+    // Firebase
     implementation(platform(libs.firebase.bom))
+    implementation(libs.firebase.database)
+    implementation(libs.firebase.firestore)
+    implementation("com.google.firebase:firebase-storage-ktx")
 
-    // 2. Library Standar
+    // UI & AndroidX
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
 
-    // 3. Library Firebase (Versi otomatis diatur oleh BoM, jadi tidak akan bentrok)
-    implementation(libs.firebase.database)
-    implementation(libs.firebase.firestore)
+    // KTX Tambahan (WAJIB BUAT viewModels)
+    implementation(libs.androidx.activity.ktx)
+    implementation(libs.androidx.fragment.ktx)
 
+    // Glide KSP
+    implementation(libs.glide)
+    ksp(libs.glide.ksp)
+
+    // Testing
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

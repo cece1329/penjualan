@@ -13,24 +13,27 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Penjualan">
-
+        <activity
+            android:name=".produk.DataProdukActivity"
+            android:exported="false" />
+        <activity
+            android:name=".produk.TambahProdukActivity"
+            android:exported="false" />
         <activity
             android:name=".kategori.DataKategori"
             android:exported="false" />
-
         <activity
             android:name=".kategori.ModKategori"
             android:exported="false" />
-
         <activity
             android:name=".beranda.cardActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
     </application>
 
 </manifest>
