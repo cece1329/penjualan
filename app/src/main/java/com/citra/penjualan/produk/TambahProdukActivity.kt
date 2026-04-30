@@ -1,86 +1,91 @@
 package com.citra.penjualan.produk
 
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import com.citra.penjualan.databinding.ActivityTambahProdukBinding // Pakai Binding biar elit
+import com.citra.penjualan.databinding.ActivityTambahProdukBinding
 import com.citra.penjualan.model.ModelProduk
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
-import java.util.*
+import com.google.firebase.database.FirebaseDatabase
 
 class TambahProdukActivity : AppCompatActivity() {
 
-    private val binding by lazy { ActivityTambahProdukBinding.inflate(layoutInflater) }
-    private var imageUri: Uri? = null
-    private val db = FirebaseFirestore.getInstance()
-    private val storage = FirebaseStorage.getInstance()
-
-    private val getImage = registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-        if (uri != null) {
-            imageUri = uri
-            // Bonus: nampilin gambar yang dipilih biar user yakin
-            // binding.imgPreview.setImageURI(uri)
-            Toast.makeText(this, "Foto terpilih!", Toast.LENGTH_SHORT).show()
-        }
-    }
+    private lateinit var binding: ActivityTambahProdukBinding
+    private val db = FirebaseDatabase.getInstance().getReference("produk")
+    private var dataEdit: ModelProduk? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding = ActivityTambahProdukBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.boxFoto.setOnClickListener {
-            getImage.launch("image/*")
+        // Cek apakah ada data yang dikirim (berarti mode EDIT)
+        dataEdit = intent.getParcelableExtra("DATA_PRODUK")
+
+        if (dataEdit != null) {
+            setupViewEdit()
         }
 
+        // Logic ganti status via Chip
+        binding.chipStatus.setOnClickListener {
+            if (binding.chipStatus.text == "Aktif") {
+                binding.chipStatus.text = "Tidak Aktif"
+            } else {
+                binding.chipStatus.text = "Aktif"
+            }
+        }
+
+        // Tombol Simpan atau Update Data
         binding.btnSimpanProduk.setOnClickListener {
-            uploadData()
+            validateAndSave()
         }
     }
 
-    private fun uploadData() {
-        val nama = binding.inNamaProduk.text.toString()
-        val harga = binding.inHargaBeli.text.toString().toIntOrNull() ?: 0
+    private fun setupViewEdit() {
+        binding.apply {
+            inNamaProduk.setText(dataEdit?.namaProduk)
+            inHargaBeli.setText(dataEdit?.hargaProduk?.toString() ?: "")
+            inStokProduk.setText(dataEdit?.stokProduk?.toString() ?: "")
+            inCabangProduk.setText(dataEdit?.cabangProduk ?: "")
+            chipStatus.text = dataEdit?.statusProduk
+            btnSimpanProduk.text = "Update Data Produk"
+        }
+    }
 
-        if (nama.isEmpty() || imageUri == null) {
-            Toast.makeText(this, "Nama dan Foto wajib diisi!", Toast.LENGTH_SHORT).show()
+    private fun validateAndSave() {
+        val nama = binding.inNamaProduk.text.toString().trim()
+        val hargaStr = binding.inHargaBeli.text.toString().trim()
+        val stokStr = binding.inStokProduk.text.toString().trim()
+        val cabang = binding.inCabangProduk.text.toString().trim()
+        val status = binding.chipStatus.text.toString()
+
+        // Validasi jika ada field yang kosong
+        if (nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || cabang.isEmpty()) {
+            Toast.makeText(this, "Lengkapi semua data ya!", Toast.LENGTH_SHORT).show()
             return
         }
 
-        val fileName = UUID.randomUUID().toString()
-        val ref = storage.reference.child("produk/$fileName")
+        val harga = hargaStr.toIntOrNull() ?: 0
+        val stok = stokStr.toIntOrNull() ?: 0
+        val id = dataEdit?.idProduk ?: db.push().key
 
-        ref.putFile(imageUri!!)
-            .addOnSuccessListener {
-                ref.downloadUrl.addOnSuccessListener { uri ->
-                    simpanKeFirestore(nama, harga, uri.toString())
-                }
-            }
-            .addOnFailureListener {
-                Toast.makeText(this, "Gagal upload foto", Toast.LENGTH_SHORT).show()
-            }
-    }
-
-    private fun simpanKeFirestore(nama: String, harga: Int, fotoUrl: String) {
-        val id = db.collection("produk").document().id
+        // Menyiapkan model produk
         val produk = ModelProduk(
             idProduk = id,
             namaProduk = nama,
             hargaProduk = harga,
-            fotoProduk = fotoUrl,
-            statusProduk = "Aktif"
+            stokProduk = stok,
+            cabangProduk = cabang,
+            statusProduk = status
         )
 
-        db.collection("produk").document(id)
-            .set(produk)
-            .addOnSuccessListener {
-                Toast.makeText(this, "Produk berhasil disimpan!", Toast.LENGTH_SHORT).show()
-                finish()
+        // Menyimpan atau Update ke Firebase Database
+        if (id != null) {
+            db.child(id).setValue(produk).addOnSuccessListener {
+                Toast.makeText(this, "Berhasil simpan data produk!", Toast.LENGTH_SHORT).show()
+                finish() // Kembali ke halaman sebelumnya
+            }.addOnFailureListener {
+                Toast.makeText(this, "Gagal: ${it.message}", Toast.LENGTH_SHORT).show()
             }
-            .addOnFailureListener {
-                Toast.makeText(this, "Gagal simpan data", Toast.LENGTH_SHORT).show()
-            }
+        }
     }
 }

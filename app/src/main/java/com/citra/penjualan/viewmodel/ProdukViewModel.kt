@@ -1,16 +1,15 @@
 package com.citra.penjualan.viewmodel
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData // INI YANG BENER (Bukan MutableCorner)
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.citra.penjualan.model.ModelProduk
 import com.google.firebase.database.*
 
 class ProdukViewModel : ViewModel() {
-    // Pastikan nama path di Firebase sesuai, misal "Produk"
-    private val dbRef = FirebaseDatabase.getInstance().getReference("Produk")
+    // Path disesuaikan dengan Realtime Database kamu
+    private val dbRef = FirebaseDatabase.getInstance().getReference("produk")
 
-    // Inisialisasi LiveData
     private val _listProduk = MutableLiveData<List<ModelProduk>>()
     val listProduk: LiveData<List<ModelProduk>> = _listProduk
 
@@ -20,9 +19,8 @@ class ProdukViewModel : ViewModel() {
                 val items = mutableListOf<ModelProduk>()
                 for (data in snapshot.children) {
                     val produk = data.getValue(ModelProduk::class.java)
-
-                    // Kita set idProduk dari key yang ada di Firebase
                     if (produk != null) {
+                        // Mengambil key dari Firebase sebagai idProduk
                         produk.idProduk = data.key
                         items.add(produk)
                     }
@@ -30,9 +28,7 @@ class ProdukViewModel : ViewModel() {
                 _listProduk.value = items
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                // Bisa tambahin log error di sini kalau perlu
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 }

@@ -5,16 +5,11 @@ import kotlinx.parcelize.Parcelize
 
 @Parcelize
 data class ModelProduk(
-    // GUNAKAN 'var' supaya bisa diisi manual di ViewModel
-    var idProduk: String? = null,
-    var namaProduk: String? = null,
-    var hargaProduk: Int? = 0,
-    var idKategori: String? = null,
-    var idCabang: String? = null,
-    var fotoProduk: String? = null,
-    var stokProduk: Int? = 0,
-    var tanpaBatas: Boolean? = false,
-    var statusProduk: String? = null,
-    var createdAt: String? = null,
-    var updateAt: String? = null
+    var idProduk: String? = "",
+    var namaProduk: String = "",
+    var hargaProduk: Int = 0,
+    var stokProduk: Int = 0,
+    var cabangProduk: String = "",
+    var statusProduk: String = "",
+    var namaKategori: String = "" // Tambahkan baris ini
 ) : Parcelable

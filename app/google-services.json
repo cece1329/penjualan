@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "10788955425",
+    "firebase_url": "https://penjualancitra-default-rtdb.firebaseio.com",
+    "project_id": "penjualancitra",
+    "storage_bucket": "penjualancitra.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10788955425:android:bf9d89d1916b726b688a60",
+        "android_client_info": {
+          "package_name": "com.citra.penjualan"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDk82cQLeChxvBpy9yUpHtE75V_7KGHfC0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

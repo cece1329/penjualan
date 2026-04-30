@@ -58,7 +58,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="2dp"
-            android:text="Rp.12.000"
+            android:text="Rp. 0"
             android:textColor="@android:color/black"
             android:textSize="14sp"
             android:textStyle="bold"
@@ -66,7 +66,7 @@
             app:layout_constraintStart_toStartOf="@id/tv_nama_produk"
             app:layout_constraintTop_toBottomOf="@id/tv_nama_produk" />
 
-        <!-- Hiasan 1 -->
+        <!-- Info Kategori -->
         <LinearLayout
             android:id="@+id/ll_info_1"
             android:layout_width="wrap_content"
@@ -84,6 +84,7 @@
                 app:tint="#333333" />
 
             <TextView
+                android:id="@+id/tv_kategori_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
@@ -92,7 +93,7 @@
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Hiasan 2 -->
+        <!-- Info Stok (Icon Keranjang) -->
         <LinearLayout
             android:id="@+id/ll_info_2"
             android:layout_width="wrap_content"
@@ -110,15 +111,16 @@
                 app:tint="#333333" />
 
             <TextView
+                android:id="@+id/tv_stok_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"
-                android:text="12"
+                android:text="0"
                 android:textColor="#333333"
                 android:textSize="12sp" />
         </LinearLayout>
 
-        <!-- Hiasan 3 -->
+        <!-- Info Cabang -->
         <LinearLayout
             android:id="@+id/ll_info_3"
             android:layout_width="wrap_content"
@@ -137,6 +139,7 @@
                 app:tint="#333333" />
 
             <TextView
+                android:id="@+id/tv_cabang_item"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="6dp"

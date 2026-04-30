@@ -8,7 +8,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.R
-import com.citra.penjualan.kategori.DataKategori
+import com.citra.penjualan.kategori.DataKategoriActivity
 import com.citra.penjualan.produk.DataProdukActivity // 1. IMPORT WAJIB BIAR NGGAK MERAH
 
 class cardActivity : AppCompatActivity() {
@@ -39,7 +39,7 @@ class cardActivity : AppCompatActivity() {
 
         // 2. TOMBOL KATEGORI (PINDAH HALAMAN)
         findViewById<ImageView>(R.id.btnkategori).setOnClickListener {
-            val intent = Intent(this, DataKategori::class.java)
+            val intent = Intent(this, DataKategoriActivity::class.java)
             startActivity(intent)
         }
 

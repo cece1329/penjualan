@@ -5,7 +5,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-// PASTIKAN IMPORT INI BENER (Sesuai nama file XML kamu)
 import com.citra.penjualan.databinding.ActivityDataProdukBinding
 import com.citra.penjualan.viewmodel.ProdukViewModel
 
@@ -17,32 +16,31 @@ class DataProdukActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Inisialisasi View Binding
         binding = ActivityDataProdukBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 1. Setup ViewModel
+        // Setup ViewModel
         viewModel = ViewModelProvider(this)[ProdukViewModel::class.java]
 
-        // 2. Setup RecyclerView (ID sesuai XML: recyclerProduk)
+        // Setup RecyclerView
         adapter = ProdukAdapter(arrayListOf())
-        binding.recyclerProduk.layoutManager = LinearLayoutManager(this)
-        binding.recyclerProduk.adapter = adapter
+        binding.recyclerProduk.apply {
+            layoutManager = LinearLayoutManager(this@DataProdukActivity)
+            adapter = this@DataProdukActivity.adapter
+        }
 
-        // 3. Ambil Data
+        // Observe Data
         viewModel.listProduk.observe(this) { list ->
             if (list != null) {
                 adapter.updateData(list)
             }
         }
+
         viewModel.fetchProduk()
 
-        // 4. Klik Tombol Tambah (ID sesuai XML: fabTambahProduk)
+        // FAB Tambah Produk
         binding.fabTambahProduk.setOnClickListener {
-            val intent = Intent(this, TambahProdukActivity::class.java)
-            startActivity(intent)
+            startActivity(Intent(this, TambahProdukActivity::class.java))
         }
-
-        // CATATAN: Jangan panggil binding.btnBack kalau di XML sudah dihapus!
     }
 }
