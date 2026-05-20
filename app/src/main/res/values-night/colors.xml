@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Theme Colors -->
+    <color name="backgroundColor">#121212</color>
+    <color name="backgroundFormColor">#1A1A1A</color>
+    <color name="textColorPrimary">#E0E0E0</color>
+    <color name="textColorSecondary">#B0B0B0</color>
+    <color name="textColorTitle">#FFFFFF</color>
+    <color name="cardBackground">#1E1E1E</color>
+    <color name="borderColor">#373737</color>
+    <color name="textColorEditText">#FFFFFF</color>
+</resources>

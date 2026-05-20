@@ -2,4 +2,14 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <!-- Light Theme Colors -->
+    <color name="backgroundColor">#FFFFFF</color>
+    <color name="backgroundFormColor">#F9F7FF</color>
+    <color name="textColorPrimary">#2E2E2E</color>
+    <color name="textColorSecondary">#666666</color>
+    <color name="textColorTitle">#4A4A4A</color>
+    <color name="cardBackground">#FFFFFF</color>
+    <color name="borderColor">#D3D3D3</color>
+    <color name="textColorEditText">#333333</color>
 </resources>
