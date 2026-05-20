@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundFormColor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp"
+        android:gravity="center_horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Koneksi Printer"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="32dp"
+            android:textColor="@color/textColorPrimary"/>
+
+        <!-- Printer Connection Icon/State -->
+        <FrameLayout
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:background="@drawable/bg_border"
+            android:layout_marginBottom="24dp"
+            android:padding="16dp">
+
+            <ImageView
+                android:id="@+id/imgPrinterState"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:src="@drawable/printer"
+                app:tint="#F44336"/> <!-- Red initially (disconnected) -->
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tvStatusPrinter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status: Terputus"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="32dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnConnectPrinter"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Hubungkan Printer"
+            android:backgroundTint="#2196F3"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_marginBottom="16dp"
+            app:cornerRadius="14dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnPrintTest"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Cetak Test Halaman"
+            android:backgroundTint="#4CAF50"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:enabled="false"
+            app:cornerRadius="14dp"/>
+
+    </LinearLayout>
+</ScrollView>
