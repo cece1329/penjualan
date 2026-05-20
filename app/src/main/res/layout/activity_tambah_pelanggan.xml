@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundFormColor">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="24dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Form Pelanggan"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="32dp"
+            android:textColor="@color/textColorPrimary"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nama Pelanggan"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etNamaPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:hint="Contoh: Budi Santoso"
+            android:background="@drawable/bg_border"
+            android:paddingHorizontal="16dp"
+            android:inputType="text"
+            android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Nomor Telepon"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etTeleponPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:hint="Contoh: 08123456789"
+            android:background="@drawable/bg_border"
+            android:paddingHorizontal="16dp"
+            android:inputType="phone"
+            android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Alamat"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etAlamatPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:hint="Contoh: Jl. Mawar No. 12"
+            android:background="@drawable/bg_border"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="8dp"
+            android:gravity="top"
+            android:inputType="textMultiLine"
+            android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
+            android:layout_marginBottom="32dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSimpanPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:text="Simpan Pelanggan"
+            android:backgroundTint="#673AB7"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            app:cornerRadius="14dp"/>
+
+    </LinearLayout>
+</ScrollView>
