@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F9F7FF">
+    android:background="@color/backgroundFormColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,13 +21,13 @@
             android:gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="32dp"
-            android:textColor="#2E2E2E"/>
+            android:textColor="@color/textColorPrimary"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Nama Produk"
-            android:textColor="#666666"
+            android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
@@ -40,13 +40,15 @@
             android:paddingHorizontal="16dp"
             android:inputType="text"
             android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Harga Jual"
-            android:textColor="#666666"
+            android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
@@ -59,13 +61,15 @@
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jumlah Stok"
-            android:textColor="#666666"
+            android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
@@ -78,13 +82,15 @@
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="16dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Cabang Produk"
-            android:textColor="#666666"
+            android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
@@ -97,13 +103,15 @@
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="20dp"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Status Produk:"
-            android:textColor="#2E2E2E"
+            android:textColor="@color/textColorPrimary"
             android:textStyle="bold"
             android:textSize="14sp"/>
 

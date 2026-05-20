@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#FFFFFF">
+    android:background="@color/backgroundColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -21,7 +21,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Selamat Siang, Citra"
-                android:textColor="#4A4A4A"
+                android:textColor="@color/textColorTitle"
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
@@ -49,7 +49,7 @@
             android:layout_gravity="end"
             android:layout_marginTop="5dp"
             android:text="08 Januari 2026"
-            android:textColor="#666666" />
+            android:textColor="@color/textColorSecondary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -67,6 +67,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Estimasi Hari Ini"
+                    android:textColor="@color/textColorPrimary"
                     android:textSize="18sp"
                     android:textStyle="bold" />
 
@@ -76,6 +77,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="Rp 0"
+                    android:textColor="@color/textColorPrimary"
                     android:textSize="18sp" />
             </RelativeLayout>
 
@@ -91,7 +93,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="Target Penjualan Hari Ini"
-                    android:textColor="#333333"
+                    android:textColor="@color/textColorPrimary"
                     android:textStyle="bold" />
 
                 <ProgressBar
@@ -112,7 +114,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="65% Tercapai"
-                        android:textColor="#666666"
+                        android:textColor="@color/textColorSecondary"
                         android:textSize="12sp" />
 
                     <TextView
@@ -120,7 +122,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:text="Target: Rp 1.000.000"
-                        android:textColor="#666666"
+                        android:textColor="@color/textColorSecondary"
                         android:textSize="12sp" />
                 </RelativeLayout>
             </LinearLayout>
@@ -147,6 +149,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColorPrimary"
                         android:text="Transaksi" />
                 </LinearLayout>
 
@@ -166,6 +169,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColorPrimary"
                         android:text="Pelanggan" />
                 </LinearLayout>
 
@@ -185,6 +189,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:textColor="@color/textColorPrimary"
                         android:text="Laporan" />
                 </LinearLayout>
             </LinearLayout>
@@ -195,7 +200,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="Siap melayani pelanggan"
-            android:textColor="#333333"
+            android:textColor="@color/textColorPrimary"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -203,7 +208,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Jangan Kecewakan Pelanggan"
-            android:textColor="#666666" />
+            android:textColor="@color/textColorSecondary" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -229,6 +234,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/textColorPrimary"
                     android:text="Akun" />
             </LinearLayout>
 
@@ -250,6 +256,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/textColorPrimary"
                     android:text="Produk" />
             </LinearLayout>
 
@@ -271,6 +278,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/textColorPrimary"
                     android:text="Kategori" />
             </LinearLayout>
         </LinearLayout>
@@ -299,6 +307,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/textColorPrimary"
                     android:text="Pegawai" />
             </LinearLayout>
 
@@ -320,6 +329,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/textColorPrimary"
                     android:text="Cabang" />
             </LinearLayout>
 
@@ -341,6 +351,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
+                    android:textColor="@color/textColorPrimary"
                     android:text="Printer" />
             </LinearLayout>
         </LinearLayout>
