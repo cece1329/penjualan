@@ -83,6 +83,27 @@
             android:textSize="15sp"
             android:textColor="@color/textColorEditText"
             android:textColorHint="@color/textColorSecondary"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password / PIN Karyawan"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <EditText
+            android:id="@+id/etPasswordPegawai"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:hint="Masukkan password karyawan"
+            android:background="@drawable/bg_border"
+            android:paddingHorizontal="16dp"
+            android:inputType="textPassword"
+            android:textSize="15sp"
+            android:textColor="@color/textColorEditText"
+            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="32dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
@@ -90,12 +111,12 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:text="Simpan Pegawai"
-            android:backgroundTint="#673AB7"
+            android:backgroundTint="@color/colorSoftPurple"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            app:cornerRadius="14dp"/>
+            app:cornerRadius="18dp"/>
 
     </LinearLayout>
 </ScrollView>

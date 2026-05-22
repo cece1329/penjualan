@@ -1,29 +1,53 @@
 package com.citra.penjualan.produk
 
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.databinding.ActivityTambahProdukBinding
+import com.citra.penjualan.model.ModelKategori
 import com.citra.penjualan.model.ModelProduk
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 class TambahProdukActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityTambahProdukBinding
     private val db = FirebaseDatabase.getInstance().getReference("produk")
+    private val dbCabang = FirebaseDatabase.getInstance().getReference("cabang")
+    private val dbKategori = FirebaseDatabase.getInstance().getReference("kategori")
     private var dataEdit: ModelProduk? = null
+
+    private val listCabang = ArrayList<String>()
+    private val listAllKategori = ArrayList<ModelKategori>()
+    private val listFilteredKategoriNames = ArrayList<String>()
+
+    private lateinit var adapterCabang: ArrayAdapter<String>
+    private lateinit var adapterKategori: ArrayAdapter<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTambahProdukBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Setup Spinners
+        adapterCabang = ArrayAdapter(this, android.R.layout.simple_spinner_item, listCabang)
+        adapterCabang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerCabangProduk.adapter = adapterCabang
+
+        adapterKategori = ArrayAdapter(this, android.R.layout.simple_spinner_item, listFilteredKategoriNames)
+        adapterKategori.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerKategoriProduk.adapter = adapterKategori
+
         // Cek apakah ada data yang dikirim (berarti mode EDIT)
         dataEdit = intent.getParcelableExtra("DATA_PRODUK")
 
-        if (dataEdit != null) {
-            setupViewEdit()
-        }
+        // Load data in order: 1. Cabang, 2. Kategori, then bind if edit
+        loadCabangAndKategori()
 
         // Logic ganti status via Chip
         binding.chipStatus.setOnClickListener {
@@ -38,6 +62,95 @@ class TambahProdukActivity : AppCompatActivity() {
         binding.btnSimpanProduk.setOnClickListener {
             validateAndSave()
         }
+
+        // Filter categories when a branch is selected
+        binding.spinnerCabangProduk.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selectedBranch = listCabang.getOrNull(position) ?: ""
+                filterCategoriesByBranch(selectedBranch)
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
+        }
+    }
+
+    private fun loadCabangAndKategori() {
+        // Fetch Branches
+        dbCabang.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(branchSnapshot: DataSnapshot) {
+                listCabang.clear()
+                for (data in branchSnapshot.children) {
+                    val nama = data.child("namaCabang").value?.toString()
+                    if (nama != null) {
+                        listCabang.add(nama)
+                    }
+                }
+                if (listCabang.isEmpty()) {
+                    listCabang.add("Pusat")
+                }
+                adapterCabang.notifyDataSetChanged()
+
+                // Now fetch Categories
+                dbKategori.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(kategoriSnapshot: DataSnapshot) {
+                        listAllKategori.clear()
+                        for (data in kategoriSnapshot.children) {
+                            val kat = data.getValue(ModelKategori::class.java)
+                            if (kat != null) {
+                                listAllKategori.add(kat)
+                            }
+                        }
+
+                        // Trigger initial filtering based on selected branch
+                        val initialBranch = binding.spinnerCabangProduk.selectedItem?.toString() ?: ""
+                        filterCategoriesByBranch(initialBranch)
+
+                        // If Edit Mode, set selections
+                        if (dataEdit != null) {
+                            setupViewEdit()
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@TambahProdukActivity, "Gagal memuat kategori: ${error.message}", Toast.LENGTH_SHORT).show()
+                    }
+                })
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@TambahProdukActivity, "Gagal memuat cabang: ${error.message}", Toast.LENGTH_SHORT).show()
+            }
+        })
+    }
+
+    private fun filterCategoriesByBranch(branchName: String) {
+        listFilteredKategoriNames.clear()
+        
+        // Filter categories that belong to the selected branch
+        val filtered = listAllKategori.filter { it.cabangKategori?.equals(branchName, ignoreCase = true) == true }
+        for (k in filtered) {
+            val name = k.namaKategori
+            if (name != null) {
+                listFilteredKategoriNames.add(name)
+            }
+        }
+
+        // Fallback to all category names if none match the branch, to ensure user has choices
+        if (listFilteredKategoriNames.isEmpty()) {
+            for (k in listAllKategori) {
+                val name = k.namaKategori
+                if (name != null) {
+                    listFilteredKategoriNames.add(name)
+                }
+            }
+        }
+
+        // Add a default if totally empty
+        if (listFilteredKategoriNames.isEmpty()) {
+            listFilteredKategoriNames.add("Umum")
+        }
+
+        adapterKategori.notifyDataSetChanged()
     }
 
     private fun setupViewEdit() {
@@ -45,9 +158,21 @@ class TambahProdukActivity : AppCompatActivity() {
             inNamaProduk.setText(dataEdit?.namaProduk)
             inHargaBeli.setText(dataEdit?.hargaProduk?.toString() ?: "")
             inStokProduk.setText(dataEdit?.stokProduk?.toString() ?: "")
-            inCabangProduk.setText(dataEdit?.cabangProduk ?: "")
             chipStatus.text = dataEdit?.statusProduk
             btnSimpanProduk.text = "Update Data Produk"
+
+            // Set selected branch in spinner
+            val branchIndex = listCabang.indexOf(dataEdit?.cabangProduk)
+            if (branchIndex != -1) {
+                spinnerCabangProduk.setSelection(branchIndex)
+                
+                // Immediately filter and set category
+                filterCategoriesByBranch(dataEdit?.cabangProduk ?: "")
+                val categoryIndex = listFilteredKategoriNames.indexOf(dataEdit?.namaKategori)
+                if (categoryIndex != -1) {
+                    spinnerKategoriProduk.setSelection(categoryIndex)
+                }
+            }
         }
     }
 
@@ -55,11 +180,12 @@ class TambahProdukActivity : AppCompatActivity() {
         val nama = binding.inNamaProduk.text.toString().trim()
         val hargaStr = binding.inHargaBeli.text.toString().trim()
         val stokStr = binding.inStokProduk.text.toString().trim()
-        val cabang = binding.inCabangProduk.text.toString().trim()
+        val cabang = binding.spinnerCabangProduk.selectedItem?.toString()?.trim() ?: ""
+        val kategori = binding.spinnerKategoriProduk.selectedItem?.toString()?.trim() ?: ""
         val status = binding.chipStatus.text.toString()
 
         // Validasi jika ada field yang kosong
-        if (nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || cabang.isEmpty()) {
+        if (nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || cabang.isEmpty() || kategori.isEmpty()) {
             Toast.makeText(this, "Lengkapi semua data ya!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -75,7 +201,8 @@ class TambahProdukActivity : AppCompatActivity() {
             hargaProduk = harga,
             stokProduk = stok,
             cabangProduk = cabang,
-            statusProduk = status
+            statusProduk = status,
+            namaKategori = kategori
         )
 
         // Menyimpan atau Update ke Firebase Database

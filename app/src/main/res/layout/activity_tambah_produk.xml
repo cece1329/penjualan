@@ -89,22 +89,33 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Cabang Produk"
+            android:text="Pilih Cabang"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
-        <EditText
-            android:id="@+id/inCabangProduk"
+        <Spinner
+            android:id="@+id/spinnerCabangProduk"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Cabang Utama"
-            android:inputType="text"
-            android:background="@drawable/bg_border"
+            android:background="@drawable/spinner_background"
             android:paddingHorizontal="16dp"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Pilih Kategori"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerKategoriProduk"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/spinner_background"
+            android:paddingHorizontal="16dp"
             android:layout_marginBottom="20dp"/>
 
         <TextView
@@ -134,13 +145,13 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:text="Simpan Data Produk"
-            android:backgroundTint="#673AB7"
+            android:backgroundTint="@color/colorSoftPurple"
             android:layout_marginTop="40dp"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            app:cornerRadius="14dp"
+            app:cornerRadius="18dp"
             app:elevation="4dp"/>
 
     </LinearLayout>

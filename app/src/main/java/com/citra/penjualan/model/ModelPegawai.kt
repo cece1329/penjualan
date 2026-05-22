@@ -8,5 +8,6 @@ data class ModelPegawai(
     var idPegawai: String? = "",
     var namaPegawai: String? = "",
     var jabatanPegawai: String? = "",
-    var teleponPegawai: String? = ""
+    var teleponPegawai: String? = "",
+    var passwordPegawai: String? = ""
 ) : Parcelable

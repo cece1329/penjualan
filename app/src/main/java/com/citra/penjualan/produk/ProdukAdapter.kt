@@ -31,6 +31,30 @@ class ProdukAdapter(private var list: List<ModelProduk>) : RecyclerView.Adapter<
             // Menampilkan Cabang Produk
             tvCabangItem.text = p.cabangProduk ?: "Belum Ada Cabang"
 
+            // Automatic Gradient Avatar/Image Generation
+            try {
+                val initials = if (p.namaProduk.isNotEmpty()) p.namaProduk.take(1).uppercase() else "?"
+                tvInitials.text = initials
+                
+                val colors1 = intArrayOf(Color.parseColor("#BA68C8"), Color.parseColor("#8E24AA"))
+                val colors2 = intArrayOf(Color.parseColor("#9575CD"), Color.parseColor("#673AB7"))
+                val colors3 = intArrayOf(Color.parseColor("#7986CB"), Color.parseColor("#3F51B5"))
+                val colors4 = intArrayOf(Color.parseColor("#E040FB"), Color.parseColor("#9C27B0"))
+                val gradientsList = listOf(colors1, colors2, colors3, colors4)
+                
+                val hashIdx = Math.abs(p.namaProduk.hashCode()) % gradientsList.size
+                val selectedGradient = gradientsList[hashIdx]
+                
+                val gd = android.graphics.drawable.GradientDrawable(
+                    android.graphics.drawable.GradientDrawable.Orientation.TL_BR,
+                    selectedGradient
+                )
+                gd.cornerRadius = 24f
+                tvInitials.background = gd
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
             // Logic Status Aktif / Tidak Aktif
             if (p.statusProduk == "Aktif") {
                 chipStatus.text = "Aktif"

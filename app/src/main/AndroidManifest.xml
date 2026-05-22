@@ -87,6 +87,10 @@
         
         <activity
             android:name=".beranda.cardActivity"
+            android:exported="false" />
+
+        <activity
+            android:name=".akun.LoginActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true">
             <intent-filter>

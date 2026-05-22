@@ -92,12 +92,12 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:text="Simpan &amp; Selesaikan Transaksi"
-            android:backgroundTint="#4CAF50"
+            android:backgroundTint="@color/colorSoftPurple"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            app:cornerRadius="14dp"/>
+            app:cornerRadius="18dp"/>
 
     </LinearLayout>
 </ScrollView>

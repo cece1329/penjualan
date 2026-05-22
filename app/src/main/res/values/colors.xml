@@ -3,13 +3,18 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Light Theme Colors -->
-    <color name="backgroundColor">#FFFFFF</color>
-    <color name="backgroundFormColor">#F9F7FF</color>
-    <color name="textColorPrimary">#2E2E2E</color>
-    <color name="textColorSecondary">#666666</color>
-    <color name="textColorTitle">#4A4A4A</color>
+    <!-- Light Theme Colors - Soft Cute Purple Theme -->
+    <color name="backgroundColor">#FBF8FF</color> <!-- Softest lavender-white -->
+    <color name="backgroundFormColor">#F5EEFD</color> <!-- Soft lavender backdrop -->
+    <color name="textColorPrimary">#5C3D75</color> <!-- Soft deep purple-grey for text readability -->
+    <color name="textColorSecondary">#8E74A6</color> <!-- Soft violet for subtitles -->
+    <color name="textColorTitle">#4A2B66</color> <!-- Soft dark purple for headers -->
     <color name="cardBackground">#FFFFFF</color>
-    <color name="borderColor">#D3D3D3</color>
-    <color name="textColorEditText">#333333</color>
+    <color name="borderColor">#E8DDF2</color> <!-- Softest violet border -->
+    <color name="textColorEditText">#5C3D75</color>
+
+    <!-- Dedicated Soft Cute Purple Brand Tokens -->
+    <color name="colorSoftPurple">#BA68C8</color> <!-- Soft Medium Pastel Purple -->
+    <color name="colorSoftPurpleLight">#F3E5F5</color> <!-- Very Light Soft Purple -->
+    <color name="colorSoftPurpleDark">#AB47BC</color> <!-- Medium Dark Purple for outlines/active text -->
 </resources>

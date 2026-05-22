@@ -6,42 +6,106 @@
     android:layout_marginHorizontal="12dp"
     android:layout_marginVertical="6dp"
     app:cardBackgroundColor="@color/cardBackground"
-    app:cardCornerRadius="14dp"
-    app:cardElevation="4dp"
-    app:strokeWidth="0dp">
+    app:cardCornerRadius="16dp"
+    app:cardElevation="3dp"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/borderColor">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="16dp">
+        android:orientation="horizontal"
+        android:padding="14dp"
+        android:gravity="center_vertical">
 
-        <TextView
-            android:id="@+id/tvNamaPegawai"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Nama Pegawai"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="16sp"
-            android:textStyle="bold"/>
+        <!-- Employee icon from asset -->
+        <androidx.cardview.widget.CardView
+            android:layout_width="52dp"
+            android:layout_height="52dp"
+            app:cardCornerRadius="26dp"
+            app:cardElevation="0dp"
+            app:cardBackgroundColor="@color/colorSoftPurpleLight"
+            android:layout_marginEnd="14dp">
 
-        <TextView
-            android:id="@+id/tvJabatanPegawai"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Jabatan: -"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="13sp"/>
+            <ImageView
+                android:layout_width="34dp"
+                android:layout_height="34dp"
+                android:layout_gravity="center"
+                android:src="@drawable/employee"
+                android:scaleType="fitCenter" />
+        </androidx.cardview.widget.CardView>
 
-        <TextView
-            android:id="@+id/tvTeleponPegawai"
-            android:layout_width="match_parent"
+        <!-- Text Info -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:text="Telepon: -"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="13sp"/>
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvNamaPegawai"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Nama Pegawai"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <!-- Jabatan Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="4dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/jabatan"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvJabatanPegawai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jabatan: -"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+
+            <!-- Telepon Row -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:layout_marginTop="3dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:src="@drawable/telp"
+                    android:scaleType="fitCenter"
+                    android:layout_marginEnd="6dp"/>
+
+                <TextView
+                    android:id="@+id/tvTeleponPegawai"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Telepon: -"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="12sp"/>
+            </LinearLayout>
+        </LinearLayout>
+
+        <ImageView
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:src="@drawable/arrow"
+            android:scaleType="fitCenter"
+            app:tint="@color/colorSoftPurple"/>
 
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

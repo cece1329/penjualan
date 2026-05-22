@@ -38,11 +38,11 @@ class PrinterActivity : AppCompatActivity() {
                 binding.btnConnectPrinter.text = "Putuskan Koneksi"
                 binding.btnConnectPrinter.isEnabled = true
                 binding.btnConnectPrinter.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(Color.parseColor("#F44336"))
+                    android.content.res.ColorStateList.valueOf(Color.parseColor("#EF5350"))
                 )
 
                 binding.tvStatusPrinter.text = "Status: Terhubung (Bluetooth)"
-                binding.imgPrinterState.setColorFilter(Color.parseColor("#4CAF50"))
+                binding.imgPrinterState.setColorFilter(Color.parseColor("#66BB6A"))
                 binding.btnPrintTest.isEnabled = true
 
                 Toast.makeText(this, "Printer berhasil terhubung!", Toast.LENGTH_SHORT).show()
@@ -51,11 +51,11 @@ class PrinterActivity : AppCompatActivity() {
             isConnected = false
             binding.btnConnectPrinter.text = "Hubungkan Printer"
             binding.btnConnectPrinter.setBackgroundTintList(
-                android.content.res.ColorStateList.valueOf(Color.parseColor("#2196F3"))
+                android.content.res.ColorStateList.valueOf(Color.parseColor("#BA68C8"))
             )
 
             binding.tvStatusPrinter.text = "Status: Terputus"
-            binding.imgPrinterState.setColorFilter(Color.parseColor("#F44336"))
+            binding.imgPrinterState.setColorFilter(Color.parseColor("#EF5350"))
             binding.btnPrintTest.isEnabled = false
 
             Toast.makeText(this, "Koneksi printer terputus.", Toast.LENGTH_SHORT).show()

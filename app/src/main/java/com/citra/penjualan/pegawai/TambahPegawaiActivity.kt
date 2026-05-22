@@ -34,6 +34,7 @@ class TambahPegawaiActivity : AppCompatActivity() {
             etNamaPegawai.setText(dataEdit?.namaPegawai)
             etJabatanPegawai.setText(dataEdit?.jabatanPegawai)
             etTeleponPegawai.setText(dataEdit?.teleponPegawai)
+            etPasswordPegawai.setText(dataEdit?.passwordPegawai)
             btnSimpanPegawai.text = "Update Data Pegawai"
         }
     }
@@ -42,8 +43,9 @@ class TambahPegawaiActivity : AppCompatActivity() {
         val nama = binding.etNamaPegawai.text.toString().trim()
         val jabatan = binding.etJabatanPegawai.text.toString().trim()
         val telp = binding.etTeleponPegawai.text.toString().trim()
+        val password = binding.etPasswordPegawai.text.toString().trim()
 
-        if (nama.isEmpty() || jabatan.isEmpty() || telp.isEmpty()) {
+        if (nama.isEmpty() || jabatan.isEmpty() || telp.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Lengkapi semua data ya!", Toast.LENGTH_SHORT).show()
             return
         }
@@ -54,7 +56,8 @@ class TambahPegawaiActivity : AppCompatActivity() {
             idPegawai = id,
             namaPegawai = nama,
             jabatanPegawai = jabatan,
-            teleponPegawai = telp
+            teleponPegawai = telp,
+            passwordPegawai = password
         )
 
         if (id != null) {

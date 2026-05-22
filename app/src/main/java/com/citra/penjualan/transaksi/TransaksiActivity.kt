@@ -10,6 +10,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.databinding.ActivityTransaksiBinding
 import com.citra.penjualan.model.ModelProduk
+import com.citra.penjualan.printer.ReceiptPdfPrinter
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -17,6 +18,7 @@ import com.google.firebase.database.ValueEventListener
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
 
 class TransaksiActivity : AppCompatActivity() {
 
@@ -129,11 +131,30 @@ class TransaksiActivity : AppCompatActivity() {
                 selectedProduk?.idProduk?.let { key ->
                     dbProduk.child(key).child("stokProduk").setValue(newStok)
                 }
+
                 Toast.makeText(this, "Transaksi berhasil disimpan!", Toast.LENGTH_SHORT).show()
+
+                // Print struk ke PDF (Save as PDF)
+                try {
+                    val printer = ReceiptPdfPrinter(this)
+                    val receipt = ReceiptPdfPrinter.ReceiptData(
+                        toko = "Citra Penjualan",
+                        tanggal = tanggal,
+                        idTransaksi = id,
+                        namaProduk = selectedProduk?.namaProduk ?: "-",
+                        jumlah = qty,
+                        totalHarga = totalHarga
+                    )
+                    printer.printToPdf(receipt)
+                } catch (_: Exception) {
+                    // Jika PDF printing gagal, transaksi tetap sudah tersimpan.
+                }
+
                 finish()
             }.addOnFailureListener {
                 Toast.makeText(this, "Gagal simpan transaksi: ${it.message}", Toast.LENGTH_SHORT).show()
             }
+
         }
     }
 }

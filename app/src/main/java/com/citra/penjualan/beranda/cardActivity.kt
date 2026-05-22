@@ -30,8 +30,40 @@ class cardActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
 
-        // Load Sales Estimation dynamically from Firebase
-        loadSalesEstimation()
+        // Set dynamic today's date in Indonesian
+        try {
+            val calendar = java.util.Calendar.getInstance()
+            val dateFormat = java.text.SimpleDateFormat("dd MMMM yyyy", java.util.Locale("id", "ID"))
+            val todayDate = dateFormat.format(calendar.time)
+            findViewById<TextView>(R.id.tvDate).text = todayDate
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+        // Check user session
+        val sharedPref = getSharedPreferences("user_session", Context.MODE_PRIVATE)
+        val role = sharedPref.getString("user_role", "pemilik") ?: "pemilik"
+        val name = sharedPref.getString("user_name", "Citra") ?: "Citra"
+
+        // Set dynamic welcome message
+        val tvWelcome: TextView = findViewById(R.id.tvWelcome)
+        if (role == "karyawan") {
+            tvWelcome.text = "Halo, $name"
+            
+            // Hide Owner-only widgets
+            findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.GONE
+            findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.GONE
+            findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.GONE
+            findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.GONE
+            findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.GONE
+        } else {
+            tvWelcome.text = "Selamat Siang, $name"
+        }
+
+        // Load Sales Estimation dynamically from Firebase (only for owner)
+        if (role == "pemilik") {
+            loadSalesEstimation()
+        }
 
         // --- BUTTON CLICK LISTENERS ---
 
