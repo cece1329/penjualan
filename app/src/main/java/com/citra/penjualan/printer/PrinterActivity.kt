@@ -12,6 +12,7 @@ import com.citra.penjualan.databinding.ActivityPrinterBinding
 class PrinterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityPrinterBinding
+    // Status simulasi koneksi printer (true = terhubung, false = terputus)
     private var isConnected = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
