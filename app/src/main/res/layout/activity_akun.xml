@@ -11,96 +11,253 @@
         android:orientation="vertical"
         android:padding="24dp">
 
-        <!-- Profile Pic Mock -->
-        <FrameLayout
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Profil Akun"
+            android:textSize="24sp"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:layout_marginTop="10dp"
             android:layout_marginBottom="24dp"
-            android:background="@drawable/bg_upload_foto">
+            android:textColor="@color/textColorPrimary"/>
 
-            <ImageView
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:layout_gravity="center"
-                android:src="@drawable/acc"/>
-        </FrameLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Nama Pemilik"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/etNamaPemilik"
+        <!-- User Information Card (Aesthetic Profile Summary) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardProfileSummary"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:hint="Contoh: Citra"
-            android:background="@drawable/bg_border"
-            android:paddingHorizontal="16dp"
-            android:inputType="text"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Bisnis / Toko"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
+            android:layout_marginBottom="24dp"
+            app:cardCornerRadius="16dp"
+            app:cardBackgroundColor="@color/cardBackground"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/borderColor"
+            app:cardElevation="3dp">
 
-        <EditText
-            android:id="@+id/etNamaToko"
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="20dp">
+
+                <!-- Avatar Circle -->
+                <FrameLayout
+                    android:id="@+id/avatarFrame"
+                    android:layout_width="72dp"
+                    android:layout_height="72dp"
+                    android:background="@drawable/bg_upload_foto"
+                    android:layout_marginBottom="12dp">
+
+                    <TextView
+                        android:id="@+id/tvAvatarInitials"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="C"
+                        android:textColor="#FFFFFF"
+                        android:textSize="28sp"
+                        android:textStyle="bold"/>
+                </FrameLayout>
+
+                <TextView
+                    android:id="@+id/tvProfileName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Nama Pengguna"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColorPrimary"
+                    android:layout_marginBottom="4dp"/>
+
+                <!-- Role Badge -->
+                <TextView
+                    android:id="@+id/tvProfileRoleBadge"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="PEMILIK"
+                    android:textColor="#FFFFFF"
+                    android:textSize="11sp"
+                    android:textStyle="bold"
+                    android:background="@drawable/btn_simpan"
+                    android:backgroundTint="@color/colorSoftPurple"
+                    android:paddingHorizontal="12dp"
+                    android:paddingVertical="4dp"
+                    android:layout_marginBottom="12dp"/>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="#E1BEE7"
+                    android:layout_marginBottom="12dp"/>
+
+                <!-- Extra Detail Layout (For Employees) -->
+                <LinearLayout
+                    android:id="@+id/layoutEmployeeDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:gravity="center_horizontal">
+
+                    <!-- Jabatan Row -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical"
+                        android:layout_marginBottom="6dp">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/jabatan"
+                            android:scaleType="fitCenter"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/tvProfileJabatan"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Jabatan: Kasir"
+                            android:textColor="@color/textColorSecondary"
+                            android:textSize="13sp"/>
+                    </LinearLayout>
+
+                    <!-- Telepon Row -->
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center_vertical">
+
+                        <ImageView
+                            android:layout_width="16dp"
+                            android:layout_height="16dp"
+                            android:src="@drawable/telp"
+                            android:scaleType="fitCenter"
+                            android:layout_marginEnd="6dp" />
+
+                        <TextView
+                            android:id="@+id/tvProfileTelepon"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="No. Telepon: 0812345678"
+                            android:textColor="@color/textColorSecondary"
+                            android:textSize="13sp"/>
+                    </LinearLayout>
+                </LinearLayout>
+
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Business details section (Only full interactive for owner, read-only for employees) -->
+        <LinearLayout
+            android:id="@+id/layoutTokoForm"
             android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:hint="Contoh: Citra Mart"
-            android:background="@drawable/bg_border"
-            android:paddingHorizontal="16dp"
-            android:inputType="text"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Email Kontak"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/etEmailToko"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:hint="Contoh: citra@toko.com"
-            android:background="@drawable/bg_border"
-            android:paddingHorizontal="16dp"
-            android:inputType="textEmailAddress"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
-            android:layout_marginBottom="32dp"/>
+            <TextView
+                android:id="@+id/tvFormTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Informasi Toko / Bisnis"
+                android:textColor="@color/textColorPrimary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp"/>
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Pemilik"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="13sp"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/etNamaPemilik"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Contoh: Citra"
+                android:background="@drawable/bg_border"
+                android:paddingHorizontal="16dp"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:textColor="@color/textColorEditText"
+                android:textColorHint="@color/textColorSecondary"
+                android:layout_marginBottom="14dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Nama Bisnis / Toko"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="13sp"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/etNamaToko"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Contoh: Citra Mart"
+                android:background="@drawable/bg_border"
+                android:paddingHorizontal="16dp"
+                android:inputType="text"
+                android:textSize="14sp"
+                android:textColor="@color/textColorEditText"
+                android:textColorHint="@color/textColorSecondary"
+                android:layout_marginBottom="14dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Email Kontak"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="13sp"
+                android:layout_marginBottom="6dp"/>
+
+            <EditText
+                android:id="@+id/etEmailToko"
+                android:layout_width="match_parent"
+                android:layout_height="52dp"
+                android:hint="Contoh: citra@toko.com"
+                android:background="@drawable/bg_border"
+                android:paddingHorizontal="16dp"
+                android:inputType="textEmailAddress"
+                android:textSize="14sp"
+                android:textColor="@color/textColorEditText"
+                android:textColorHint="@color/textColorSecondary"
+                android:layout_marginBottom="24dp"/>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSimpanProfil"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:text="Simpan Profil Toko"
+                android:backgroundTint="@color/colorSoftPurple"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="#FFFFFF"
+                app:cornerRadius="18dp"
+                android:layout_marginBottom="12dp"/>
+
+        </LinearLayout>
+
+        <!-- Logout Button -->
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnSimpanProfil"
+            android:id="@+id/btnKeluar"
             android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Simpan Profil Toko"
-            android:backgroundTint="#673AB7"
+            android:layout_height="54dp"
+            android:text="Keluar Akun"
+            android:backgroundTint="#E53935"
             android:textAllCaps="false"
-            android:textSize="16sp"
+            android:textSize="15sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            app:cornerRadius="14dp"/>
+            app:cornerRadius="14dp"
+            android:layout_marginTop="8dp"/>
 
     </LinearLayout>
 </ScrollView>
