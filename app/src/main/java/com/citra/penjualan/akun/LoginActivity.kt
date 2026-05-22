@@ -96,6 +96,7 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
+        // Cek login berdasarkan peran yang dipilih (Pemilik / Karyawan)
         if (selectedRole == "pemilik") {
             // Pemilik hardcoded / simple credentials for default safety
             if ((usernameInput.lowercase() == "pemilik" || usernameInput.lowercase() == "admin") && passwordInput == "admin123") {
