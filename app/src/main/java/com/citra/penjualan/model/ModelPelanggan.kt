@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+// Model data untuk menyimpan informasi kontak pelanggan
 data class ModelPelanggan(
     var idPelanggan: String? = "",
     var namaPelanggan: String? = "",

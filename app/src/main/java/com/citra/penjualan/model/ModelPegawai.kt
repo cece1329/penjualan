@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
+// Model data untuk menyimpan informasi pegawai beserta hak akses login
 data class ModelPegawai(
     var idPegawai: String? = "",
     var namaPegawai: String? = "",
