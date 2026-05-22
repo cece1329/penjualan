@@ -1,16 +1,19 @@
 package com.citra.penjualan.printer
 
 import android.content.Context
+import android.graphics.Canvas
+import android.graphics.DashPathEffect
 import android.graphics.Paint
+import android.graphics.Path
+import android.graphics.RectF
 import android.graphics.Typeface
-import android.print.PrintAttributes
-import android.print.PrintDocumentAdapter
-import android.print.PrintManager
-import android.print.PrintDocumentInfo
+import android.graphics.pdf.PdfDocument
 import android.os.CancellationSignal
 import android.os.ParcelFileDescriptor
-import android.graphics.pdf.PdfDocument
-import android.util.TypedValue
+import android.print.PrintAttributes
+import android.print.PrintDocumentAdapter
+import android.print.PrintDocumentInfo
+import android.print.PrintManager
 import java.io.FileOutputStream
 
 class ReceiptPdfPrinter(private val context: Context) {
@@ -24,9 +27,13 @@ class ReceiptPdfPrinter(private val context: Context) {
         val totalHarga: Int
     )
 
+    // Ukuran struk thermal 80mm = ~226 pt lebar
+    private val PAGE_W = 226
+    private val PAGE_H = 520
+
     fun printToPdf(receipt: ReceiptData) {
         val printManager = context.getSystemService(Context.PRINT_SERVICE) as PrintManager
-        val jobName = "Struk_${receipt.idTransaksi ?: ""}".trim()
+        val jobName = "Nota_${receipt.idTransaksi?.takeLast(6) ?: "Toko"}".trim()
 
         val adapter = object : PrintDocumentAdapter() {
             private var pdfDocument: PdfDocument? = null
@@ -39,17 +46,12 @@ class ReceiptPdfPrinter(private val context: Context) {
                 extras: android.os.Bundle?,
             ) {
                 if (cancellationSignal?.isCanceled == true) {
-                    callback?.onLayoutCancelled()
-                    return
+                    callback?.onLayoutCancelled(); return
                 }
-
-                // Perbaikan Utama: Membuat informasi dokumen (PrintDocumentInfo)
                 val info = PrintDocumentInfo.Builder(jobName)
                     .setContentType(PrintDocumentInfo.CONTENT_TYPE_DOCUMENT)
-                    .setPageCount(PrintDocumentInfo.PAGE_COUNT_UNKNOWN)
+                    .setPageCount(1)
                     .build()
-
-                // Memberikan info ke callback beserta flag 'changed = true'
                 callback?.onLayoutFinished(info, true)
             }
 
@@ -61,23 +63,11 @@ class ReceiptPdfPrinter(private val context: Context) {
             ) {
                 try {
                     pdfDocument = PdfDocument()
-
-                    val pageInfo = PdfDocument.PageInfo.Builder(
-                        595,
-                        842,
-                        1
-                    ).create()
-
+                    val pageInfo = PdfDocument.PageInfo.Builder(PAGE_W, PAGE_H, 1).create()
                     val page = pdfDocument!!.startPage(pageInfo)
-                    val canvas = page.canvas
-                    drawReceipt(canvas, receipt)
+                    drawReceipt(page.canvas, receipt)
                     pdfDocument!!.finishPage(page)
-
-                    // Menulis PDF menggunakan FileOutputStream dari descriptor tujuan
-                    FileOutputStream(destination.fileDescriptor).use { outputStream ->
-                        pdfDocument!!.writeTo(outputStream)
-                    }
-
+                    FileOutputStream(destination.fileDescriptor).use { pdfDocument!!.writeTo(it) }
                     callback?.onWriteFinished(arrayOf(android.print.PageRange(0, 0)))
                 } catch (e: Exception) {
                     callback?.onWriteFailed(e.toString())
@@ -88,7 +78,6 @@ class ReceiptPdfPrinter(private val context: Context) {
             }
         }
 
-        // Setting dasar untuk printer adapter
         val attributes = PrintAttributes.Builder()
             .setMediaSize(PrintAttributes.MediaSize.ISO_A4)
             .setColorMode(PrintAttributes.COLOR_MODE_COLOR)
@@ -98,83 +87,210 @@ class ReceiptPdfPrinter(private val context: Context) {
         printManager.print(jobName, adapter, attributes)
     }
 
-    private fun drawReceipt(canvas: android.graphics.Canvas, receipt: ReceiptData) {
-        val paint = Paint(Paint.ANTI_ALIAS_FLAG)
+    private fun drawReceipt(canvas: Canvas, receipt: ReceiptData) {
+        val W = PAGE_W.toFloat()
+        val cx = W / 2f
+        val ml = 14f
+        val mr = W - 14f
+        val p = Paint(Paint.ANTI_ALIAS_FLAG)
 
-        fun textSizeSp(sp: Float): Float {
-            return TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP,
-                sp,
-                context.resources.displayMetrics
-            )
+        // ─── HEADER: Background ungu gelap ───
+        p.style = Paint.Style.FILL
+        p.color = 0xFF4A2B66.toInt()
+        canvas.drawRect(0f, 0f, W, 88f, p)
+
+        // Accent diagonal strip di header
+        p.color = 0xFF6A3D8F.toInt()
+        val path = Path()
+        path.moveTo(0f, 58f); path.lineTo(W, 44f)
+        path.lineTo(W, 88f); path.lineTo(0f, 88f); path.close()
+        canvas.drawPath(path, p)
+
+        // Nama Toko (putih, bold, center)
+        p.color = 0xFFFFFFFF.toInt()
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        p.textSize = 18f
+        p.textAlign = Paint.Align.CENTER
+        canvas.drawText(receipt.toko.ifBlank { "TOKO CITRA" }.uppercase(), cx, 32f, p)
+
+        // Tagline
+        p.color = 0xFFCE93D8.toInt()
+        p.textSize = 7.5f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.ITALIC)
+        canvas.drawText("Terima kasih sudah berbelanja ♥", cx, 47f, p)
+
+        // Badge "NOTA TRANSAKSI"
+        p.color = 0xFFBA68C8.toInt()
+        p.style = Paint.Style.FILL
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        canvas.drawRoundRect(RectF(cx - 40f, 64f, cx + 40f, 80f), 8f, 8f, p)
+        p.color = 0xFFFFFFFF.toInt()
+        p.textSize = 8f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText("✦  NOTA TRANSAKSI  ✦", cx, 75f, p)
+
+        var y = 102f
+
+        // ─── INFO BARIS ───
+        fun kv(label: String, value: String) {
+            p.textAlign = Paint.Align.LEFT
+            p.color = 0xFF9E9E9E.toInt()
+            p.textSize = 7.5f
+            p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+            canvas.drawText(label, ml, y, p)
+            p.textAlign = Paint.Align.RIGHT
+            p.color = 0xFF3E1E55.toInt()
+            p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+            canvas.drawText(value, mr, y, p)
+            y += 13f
         }
 
-        val marginLeft = 48f
-        var y = 72f
+        kv("Tanggal", receipt.tanggal)
+        kv("No. Nota", "#${receipt.idTransaksi?.takeLast(8) ?: "-"}")
+        kv("Kasir", receipt.toko.ifBlank { "Admin" })
 
-        // Header
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        paint.textAlign = Paint.Align.LEFT
-        paint.textSize = textSizeSp(18f)
-        paint.color = 0xFF5C3D75.toInt()
-        canvas.drawText(receipt.toko.ifBlank { "" }, marginLeft, y, paint)
+        y += 4f
+        drawDashed(canvas, ml, mr, y); y += 12f
 
-        y += 30f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        paint.textSize = textSizeSp(16f)
-        paint.color = 0xFF4A2B66.toInt()
-        canvas.drawText("STRUK TRANSAKSI", marginLeft, y, paint)
-
-        y += 26f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        paint.textSize = textSizeSp(12.5f)
-        paint.color = 0xFF8E74A6.toInt()
-        canvas.drawText("Tanggal : ${receipt.tanggal}", marginLeft, y, paint)
-        y += 20f
-        canvas.drawText("ID       : ${receipt.idTransaksi ?: "-"}", marginLeft, y, paint)
-
-        y += 18f
-
-        // Separator Line
-        paint.color = 0xFFBA68C8.toInt()
-        paint.strokeWidth = 2f
-        canvas.drawLine(marginLeft, y, 547f, y, paint)
-
+        // ─── HEADER TABEL ───
+        p.style = Paint.Style.FILL
+        p.color = 0xFFF3E5F5.toInt()
+        canvas.drawRoundRect(RectF(ml, y, mr, y + 16f), 4f, 4f, p)
+        p.color = 0xFF5C3D75.toInt()
+        p.textSize = 7.5f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        p.textAlign = Paint.Align.LEFT
+        canvas.drawText("  PRODUK", ml + 4f, y + 11f, p)
+        p.textAlign = Paint.Align.CENTER
+        canvas.drawText("QTY", cx, y + 11f, p)
+        p.textAlign = Paint.Align.RIGHT
+        canvas.drawText("HARGA  ", mr - 2f, y + 11f, p)
         y += 20f
 
-        // Items
-        paint.color = 0xFF5C3D75.toInt()
-        paint.textSize = textSizeSp(14.5f)
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        canvas.drawText(receipt.namaProduk, marginLeft, y, paint)
-        y += 18f
+        // ─── BARIS ITEM ───
+        val perItem = if (receipt.jumlah > 0) receipt.totalHarga / receipt.jumlah else receipt.totalHarga
 
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        paint.textSize = textSizeSp(12.5f)
-        canvas.drawText("Jumlah : ${receipt.jumlah}", marginLeft, y, paint)
-        y += 18f
+        // Background baris item
+        p.style = Paint.Style.FILL
+        p.color = 0xFFFAF5FF.toInt()
+        canvas.drawRect(ml, y - 2f, mr, y + 26f, p)
 
-        // Total Line
-        y += 12f
-        paint.strokeWidth = 2f
-        canvas.drawLine(marginLeft, y, 547f, y, paint)
-        y += 26f
+        // Nama produk
+        p.textAlign = Paint.Align.LEFT
+        p.color = 0xFF222222.toInt()
+        p.textSize = 8.5f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText("  ${receipt.namaProduk}", ml + 4f, y + 10f, p)
 
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
-        paint.textSize = textSizeSp(18f)
-        paint.color = 0xFF4A2B66.toInt()
-        canvas.drawText("TOTAL", marginLeft, y, paint)
+        // Harga per pcs
+        p.color = 0xFF888888.toInt()
+        p.textSize = 6.5f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        canvas.drawText("  @ Rp ${fmt(perItem)}", ml + 4f, y + 22f, p)
 
-        val totalText = "Rp ${receipt.totalHarga}"
-        paint.textAlign = Paint.Align.RIGHT
-        canvas.drawText(totalText, 547f, y, paint)
+        // QTY (tengah)
+        p.textAlign = Paint.Align.CENTER
+        p.color = 0xFF5C3D75.toInt()
+        p.textSize = 10f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText("${receipt.jumlah}", cx, y + 15f, p)
 
-        // Footer
-        paint.textAlign = Paint.Align.LEFT
+        // Total kanan
+        p.textAlign = Paint.Align.RIGHT
+        p.color = 0xFF4A2B66.toInt()
+        p.textSize = 9f
+        canvas.drawText("Rp ${fmt(receipt.totalHarga)}  ", mr - 2f, y + 15f, p)
         y += 34f
-        paint.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
-        paint.textSize = textSizeSp(11.5f)
-        paint.color = 0xFF8E74A6.toInt()
-        canvas.drawText("Terima kasih telah berbelanja.", marginLeft, y, paint)
+
+        drawDashed(canvas, ml, mr, y); y += 12f
+
+        // ─── SUMMARY ───
+        // Subtotal baris
+        p.textAlign = Paint.Align.LEFT
+        p.color = 0xFF888888.toInt()
+        p.textSize = 8f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        canvas.drawText("Subtotal (${receipt.jumlah} item)", ml, y, p)
+        p.textAlign = Paint.Align.RIGHT
+        canvas.drawText("Rp ${fmt(receipt.totalHarga)}", mr, y, p)
+        y += 10f
+
+        // Biaya layanan
+        p.textAlign = Paint.Align.LEFT
+        canvas.drawText("Biaya Layanan", ml, y, p)
+        p.textAlign = Paint.Align.RIGHT
+        canvas.drawText("Rp 0", mr, y, p)
+        y += 14f
+
+        // ─── TOTAL BOX ───
+        p.style = Paint.Style.FILL
+        p.color = 0xFF4A2B66.toInt()
+        canvas.drawRoundRect(RectF(ml, y, mr, y + 30f), 10f, 10f, p)
+
+        p.textAlign = Paint.Align.LEFT
+        p.color = 0xFFCE93D8.toInt()
+        p.textSize = 8.5f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        canvas.drawText("  TOTAL PEMBAYARAN", ml + 4f, y + 19f, p)
+
+        p.textAlign = Paint.Align.RIGHT
+        p.color = 0xFFFFFFFF.toInt()
+        p.textSize = 12f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText("Rp ${fmt(receipt.totalHarga)}  ", mr - 4f, y + 20f, p)
+        y += 42f
+
+        // ─── LUNAS STAMP ───
+        drawDashed(canvas, ml, mr, y); y += 14f
+
+        p.style = Paint.Style.FILL
+        p.color = 0xFFE8F5E9.toInt()
+        canvas.drawRoundRect(RectF(cx - 34f, y - 2f, cx + 34f, y + 18f), 10f, 10f, p)
+        p.style = Paint.Style.STROKE
+        p.color = 0xFF4CAF50.toInt()
+        p.strokeWidth = 1.5f
+        canvas.drawRoundRect(RectF(cx - 34f, y - 2f, cx + 34f, y + 18f), 10f, 10f, p)
+        p.style = Paint.Style.FILL
+        p.color = 0xFF388E3C.toInt()
+        p.textAlign = Paint.Align.CENTER
+        p.textSize = 11f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.BOLD)
+        canvas.drawText("✓  LUNAS", cx, y + 13f, p)
+        y += 26f
+
+        // ─── FOOTER TEXT ───
+        p.style = Paint.Style.FILL
+        p.color = 0xFFBDBDBD.toInt()
+        p.textSize = 6f
+        p.typeface = Typeface.create(Typeface.DEFAULT, Typeface.NORMAL)
+        p.textAlign = Paint.Align.CENTER
+        canvas.drawText("Simpan nota ini sebagai bukti pembelian Anda.", cx, y, p); y += 9f
+        canvas.drawText("Barang yang sudah dibeli tidak dapat dikembalikan.", cx, y, p); y += 9f
+        canvas.drawText("Terima kasih atas kepercayaan Anda! ♥", cx, y, p)
+
+        // Bottom bar
+        p.color = 0xFF4A2B66.toInt()
+        canvas.drawRect(0f, PAGE_H - 10f, W, PAGE_H.toFloat(), p)
+    }
+
+    private fun drawDashed(canvas: Canvas, startX: Float, endX: Float, y: Float) {
+        val p = Paint(Paint.ANTI_ALIAS_FLAG)
+        p.color = 0xFFD1C4E9.toInt()
+        p.strokeWidth = 1f
+        p.style = Paint.Style.STROKE
+        p.pathEffect = DashPathEffect(floatArrayOf(5f, 4f), 0f)
+        canvas.drawLine(startX, y, endX, y, p)
+    }
+
+    private fun fmt(amount: Int): String {
+        val s = amount.toString()
+        val sb = StringBuilder()
+        var count = 0
+        for (i in s.length - 1 downTo 0) {
+            if (count > 0 && count % 3 == 0) sb.insert(0, ".")
+            sb.insert(0, s[i])
+            count++
+        }
+        return sb.toString()
     }
 }

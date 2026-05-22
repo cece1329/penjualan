@@ -59,8 +59,28 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="24dp"
             app:cornerRadius="18dp"/>
+
+        <TextView
+            android:id="@+id/tvPilihTransaksi"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Pilih Transaksi untuk Dicetak:"
+            android:textColor="@color/textColorPrimary"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:layout_marginBottom="8dp"
+            android:visibility="gone"/>
+
+        <Spinner
+            android:id="@+id/spinnerTransaksi"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:background="@drawable/spinner_background"
+            android:paddingHorizontal="16dp"
+            android:layout_marginBottom="16dp"
+            android:visibility="gone"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnPrintTest"
