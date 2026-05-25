@@ -3,6 +3,7 @@ package com.citra.penjualan.pegawai
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.citra.penjualan.R
 import androidx.recyclerview.widget.RecyclerView
 import com.citra.penjualan.databinding.ItemPegawaiBinding
 import com.citra.penjualan.model.ModelPegawai
@@ -19,8 +20,10 @@ class PegawaiAdapter(private var list: List<ModelPegawai>) : RecyclerView.Adapte
         val p = list[position]
         with(holder.binding) {
             tvNamaPegawai.text = p.namaPegawai
-            tvJabatanPegawai.text = "Jabatan: ${p.jabatanPegawai ?: "-"}"
-            tvTeleponPegawai.text = "Telepon: ${p.teleponPegawai ?: "-"}"
+            tvJabatanPegawai.text = holder.itemView.context.getString(R.string.item_position_prefix, p.jabatanPegawai ?: "-")
+            tvTeleponPegawai.text = holder.itemView.context.getString(R.string.item_phone_prefix, p.teleponPegawai ?: "-")
+            tvCabangPegawai.text = "Cabang: ${p.cabangPegawai ?: "-"}"
+            tvPinPegawai.text = "PIN: ${p.passwordPegawai ?: "-"}"
 
             root.setOnClickListener {
                 val context = holder.itemView.context

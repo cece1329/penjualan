@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityTambahKategoriBinding
 import com.citra.penjualan.model.ModelKategori
 import com.google.firebase.database.DataSnapshot
@@ -27,8 +28,8 @@ class TambahKategoriActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Setup Spinner
-        adapterCabang = ArrayAdapter(this, android.R.layout.simple_spinner_item, listCabang)
-        adapterCabang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapterCabang = ArrayAdapter(this, R.layout.item_spinner_selected, listCabang)
+        adapterCabang.setDropDownViewResource(R.layout.item_spinner_dropdown)
         binding.spinnerCabangKategori.adapter = adapterCabang
 
         // Cek apakah ada data yang dikirim (berarti mode EDIT)
@@ -39,16 +40,26 @@ class TambahKategoriActivity : AppCompatActivity() {
 
         // Logic ganti status via Chip
         binding.chipStatus.setOnClickListener {
-            if (binding.chipStatus.text == "Aktif") {
-                binding.chipStatus.text = "Tidak Aktif"
+            if (binding.chipStatus.text == getString(R.string.msg_active)) {
+                binding.chipStatus.text = getString(R.string.msg_inactive)
             } else {
-                binding.chipStatus.text = "Aktif"
+                binding.chipStatus.text = getString(R.string.msg_active)
             }
         }
 
         // Tombol Simpan atau Update Data
         binding.btnSimpan.setOnClickListener {
             validateAndSave()
+        }
+
+        // Fitur Hapus (Hanya muncul jika dalam mode Edit)
+        if (dataEdit != null) {
+            binding.btnHapus.visibility = android.view.View.VISIBLE
+            binding.btnHapus.setOnClickListener {
+                showDeleteConfirmation()
+            }
+        } else {
+            binding.btnHapus.visibility = android.view.View.GONE
         }
     }
 
@@ -65,7 +76,7 @@ class TambahKategoriActivity : AppCompatActivity() {
                 
                 // Add a default if empty
                 if (listCabang.isEmpty()) {
-                    listCabang.add("Pusat")
+                    listCabang.add(getString(R.string.msg_center))
                 }
                 
                 adapterCabang.notifyDataSetChanged()
@@ -76,7 +87,7 @@ class TambahKategoriActivity : AppCompatActivity() {
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@TambahKategoriActivity, "Gagal memuat cabang: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TambahKategoriActivity, getString(R.string.kategori_load_branch_failed, error.message), Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -85,7 +96,7 @@ class TambahKategoriActivity : AppCompatActivity() {
         binding.apply {
             etNamaKategori.setText(dataEdit?.namaKategori)
             chipStatus.text = dataEdit?.statusKategori
-            btnSimpan.text = "Update Data Kategori"
+            btnSimpan.text = getString(R.string.kategori_update_btn)
 
             // Set selected branch in spinner
             val branchIndex = listCabang.indexOf(dataEdit?.cabangKategori)
@@ -95,13 +106,29 @@ class TambahKategoriActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDeleteConfirmation() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.delete_confirm_title))
+            .setMessage(getString(R.string.delete_confirm_msg))
+            .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
+                dataEdit?.idKategori?.let { id ->
+                    db.child(id).removeValue().addOnSuccessListener {
+                        Toast.makeText(this, "Kategori berhasil dihapus", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+            }
+            .setNegativeButton(getString(R.string.btn_cancel), null)
+            .show()
+    }
+
     private fun validateAndSave() {
         val nama = binding.etNamaKategori.text.toString().trim()
         val cabang = binding.spinnerCabangKategori.selectedItem?.toString()?.trim() ?: ""
         val status = binding.chipStatus.text.toString()
 
         if (nama.isEmpty() || cabang.isEmpty()) {
-            Toast.makeText(this, "Lengkapi semua data ya!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -116,10 +143,10 @@ class TambahKategoriActivity : AppCompatActivity() {
 
         if (id != null) {
             db.child(id).setValue(kategori).addOnSuccessListener {
-                Toast.makeText(this, "Berhasil simpan data!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.kategori_save_success), Toast.LENGTH_SHORT).show()
                 finish() // Kembali ke halaman list
             }.addOnFailureListener {
-                Toast.makeText(this, "Gagal: ${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.msg_failed, it.message), Toast.LENGTH_SHORT).show()
             }
         }
     }

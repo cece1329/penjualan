@@ -6,6 +6,7 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityTambahProdukBinding
 import com.citra.penjualan.model.ModelKategori
 import com.citra.penjualan.model.ModelProduk
@@ -35,12 +36,12 @@ class TambahProdukActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         // Setup Spinners
-        adapterCabang = ArrayAdapter(this, android.R.layout.simple_spinner_item, listCabang)
-        adapterCabang.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapterCabang = ArrayAdapter(this, R.layout.item_spinner_selected, listCabang)
+        adapterCabang.setDropDownViewResource(R.layout.item_spinner_dropdown)
         binding.spinnerCabangProduk.adapter = adapterCabang
 
-        adapterKategori = ArrayAdapter(this, android.R.layout.simple_spinner_item, listFilteredKategoriNames)
-        adapterKategori.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapterKategori = ArrayAdapter(this, R.layout.item_spinner_selected, listFilteredKategoriNames)
+        adapterKategori.setDropDownViewResource(R.layout.item_spinner_dropdown)
         binding.spinnerKategoriProduk.adapter = adapterKategori
 
         // Cek apakah ada data yang dikirim (berarti mode EDIT)
@@ -51,16 +52,26 @@ class TambahProdukActivity : AppCompatActivity() {
 
         // Logic ganti status via Chip
         binding.chipStatus.setOnClickListener {
-            if (binding.chipStatus.text == "Aktif") {
-                binding.chipStatus.text = "Tidak Aktif"
+            if (binding.chipStatus.text == getString(R.string.msg_active)) {
+                binding.chipStatus.text = getString(R.string.msg_inactive)
             } else {
-                binding.chipStatus.text = "Aktif"
+                binding.chipStatus.text = getString(R.string.msg_active)
             }
         }
 
         // Tombol Simpan atau Update Data
         binding.btnSimpanProduk.setOnClickListener {
             validateAndSave()
+        }
+
+        // Fitur Hapus (Muncul hanya saat mode Edit)
+        if (dataEdit != null) {
+            binding.btnHapusProduk.visibility = View.VISIBLE
+            binding.btnHapusProduk.setOnClickListener {
+                showDeleteConfirmation()
+            }
+        } else {
+            binding.btnHapusProduk.visibility = View.GONE
         }
 
         // Filter categories when a branch is selected
@@ -86,7 +97,7 @@ class TambahProdukActivity : AppCompatActivity() {
                     }
                 }
                 if (listCabang.isEmpty()) {
-                    listCabang.add("Pusat")
+                    listCabang.add(getString(R.string.msg_center))
                 }
                 adapterCabang.notifyDataSetChanged()
 
@@ -112,13 +123,13 @@ class TambahProdukActivity : AppCompatActivity() {
                     }
 
                     override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(this@TambahProdukActivity, "Gagal memuat kategori: ${error.message}", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@TambahProdukActivity, getString(R.string.produk_load_category_failed, error.message), Toast.LENGTH_SHORT).show()
                     }
                 })
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@TambahProdukActivity, "Gagal memuat cabang: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@TambahProdukActivity, getString(R.string.produk_load_branch_failed, error.message), Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -147,7 +158,7 @@ class TambahProdukActivity : AppCompatActivity() {
 
         // Add a default if totally empty
         if (listFilteredKategoriNames.isEmpty()) {
-            listFilteredKategoriNames.add("Umum")
+            listFilteredKategoriNames.add(getString(R.string.msg_general))
         }
 
         adapterKategori.notifyDataSetChanged()
@@ -159,7 +170,7 @@ class TambahProdukActivity : AppCompatActivity() {
             inHargaBeli.setText(dataEdit?.hargaProduk?.toString() ?: "")
             inStokProduk.setText(dataEdit?.stokProduk?.toString() ?: "")
             chipStatus.text = dataEdit?.statusProduk
-            btnSimpanProduk.text = "Update Data Produk"
+            btnSimpanProduk.text = getString(R.string.produk_update_btn)
 
             // Set selected branch in spinner
             val branchIndex = listCabang.indexOf(dataEdit?.cabangProduk)
@@ -176,6 +187,22 @@ class TambahProdukActivity : AppCompatActivity() {
         }
     }
 
+    private fun showDeleteConfirmation() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle(getString(R.string.delete_confirm_title))
+            .setMessage(getString(R.string.delete_confirm_msg))
+            .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
+                dataEdit?.idProduk?.let { id ->
+                    db.child(id).removeValue().addOnSuccessListener { // Menghapus data dari Firebase
+                        Toast.makeText(this, getString(R.string.produk_delete_success), Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                }
+            }
+            .setNegativeButton(getString(R.string.btn_cancel), null)
+            .show()
+    }
+
     private fun validateAndSave() {
         val nama = binding.inNamaProduk.text.toString().trim()
         val hargaStr = binding.inHargaBeli.text.toString().trim()
@@ -186,7 +213,7 @@ class TambahProdukActivity : AppCompatActivity() {
 
         // Validasi jika ada field yang kosong
         if (nama.isEmpty() || hargaStr.isEmpty() || stokStr.isEmpty() || cabang.isEmpty() || kategori.isEmpty()) {
-            Toast.makeText(this, "Lengkapi semua data ya!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -208,10 +235,10 @@ class TambahProdukActivity : AppCompatActivity() {
         // Menyimpan atau Update ke Firebase Database
         if (id != null) {
             db.child(id).setValue(produk).addOnSuccessListener {
-                Toast.makeText(this, "Berhasil simpan data produk!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.produk_save_success), Toast.LENGTH_SHORT).show()
                 finish() // Kembali ke halaman sebelumnya
             }.addOnFailureListener {
-                Toast.makeText(this, "Gagal: ${it.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, getString(R.string.msg_failed, it.message), Toast.LENGTH_SHORT).show()
             }
         }
     }

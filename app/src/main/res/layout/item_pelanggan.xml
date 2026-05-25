@@ -46,9 +46,22 @@
                 android:id="@+id/tvNamaPelanggan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Nama Pelanggan"
+                android:text="@string/pelanggan_name_label"
                 android:textColor="@color/textColorPrimary"
                 android:textSize="15sp"
+                android:textStyle="bold"/>
+
+            <TextView
+                android:id="@+id/tvJenisPelanggan"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:background="@drawable/bg_rekap_box"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="3dp"
+                android:text="Umum"
+                android:textColor="@color/colorSoftPurpleDark"
+                android:textSize="11sp"
                 android:textStyle="bold"/>
 
             <!-- Telepon Row -->

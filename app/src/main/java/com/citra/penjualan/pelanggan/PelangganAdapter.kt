@@ -3,6 +3,7 @@ package com.citra.penjualan.pelanggan
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.citra.penjualan.R
 import androidx.recyclerview.widget.RecyclerView
 import com.citra.penjualan.databinding.ItemPelangganBinding
 import com.citra.penjualan.model.ModelPelanggan
@@ -19,8 +20,9 @@ class PelangganAdapter(private var list: List<ModelPelanggan>) : RecyclerView.Ad
         val p = list[position]
         with(holder.binding) {
             tvNamaPelanggan.text = p.namaPelanggan
-            tvTeleponPelanggan.text = "Telepon: ${p.teleponPelanggan ?: "-"}"
-            tvAlamatPelanggan.text = "Alamat: ${p.alamatPelanggan ?: "-"}"
+            tvJenisPelanggan.text = p.jenisPelanggan ?: "Umum"
+            tvTeleponPelanggan.text = holder.itemView.context.getString(R.string.item_phone_prefix, p.teleponPelanggan ?: "-")
+            tvAlamatPelanggan.text = holder.itemView.context.getString(R.string.item_address_prefix, p.alamatPelanggan ?: "-")
 
             root.setOnClickListener {
                 val context = holder.itemView.context

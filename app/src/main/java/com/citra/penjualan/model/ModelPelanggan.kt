@@ -9,5 +9,6 @@ data class ModelPelanggan(
     var idPelanggan: String? = "",
     var namaPelanggan: String? = "",
     var teleponPelanggan: String? = "",
-    var alamatPelanggan: String? = ""
+    var alamatPelanggan: String? = "",
+    var jenisPelanggan: String? = "Umum"
 ) : Parcelable

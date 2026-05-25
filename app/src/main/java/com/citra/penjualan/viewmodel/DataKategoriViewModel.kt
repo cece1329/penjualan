@@ -19,7 +19,7 @@ class DataKategoriViewModel : ViewModel() {
                 val items = ArrayList<ModelKategori>()
                 for (data in snapshot.children) {
                     val kategori = data.getValue(ModelKategori::class.java)
-                    if (kategori != null) items.add(kategori)
+                    if (kategori != null) items.add(kategori.copy(idKategori = data.key))
                 }
                 originalKategoriList = items
                 kategoriList.value = items
@@ -30,9 +30,10 @@ class DataKategoriViewModel : ViewModel() {
 
     fun filter(query: String) {
         val filteredList = if (query.isEmpty()) originalKategoriList
-        else originalKategoriList.filter {
-            it.namaKategori?.lowercase()?.contains(query.lowercase()) == true
-        } as ArrayList<ModelKategori>
+        else ArrayList(originalKategoriList.filter {
+            it.namaKategori?.lowercase()?.contains(query.lowercase()) == true ||
+                it.cabangKategori?.lowercase()?.contains(query.lowercase()) == true
+        })
         kategoriList.value = filteredList
     }
 }

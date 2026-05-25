@@ -1,3 +1,281 @@
 <resources>
     <string name="app_name">penjualan</string>
+
+    <string name="language_dialog_title">Pilih Bahasa</string>
+    <string name="language_option_default">Bawaan Sistem</string>
+    <string name="language_option_id">Bahasa Indonesia</string>
+    <string name="language_option_en">English</string>
+
+    <string name="theme_dialog_title">Pilih Tema</string>
+    <string name="theme_option_default">Bawaan Sistem</string>
+    <string name="theme_option_light">Mode Terang</string>
+    <string name="theme_option_dark">Mode Gelap</string>
+    <string name="theme_changed_toast">Tema berhasil diperbarui</string>
+    <string name="theme_cancel">Batal</string>
+
+    <string name="language_changed_toast">Bahasa berhasil diperbarui</string>
+    <string name="language_cancel">Batal</string>
+
+    <!-- Home / Welcome -->
+    <string name="welcome_halo">Halo</string>
+    <string name="welcome_day">Selamat Siang</string>
+
+    <!-- Home UI (cardActivity.xml) -->
+    <string name="home_welcome_fallback">Selamat Siang, Citra</string>
+    <string name="home_estimasi_hari_ini">Estimasi Hari Ini</string>
+    <string name="home_persen_tercapai">65% Tercapai</string>
+    <string name="home_target">Target: Rp 1.000.000</string>
+    <string name="home_target_penjualan_hari_ini">Target Penjualan Hari Ini</string>
+    <string name="home_siap_melayani_pelanggan">Siap melayani pelanggan</string>
+    <string name="home_jangan_kecewakan_pelanggan">Jangan Kecewakan Pelanggan</string>
+
+    <!-- Home Nav -->
+    <string name="home_nav_transaction">Transaksi</string>
+
+    <!-- Receipt PDF -->
+    <string name="receipt_thanks">Terima kasih sudah berbelanja ♥</string>
+    <string name="receipt_title">✦  NOTA TRANSAKSI  ✦</string>
+    <string name="receipt_date_label">Tanggal</string>
+    <string name="receipt_invoice_label">No. Nota</string>
+    <string name="receipt_cashier_label">Kasir</string>
+    <string name="receipt_payment_method_label">METODE PEMBAYARAN</string>
+    <string name="receipt_received_amount_label">UANG DITERIMA</string>
+    <string name="receipt_change_label">KEMBALIAN</string>
+    <string name="receipt_product_header">PRODUK</string>
+
+    <string name="receipt_qty_header">QTY</string>
+    <string name="receipt_price_header">HARGA</string>
+    <string name="receipt_subtotal">Subtotal (%1$d item)</string>
+    <string name="receipt_service_fee">Biaya Layanan</string>
+    <string name="receipt_total_payment">TOTAL PEMBAYARAN</string>
+    <string name="receipt_paid">✓  LUNAS</string>
+
+    <string name="receipt_gopay_number_label">No GoPay</string>
+
+
+    <string name="receipt_footer_1">Simpan nota ini sebagai bukti pembelian Anda.</string>
+    <string name="receipt_footer_2">Barang yang sudah dibeli tidak dapat dikembalikan.</string>
+    <string name="receipt_footer_3">Terima kasih atas kepercayaan Anda! ♥</string>
+
+    <!-- Errors / Transaksi -->
+    <string name="err_gagalambil_produk">Gagal mengambil data produk: %1$s</string>
+
+    <!-- Common -->
+    <string name="msg_complete_all_data">Lengkapi semua data ya!</string>
+    <string name="msg_failed">Gagal: %1$s</string>
+    <string name="msg_active">Aktif</string>
+    <string name="msg_inactive">Tidak Aktif</string>
+    <string name="msg_center">Pusat</string>
+    <string name="msg_general">Umum</string>
+
+    <!-- Login -->
+    <string name="login_app_title">Kasir Pintar Citra</string>
+    <string name="login_app_subtitle">Kelola Toko Dengan Mudah &amp; Cepat</string>
+    <string name="login_tab_owner">Pemilik</string>
+    <string name="login_tab_employee">Karyawan</string>
+    <string name="login_as_owner">Masuk sebagai Pemilik</string>
+    <string name="login_as_employee">Masuk sebagai Karyawan</string>
+    <string name="login_username_owner">Username Pemilik</string>
+    <string name="login_username_employee">Nama / Telepon Karyawan</string>
+    <string name="login_hint_owner">Contoh: pemilik / admin</string>
+    <string name="login_hint_employee">Masukkan nama atau no telepon</string>
+    <string name="login_password_label">Password / PIN</string>
+    <string name="login_hint_password">Masukkan password</string>
+    <string name="login_button">Masuk Aplikasi</string>
+    <string name="login_copyright">© 2026 Citra Sales App</string>
+    <string name="login_fill_all">Harap lengkapi semua form input ya!</string>
+    <string name="login_welcome_owner">Selamat datang Pemilik!</string>
+    <string name="login_wrong_owner">Username atau Password Pemilik salah!</string>
+    <string name="login_welcome_employee">Selamat datang, %1$s!</string>
+    <string name="login_wrong_employee">Nama/Telepon atau Password Karyawan salah!</string>
+    <string name="login_db_error">Error database: %1$s</string>
+
+    <string name="show_pin">Lihat PIN</string>
+    <string name="hide_pin">Sembunyikan PIN</string>
+
+    <!-- Account / Profil -->
+    <string name="akun_title">Profil Akun</string>
+    <string name="akun_username">Nama Pengguna</string>
+    <string name="akun_role_owner">PEMILIK / OWNER</string>
+    <string name="akun_role_employee">KARYAWAN</string>
+    <string name="akun_position">Jabatan: %1$s</string>
+    <string name="akun_phone">No. Telepon: %1$s</string>
+    <string name="akun_store_info">Informasi Toko / Bisnis</string>
+    <string name="akun_owner_name">Nama Pemilik</string>
+    <string name="akun_hint_owner_name">Contoh: Citra</string>
+    <string name="akun_store_name">Nama Bisnis / Toko</string>
+    <string name="akun_hint_store_name">Contoh: Citra Mart</string>
+    <string name="akun_email">Email Kontak</string>
+    <string name="akun_hint_email">Contoh: citra@toko.com</string>
+    <string name="akun_save_profile">Simpan Profil Toko</string>
+    <string name="akun_logout">Keluar Akun</string>
+    <string name="akun_load_failed">Gagal memuat profil toko: %1$s</string>
+    <string name="akun_save_success">Profil toko berhasil diperbarui!</string>
+    <string name="akun_logout_success">Berhasil keluar dari akun</string>
+
+    <!-- Transaksi -->
+    <string name="transaksi_title">Transaksi Baru</string>
+    <string name="transaksi_select_product">Pilih Produk</string>
+    <string name="transaksi_select_category">Pilih Kategori</string>
+    <string name="transaksi_qty_label">Jumlah Item</string>
+    <string name="transaksi_qty_hint">Contoh: 1</string>
+    <string name="transaksi_total_label">Total Pembayaran</string>
+    <string name="transaksi_btn_pay">Simpan &amp; Selesaikan Transaksi</string>
+    <string name="transaksi_no_product">Tidak ada produk tersedia</string>
+    <string name="transaksi_select_valid">Silakan pilih produk dan jumlah yang valid</string>
+    <string name="transaksi_select_cat_first">Pilih kategori terlebih dahulu</string>
+    <string name="transaksi_stock_insufficient">Stok tidak mencukupi! Stok saat ini: %1$d</string>
+    <string name="transaksi_success">Transaksi berhasil disimpan!</string>
+    <string name="transaksi_added_to_cart">Berhasil ditambahkan ke keranjang</string>
+    <string name="transaksi_cart_empty">Keranjang masih kosong!</string>
+    <string name="transaksi_failed">Gagal simpan transaksi: %1$s</string>
+
+    <!-- Printer -->
+    <string name="printer_title">Sistem Pencetak</string>
+    <string name="printer_subtitle">Hubungkan aplikasi dengan perangkat pencetak</string>
+    <string name="printer_status_disconnected">Status: Terputus</string>
+    <string name="printer_btn_connect">Hubungkan Sistem</string>
+    <string name="printer_btn_disconnect">Putuskan Koneksi</string>
+    <string name="printer_btn_connecting">Menghubungkan…</string>
+    <string name="printer_select_transaction">Silahkan Pilih Transaksi</string>
+    <string name="printer_btn_print">Cetak Struk Transaksi</string>
+    <string name="printer_no_transaction">Belum ada transaksi</string>
+    <string name="printer_status_ready">Status: Siap Mencetak PDF</string>
+    <string name="printer_ready_toast">Sistem pencetak PDF siap digunakan!</string>
+    <string name="printer_disabled_toast">Sistem pencetakan dinonaktifkan.</string>
+    <string name="printer_preparing">Menyiapkan PDF Struk…</string>
+    <string name="printer_select_first">Pilih transaksi terlebih dahulu!</string>
+    <string name="printer_load_failed">Gagal memuat transaksi: %1$s</string>
+    <string name="printer_pdf_failed">Gagal memproses struk PDF: %1$s</string>
+
+    <!-- Laporan -->
+    <string name="laporan_title">Laporan Penjualan</string>
+    <string name="laporan_total_label">Total Akumulasi Penjualan</string>
+    <string name="laporan_load_failed">Gagal memuat laporan: %1$s</string>
+
+    <!-- Produk -->
+    <string name="produk_form_title">Data Produk</string>
+    <string name="produk_name_label">Nama Produk</string>
+    <string name="produk_name_hint">Masukkan nama produk</string>
+    <string name="produk_price_label">Harga Jual</string>
+    <string name="produk_price_hint">Contoh: 38000</string>
+    <string name="produk_stock_label">Jumlah Stok</string>
+    <string name="produk_stock_hint">Contoh: 7</string>
+    <string name="produk_branch_label">Pilih Cabang</string>
+    <string name="produk_category_label">Pilih Kategori</string>
+    <string name="produk_status_label">Status Produk:</string>
+    <string name="produk_save_btn">Simpan Data Produk</string>
+    <string name="produk_update_btn">Update Data Produk</string>
+    <string name="produk_delete_btn">Hapus Produk</string>
+    <string name="produk_delete_success">Produk berhasil dihapus!</string>
+    <string name="produk_save_success">Berhasil simpan data produk!</string>
+    <string name="produk_search_hint">Cari Produk…</string>
+    <string name="produk_load_category_failed">Gagal memuat kategori: %1$s</string>
+    <string name="produk_load_branch_failed">Gagal memuat cabang: %1$s</string>
+
+    <!-- Kategori -->
+    <string name="kategori_form_title">Form Kategori</string>
+    <string name="kategori_name_label">Nama Kategori</string>
+    <string name="kategori_name_hint">Contoh: Makanan, Minuman</string>
+    <string name="kategori_branch_label">Pilih Cabang</string>
+    <string name="kategori_status_label">Status Kategori</string>
+    <string name="kategori_save_btn">Simpan Data</string>
+    <string name="kategori_update_btn">Update Data Kategori</string>
+    <string name="kategori_save_success">Berhasil simpan data!</string>
+    <string name="kategori_delete_success">Kategori berhasil dihapus!</string>
+    <string name="kategori_search_hint">Cari Kategori…</string>
+    <string name="kategori_delete_btn">Hapus Kategori</string>
+    <string name="kategori_no_branch">Belum Ada Cabang</string>
+    <string name="kategori_load_branch_failed">Gagal memuat cabang: %1$s</string>
+
+    <!-- Pelanggan -->
+    <string name="pelanggan_form_title">Form Pelanggan</string>
+    <string name="pelanggan_name_label">Nama Pelanggan</string>
+    <string name="pelanggan_name_hint">Contoh: Budi Santoso</string>
+    <string name="pelanggan_phone_label">Nomor Telepon</string>
+    <string name="pelanggan_phone_hint">Contoh: 08123456789</string>
+    <string name="pelanggan_address_label">Alamat</string>
+    <string name="pelanggan_address_hint">Contoh: Jl. Mawar No. 12</string>
+    <string name="pelanggan_save_btn">Simpan Pelanggan</string>
+    <string name="pelanggan_update_btn">Update Data Pelanggan</string>
+    <string name="pelanggan_delete_btn">Hapus Pelanggan</string>
+    <string name="pelanggan_delete_success">Pelanggan berhasil dihapus!</string>
+    <string name="pelanggan_save_success">Berhasil simpan data pelanggan!</string>
+    <string name="pelanggan_load_failed">Gagal memuat pelanggan: %1$s</string>
+
+    <!-- Pegawai -->
+    <string name="pegawai_form_title">Form Pegawai</string>
+    <string name="pegawai_name_label">Nama Pegawai</string>
+    <string name="pegawai_name_hint">Contoh: Rian Pratama</string>
+    <string name="pegawai_position_label">Jabatan</string>
+    <string name="pegawai_position_hint">Contoh: Kasir, Gudang</string>
+    <string name="pegawai_phone_label">Nomor Telepon</string>
+    <string name="pegawai_phone_hint">Contoh: 0876543210</string>
+    <string name="pegawai_password_label">Password Karyawan</string>
+    <string name="pegawai_password_hint">Masukkan password karyawan</string>
+    <string name="pegawai_save_btn">Simpan Data Pegawai</string>
+    <string name="pegawai_update_btn">Update Data Pegawai</string>
+    <string name="pegawai_delete_btn">Hapus Pegawai</string>
+    <string name="pegawai_save_success">Berhasil simpan data pegawai!</string>
+    <string name="pegawai_load_failed">Gagal memuat pegawai: %1$s</string>
+
+    <!-- Cabang -->
+    <string name="cabang_form_title">Form Cabang Toko</string>
+    <string name="cabang_name_label">Nama Cabang</string>
+    <string name="cabang_name_hint">Contoh: Cabang Kopo</string>
+    <string name="cabang_city_label">Kota / Kabupaten</string>
+    <string name="cabang_city_hint">Contoh: Bandung</string>
+    <string name="cabang_address_label">Alamat Lengkap</string>
+    <string name="cabang_address_hint">Contoh: Jl. Kopo Indah No. 4</string>
+    <string name="cabang_save_btn">Simpan Data Cabang</string>
+    <string name="cabang_update_btn">Update Data Cabang</string>
+    <string name="cabang_delete_btn">Hapus Cabang</string>
+    <string name="cabang_delete_success">Cabang berhasil dihapus!</string>
+    <string name="cabang_save_success">Berhasil simpan data cabang!</string>
+    <string name="cabang_load_failed">Gagal memuat cabang: %1$s</string>
+
+    <!-- Item Placeholders -->
+    <string name="item_phone_prefix">Telepon: %1$s</string>
+    <string name="item_address_prefix">Alamat: %1$s</string>
+    <string name="item_city_prefix">Kota: %1$s</string>
+    <string name="item_position_prefix">Jabatan: %1$s</string>
+    <string name="item_qty_prefix">Jumlah: %1$d item</string>
+    <string name="item_date_prefix">Tanggal: %1$s</string>
+
+    <string name="nav_pelanggan">Pelanggan</string>
+    <string name="nav_laporan">Laporan</string>
+    <string name="nav_akun">Akun</string>
+    <string name="nav_produk">Produk</string>
+    <string name="nav_kategori">Kategori</string>
+    <string name="nav_pegawai">Pegawai</string>
+    <string name="nav_cabang">Cabang</string>
+    <string name="nav_printer">Printer</string>
+
+    <!-- Search -->
+    <string name="search_hint_pelanggan">Cari Pelanggan...</string>
+    <string name="search_hint_pegawai">Cari Pegawai...</string>
+    <string name="search_hint_cabang">Cari Cabang...</string>
+
+    <!-- Pegawai Actions -->
+    <string name="pegawai_delete_title">Hapus Pegawai</string>
+    <string name="pegawai_delete_msg">Yakin ingin menghapus pegawai ini?</string>
+    <string name="pegawai_delete_success">Berhasil menghapus pegawai!</string>
+    <string name="pegawai_delete_failed">Gagal menghapus pegawai: %1$s</string>
+    <string name="btn_delete">Hapus</string>
+    <string name="btn_cancel">Batal</string>
+
+    <!-- Spinner Jabatan -->
+    <string name="jabatan_prompt">Pilih Jabatan</string>
+    
+    <!-- Delete Confirmation -->
+    <string name="delete_confirm_title">Konfirmasi Hapus</string>
+    <string name="delete_confirm_msg">Apakah Anda yakin ingin menghapus data ini? Tindakan ini tidak dapat dibatalkan.</string>
+    
+    <string name="cabang_delete_title">Hapus Cabang</string>
+    <string name="cabang_delete_msg">Yakin ingin menghapus cabang toko ini?</string>
+    
+    <string name="pelanggan_delete_title">Hapus Pelanggan</string>
+    <string name="pelanggan_delete_msg">Yakin ingin menghapus pelanggan ini?</string>
+    
+    <string name="laporan_delete_success">Laporan transaksi berhasil dihapus!</string>
 </resources>

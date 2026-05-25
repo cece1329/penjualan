@@ -1,103 +1,299 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/backgroundFormColor">
 
+    <!-- TOP BAR -->
     <LinearLayout
+        android:id="@+id/topBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:background="@color/backgroundFormColor"
+        android:elevation="4dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="8dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <TextView
+        <!-- Header Row -->
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Transaksi Baru"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="32dp"
-            android:textColor="@color/textColorPrimary"/>
+            android:layout_height="48dp"
+            android:paddingHorizontal="16dp">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Pilih Produk"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
-
-        <!-- Spinner for selecting products -->
-        <Spinner
-            android:id="@+id/spinnerProduk"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:background="@drawable/spinner_background"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="16dp"/>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Jumlah Item"
-            android:textColor="@color/textColorSecondary"
-            android:textSize="14sp"
-            android:layout_marginBottom="8dp"/>
-
-        <EditText
-            android:id="@+id/etJumlah"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:hint="Contoh: 1"
-            android:background="@drawable/bg_border"
-            android:paddingHorizontal="16dp"
-            android:inputType="number"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
-            android:layout_marginBottom="24dp"/>
-
-        <!-- Total Price View Card -->
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/bg_border"
-            android:orientation="vertical"
-            android:padding="16dp"
-            android:layout_marginBottom="32dp">
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_border"
+                android:contentDescription="Kembali"
+                android:src="@drawable/arrow"
+                android:scaleType="centerInside"
+                android:padding="8dp"
+                android:rotation="180"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Total Pembayaran"
-                android:textColor="@color/textColorSecondary"
-                android:textSize="14sp"/>
+                android:layout_centerInParent="true"
+                android:text="Transaksi Baru"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorTitle"/>
+
+        </RelativeLayout>
+
+        <!-- Search Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:orientation="horizontal"
+            android:background="@drawable/bg_border"
+            android:gravity="center_vertical"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:paddingHorizontal="14dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/search"
+                android:scaleType="centerInside"
+                android:alpha="0.5"/>
+
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:hint="Cari produk..."
+                android:textSize="14sp"
+                android:textColor="@color/textColorPrimary"
+                android:textColorHint="@color/textColorSecondary"
+                android:background="@null"
+                android:paddingStart="10dp"
+                android:inputType="text"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <!-- Category Filter Chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:paddingHorizontal="16dp"
+            android:clipToPadding="false"
+            android:layout_marginBottom="10dp">
+
+            <LinearLayout
+                android:id="@+id/chipGroupKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center_vertical"/>
+
+        </HorizontalScrollView>
+
+        <LinearLayout
+            android:id="@+id/btnPilihPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bg_border"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/customer"
+                android:scaleType="fitCenter"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvPelangganTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Pelanggan Umum"
+                    android:textColor="@color/textColorTitle"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvJenisPelangganTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Opsional"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/arrow"
+                app:tint="@color/colorSoftPurple"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btnPilihKasir"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginHorizontal="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="4dp"
+            android:background="@drawable/bg_border"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:src="@drawable/employee"
+                android:scaleType="fitCenter"/>
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvKasirTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Kasir"
+                    android:textColor="@color/textColorTitle"
+                    android:textSize="14sp"
+                    android:textStyle="bold"/>
+
+                <TextView
+                    android:id="@+id/tvInfoKasirTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:text="Otomatis dari akun login"
+                    android:textColor="@color/textColorSecondary"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/imgArrowKasir"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:src="@drawable/arrow"
+                app:tint="@color/colorSoftPurple"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <!-- Product List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProduk"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="14dp"
+        android:paddingHorizontal="12dp"
+        android:clipToPadding="false"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomCheckout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Empty State -->
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tidak ada produk"
+        android:textSize="15sp"
+        android:textColor="@color/textColorSecondary"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintBottom_toTopOf="@id/bottomCheckout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+    <!-- Bottom Checkout Bar -->
+    <LinearLayout
+        android:id="@+id/bottomCheckout"
+        android:layout_width="0dp"
+        android:layout_height="80dp"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:background="#BA68C8"
+        android:paddingHorizontal="20dp"
+        android:elevation="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvItemTerpilih"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Item Terpilih"
+                android:textSize="13sp"
+                android:textColor="#FFE0FF"/>
 
             <TextView
                 android:id="@+id/tvTotalHarga"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Rp 0"
-                android:textSize="28sp"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:textColor="@color/textColorPrimary"
-                android:layout_marginTop="8dp"/>
+                android:textColor="#FFFFFF"/>
+
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnBayar"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Simpan &amp; Selesaikan Transaksi"
-            android:backgroundTint="@color/colorSoftPurple"
-            android:textAllCaps="false"
-            android:textSize="16sp"
+            android:id="@+id/btnCheckout"
+            android:layout_width="140dp"
+            android:layout_height="50dp"
+            android:text="CHECKOUT"
+            android:textAllCaps="true"
+            android:textSize="13sp"
             android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            app:cornerRadius="18dp"/>
+            android:textColor="#BA68C8"
+            android:backgroundTint="#FFFFFF"
+            app:cornerRadius="25dp"/>
 
     </LinearLayout>
-</ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

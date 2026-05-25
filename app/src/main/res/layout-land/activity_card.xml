@@ -55,6 +55,15 @@
             </RelativeLayout>
 
             <TextView
+                android:id="@+id/tvWorkInfo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="11sp"
+                android:layout_marginBottom="6dp"
+                android:visibility="gone" />
+
+            <TextView
                 android:id="@+id/tvDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -106,6 +115,7 @@
                     android:padding="10dp">
 
                     <TextView
+                        android:id="@+id/tvTargetTitle"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Target Penjualan"
@@ -128,6 +138,7 @@
                         android:layout_marginTop="3dp">
 
                         <TextView
+                            android:id="@+id/tvProgressPercent"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="65% Tercapai"
@@ -135,6 +146,7 @@
                             android:textSize="10sp" />
 
                         <TextView
+                            android:id="@+id/tvTargetAmount"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentEnd="true"
@@ -142,6 +154,18 @@
                             android:textColor="@color/textColorSecondary"
                             android:textSize="10sp" />
                     </RelativeLayout>
+
+                    <androidx.appcompat.widget.AppCompatButton
+                        android:id="@+id/btnSetTarget"
+                        android:layout_width="match_parent"
+                        android:layout_height="34dp"
+                        android:layout_marginTop="6dp"
+                        android:backgroundTint="@color/colorSoftPurpleLight"
+                        android:text="Atur Target"
+                        android:textAllCaps="false"
+                        android:textColor="@color/colorSoftPurpleDark"
+                        android:textSize="11sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

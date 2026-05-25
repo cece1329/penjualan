@@ -1,263 +1,223 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundFormColor">
+    android:background="#F8F9FA">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:padding="24dp">
+        android:padding="20dp">
 
-        <TextView
+        <!-- Profile Header Section -->
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Profil Akun"
-            android:textSize="24sp"
-            android:textStyle="bold"
             android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="24dp"
-            android:textColor="@color/textColorPrimary"/>
+            android:orientation="vertical"
+            android:layout_marginBottom="24dp">
 
-        <!-- User Information Card (Aesthetic Profile Summary) -->
+            <FrameLayout
+                android:id="@+id/avatarFrame"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:padding="12dp">
+                
+                <TextView
+                    android:id="@+id/tvAvatarInitials"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:textColor="@color/white"
+                    android:textSize="32sp"
+                    android:textStyle="bold" />
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tvProfileName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:text="Nama Pengguna"
+                android:textColor="#212121"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tvProfileRoleBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:paddingHorizontal="12dp"
+                android:paddingVertical="4dp"
+                android:text="Owner"
+                android:textColor="@color/white"
+                android:textSize="12sp" />
+        </LinearLayout>
+
+        <!-- Employee Info (Visible for Employees) -->
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/cardProfileSummary"
+            android:id="@+id/layoutEmployeeDetails"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
+            android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
-            app:cardBackgroundColor="@color/cardBackground"
-            app:strokeWidth="1dp"
-            app:strokeColor="@color/borderColor"
-            app:cardElevation="3dp">
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:gravity="center"
                 android:padding="20dp">
 
-                <!-- Avatar Circle -->
-                <FrameLayout
-                    android:id="@+id/avatarFrame"
-                    android:layout_width="72dp"
-                    android:layout_height="72dp"
-                    android:background="@drawable/bg_upload_foto"
-                    android:layout_marginBottom="12dp">
-
-                    <TextView
-                        android:id="@+id/tvAvatarInitials"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:text="C"
-                        android:textColor="#FFFFFF"
-                        android:textSize="28sp"
-                        android:textStyle="bold"/>
-                </FrameLayout>
-
-                <TextView
-                    android:id="@+id/tvProfileName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Nama Pengguna"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:textColor="@color/textColorPrimary"
-                    android:layout_marginBottom="4dp"/>
-
-                <!-- Role Badge -->
-                <TextView
-                    android:id="@+id/tvProfileRoleBadge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="PEMILIK"
-                    android:textColor="#FFFFFF"
-                    android:textSize="11sp"
-                    android:textStyle="bold"
-                    android:background="@drawable/btn_simpan"
-                    android:backgroundTint="@color/colorSoftPurple"
-                    android:paddingHorizontal="12dp"
-                    android:paddingVertical="4dp"
-                    android:layout_marginBottom="12dp"/>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="#E1BEE7"
-                    android:layout_marginBottom="12dp"/>
-
-                <!-- Extra Detail Layout (For Employees) -->
+                <!-- Baris Jabatan -->
                 <LinearLayout
-                    android:id="@+id/layoutEmployeeDetails"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:gravity="center_horizontal">
-
-                    <!-- Jabatan Row -->
-                    <LinearLayout
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/jabatan"
+                        app:tint="#757575"/>
+                    <TextView
+                        android:id="@+id/tvProfileJabatan"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical"
-                        android:layout_marginBottom="6dp">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/jabatan"
-                            android:scaleType="fitCenter"
-                            android:layout_marginEnd="6dp" />
-
-                        <TextView
-                            android:id="@+id/tvProfileJabatan"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="Jabatan: Kasir"
-                            android:textColor="@color/textColorSecondary"
-                            android:textSize="13sp"/>
-                    </LinearLayout>
-
-                    <!-- Telepon Row -->
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        android:gravity="center_vertical">
-
-                        <ImageView
-                            android:layout_width="16dp"
-                            android:layout_height="16dp"
-                            android:src="@drawable/telp"
-                            android:scaleType="fitCenter"
-                            android:layout_marginEnd="6dp" />
-
-                        <TextView
-                            android:id="@+id/tvProfileTelepon"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="No. Telepon: 0812345678"
-                            android:textColor="@color/textColorSecondary"
-                            android:textSize="13sp"/>
-                    </LinearLayout>
+                        android:layout_marginStart="16dp"
+                        android:text="Jabatan"
+                        android:textSize="14sp"
+                        android:textColor="#616161" />
                 </LinearLayout>
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:layout_width="20dp"
+                        android:layout_height="20dp"
+                        android:src="@drawable/telp"
+                        app:tint="#757575"/>
+                    <TextView
+                        android:id="@+id/tvProfileTelepon"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="16dp"
+                        android:text="Telepon"
+                        android:textSize="14sp"
+                        android:textColor="#616161" />
+                </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Business details section (Only full interactive for owner, read-only for employees) -->
-        <LinearLayout
-            android:id="@+id/layoutTokoForm"
+        <!-- Settings/Form Section -->
+        <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:strokeWidth="0dp">
 
-            <TextView
-                android:id="@+id/tvFormTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Informasi Toko / Bisnis"
-                android:textColor="@color/textColorPrimary"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Nama Pemilik"
-                android:textColor="@color/textColorSecondary"
-                android:textSize="13sp"
-                android:layout_marginBottom="6dp"/>
-
-            <EditText
-                android:id="@+id/etNamaPemilik"
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:hint="Contoh: Citra"
-                android:background="@drawable/bg_border"
-                android:paddingHorizontal="16dp"
-                android:inputType="text"
-                android:textSize="14sp"
-                android:textColor="@color/textColorEditText"
-                android:textColorHint="@color/textColorSecondary"
-                android:layout_marginBottom="14dp"/>
-
-            <TextView
-                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Nama Bisnis / Toko"
-                android:textColor="@color/textColorSecondary"
-                android:textSize="13sp"
-                android:layout_marginBottom="6dp"/>
+                android:orientation="vertical"
+                android:padding="20dp">
 
-            <EditText
-                android:id="@+id/etNamaToko"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:hint="Contoh: Citra Mart"
-                android:background="@drawable/bg_border"
-                android:paddingHorizontal="16dp"
-                android:inputType="text"
-                android:textSize="14sp"
-                android:textColor="@color/textColorEditText"
-                android:textColorHint="@color/textColorSecondary"
-                android:layout_marginBottom="14dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nama Pemilik"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNamaPemilik"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Email Kontak"
-                android:textColor="@color/textColorSecondary"
-                android:textSize="13sp"
-                android:layout_marginBottom="6dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="Nama Toko"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etNamaToko"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <EditText
-                android:id="@+id/etEmailToko"
-                android:layout_width="match_parent"
-                android:layout_height="52dp"
-                android:hint="Contoh: citra@toko.com"
-                android:background="@drawable/bg_border"
-                android:paddingHorizontal="16dp"
-                android:inputType="textEmailAddress"
-                android:textSize="14sp"
-                android:textColor="@color/textColorEditText"
-                android:textColorHint="@color/textColorSecondary"
-                android:layout_marginBottom="24dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="Email Toko"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmailToko"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textEmailAddress" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSimpanProfil"
-                android:layout_width="match_parent"
-                android:layout_height="54dp"
-                android:text="Simpan Profil Toko"
-                android:backgroundTint="@color/colorSoftPurple"
-                android:textAllCaps="false"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="#FFFFFF"
-                app:cornerRadius="18dp"
-                android:layout_marginBottom="12dp"/>
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:hint="PIN / Sandi Pemilik"
+                    app:boxCornerRadiusBottomEnd="12dp"
+                    app:boxCornerRadiusBottomStart="12dp"
+                    app:boxCornerRadiusTopEnd="12dp"
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:endIconMode="password_toggle">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etSandiPemilik"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPassword" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-        </LinearLayout>
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnSimpanProfil"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="24dp"
+                    android:text="Simpan Perubahan"
+                    android:textAllCaps="false"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
+                    app:cornerRadius="12dp" />
 
-        <!-- Logout Button -->
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnKeluar"
-            android:layout_width="match_parent"
-            android:layout_height="54dp"
-            android:text="Keluar Akun"
-            android:backgroundTint="#E53935"
-            android:textAllCaps="false"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            app:cornerRadius="14dp"
-            android:layout_marginTop="8dp"/>
-
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnKeluar"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="56dp"
+                    android:layout_marginTop="8dp"
+                    android:text="Keluar dari Akun"
+                    android:textColor="#F44336"
+                    android:textAllCaps="false" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

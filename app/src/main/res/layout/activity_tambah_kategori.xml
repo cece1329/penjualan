@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Form Kategori"
+            android:text="@string/kategori_form_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Kategori"
+            android:text="@string/kategori_name_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -34,7 +34,7 @@
             android:id="@+id/etNamaKategori"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Makanan, Minuman"
+            android:hint="@string/kategori_name_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="text"
@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pilih Cabang"
+            android:text="@string/produk_branch_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -62,7 +62,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status Kategori"
+            android:text="@string/kategori_status_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -72,7 +72,7 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aktif"
+            android:text="@string/msg_active"
             android:textSize="14sp"
             android:textColor="#2E7D32"
             app:chipBackgroundColor="#334CAF50"
@@ -82,13 +82,24 @@
             android:id="@+id/btnSimpan"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:text="Simpan Data"
+            android:text="@string/kategori_save_btn"
             android:backgroundTint="@color/colorSoftPurple"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             app:cornerRadius="18dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnHapus"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/kategori_delete_btn"
+            android:backgroundTint="#FFEBEE"
+            android:textColor="#C62828"
+            android:textAllCaps="false"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

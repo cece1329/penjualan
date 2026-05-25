@@ -1,99 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/backgroundFormColor">
+    android:orientation="vertical"
+    android:padding="24dp"
+    android:gravity="center_horizontal"
+    android:background="#FAF5FF"
+    >
 
-    <LinearLayout
+    <TextView
+        android:id="@+id/tvTitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="24dp"
-        android:gravity="center_horizontal">
+        android:text="Pengaturan Printer"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        android:textColor="#4A2B66"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="24dp"/>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Koneksi Printer"
-            android:textSize="24sp"
-            android:textStyle="bold"
-            android:gravity="center"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="32dp"
-            android:textColor="@color/textColorPrimary"/>
+    <ImageView
+        android:id="@+id/imgPrinterState"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:src="@drawable/printer"
+        android:layout_marginBottom="16dp"/>
 
-        <!-- Printer Connection Icon/State -->
-        <FrameLayout
-            android:layout_width="120dp"
-            android:layout_height="120dp"
-            android:background="@drawable/bg_border"
-            android:layout_marginBottom="24dp"
-            android:padding="16dp">
+    <TextView
+        android:id="@+id/tvStatusPrinter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Status: Tidak Diketahui"
+        android:textSize="16sp"
+        android:textColor="#8E74A6"
+        android:layout_marginBottom="32dp"/>
 
-            <ImageView
-                android:id="@+id/imgPrinterState"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/printer"
-                app:tint="#EF5350"/> <!-- Soft Red initially (disconnected) -->
-        </FrameLayout>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnConnectPrinter"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Hubungkan Printer Bluetooth"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#BA68C8"
+        app:cornerRadius="16dp"
+        android:layout_marginBottom="16dp"/>
 
-        <TextView
-            android:id="@+id/tvStatusPrinter"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Status: Terputus"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="32dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPrintTest"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Cetak Halaman Test"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="#66BB6A"
+        app:cornerRadius="16dp"
+        android:layout_marginBottom="32dp"/>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnConnectPrinter"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Hubungkan Sistem Pencetak"
-            android:backgroundTint="@color/colorSoftPurple"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:layout_marginBottom="24dp"
-            app:cornerRadius="18dp"/>
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnBack"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:text="Kembali"
+        android:textAllCaps="false"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:textColor="#4A2B66"
+        app:backgroundTint="#EAD9F7"
+        app:cornerRadius="16dp"/>
 
-        <TextView
-            android:id="@+id/tvPilihTransaksi"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Pilih Transaksi untuk Dicetak:"
-            android:textColor="@color/textColorPrimary"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="8dp"
-            android:visibility="gone"/>
-
-        <Spinner
-            android:id="@+id/spinnerTransaksi"
-            android:layout_width="match_parent"
-            android:layout_height="52dp"
-            android:background="@drawable/spinner_background"
-            android:paddingHorizontal="16dp"
-            android:layout_marginBottom="16dp"
-            android:visibility="gone"/>
-
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btnPrintTest"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:text="Cetak Struk (PDF / Printer Asli)"
-            android:backgroundTint="#66BB6A"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"
-            android:enabled="false"
-            app:cornerRadius="18dp"/>
-
-    </LinearLayout>
-</ScrollView>
+</LinearLayout>

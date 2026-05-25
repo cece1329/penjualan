@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.R
@@ -20,68 +19,48 @@ import com.google.firebase.database.ValueEventListener
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
-    private var selectedRole = "pemilik" // Default role
+    private var selectedRole = "pemilik"
     private val dbPegawai = FirebaseDatabase.getInstance().getReference("pegawai")
+    private val dbProfil = FirebaseDatabase.getInstance().getReference("profil")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        
-        // Check if user is already logged in
         val sharedPref = getSharedPreferences("user_session", Context.MODE_PRIVATE)
-        val isLoggedIn = sharedPref.getBoolean("is_logged_in", false)
-        if (isLoggedIn) {
+        if (sharedPref.getBoolean("is_logged_in", false)) {
             startActivity(Intent(this, cardActivity::class.java))
             finish()
             return
         }
-
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupRoleSelection()
-
-        binding.btnLogin.setOnClickListener {
-            validateAndLogin()
-        }
+        binding.btnLogin.setOnClickListener { validateAndLogin() }
     }
 
     private fun setupRoleSelection() {
         binding.btnTabPemilik.setOnClickListener {
             selectedRole = "pemilik"
-            
-            // Highlight Pemilik Tab
             binding.btnTabPemilik.setBackgroundResource(R.drawable.btn_simpan)
             binding.btnTabPemilik.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#BA68C8"))
             binding.btnTabPemilik.setTextColor(Color.WHITE)
-            
-            // Unhighlight Karyawan Tab
             binding.btnTabKaryawan.setBackgroundColor(Color.TRANSPARENT)
             binding.btnTabKaryawan.setTextColor(Color.parseColor("#BA68C8"))
-            
-            // Update labels and hints
-            binding.tvRoleTitle.text = "Masuk sebagai Pemilik"
-            binding.tvUsernameLabel.text = "Username Pemilik"
-            binding.etUsername.hint = "Contoh: pemilik / admin"
+            binding.tvRoleTitle.text = getString(R.string.login_as_owner)
+            binding.tvUsernameLabel.text = getString(R.string.login_username_owner)
+            binding.etUsername.hint = getString(R.string.login_hint_owner)
             binding.etUsername.setText("")
             binding.etPassword.setText("")
         }
-
         binding.btnTabKaryawan.setOnClickListener {
             selectedRole = "karyawan"
-            
-            // Highlight Karyawan Tab
             binding.btnTabKaryawan.setBackgroundResource(R.drawable.btn_simpan)
             binding.btnTabKaryawan.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#BA68C8"))
             binding.btnTabKaryawan.setTextColor(Color.WHITE)
-            
-            // Unhighlight Pemilik Tab
             binding.btnTabPemilik.setBackgroundColor(Color.TRANSPARENT)
             binding.btnTabPemilik.setTextColor(Color.parseColor("#BA68C8"))
-            
-            // Update labels and hints
-            binding.tvRoleTitle.text = "Masuk sebagai Karyawan"
-            binding.tvUsernameLabel.text = "Nama / Telepon Karyawan"
-            binding.etUsername.hint = "Masukkan nama atau no telepon"
+            binding.tvRoleTitle.text = getString(R.string.login_as_employee)
+            binding.tvUsernameLabel.text = getString(R.string.login_username_employee)
+            binding.etUsername.hint = getString(R.string.login_hint_employee)
             binding.etUsername.setText("")
             binding.etPassword.setText("")
         }
@@ -90,81 +69,89 @@ class LoginActivity : AppCompatActivity() {
     private fun validateAndLogin() {
         val usernameInput = binding.etUsername.text.toString().trim()
         val passwordInput = binding.etPassword.text.toString().trim()
-
         if (usernameInput.isEmpty() || passwordInput.isEmpty()) {
-            Toast.makeText(this, "Harap lengkapi semua form input ya!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.login_fill_all), Toast.LENGTH_SHORT).show()
             return
         }
-
-        // Cek login berdasarkan peran yang dipilih (Pemilik / Karyawan)
         if (selectedRole == "pemilik") {
-            // Pemilik hardcoded / simple credentials for default safety
-            if ((usernameInput.lowercase() == "pemilik" || usernameInput.lowercase() == "admin") && passwordInput == "admin123") {
-                saveSession(
-                    role = "pemilik",
-                    name = "Citra (Pemilik)",
-                    phone = "-",
-                    jabatan = "Owner/Pemilik"
-                )
-                Toast.makeText(this, "Selamat datang Pemilik!", Toast.LENGTH_SHORT).show()
-                startActivity(Intent(this, cardActivity::class.java))
-                finish()
-            } else {
-                Toast.makeText(this, "Username atau Password Pemilik salah!", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            // Fetch Karyawan credentials from Firebase Realtime Database
-            dbPegawai.addListenerForSingleValueEvent(object : ValueEventListener {
+            // Cek sandi pemilik dari database profil
+            dbProfil.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    var loginSuccess = false
-                    var matchedPegawai: ModelPegawai? = null
+                    val sandiDb = snapshot.child("sandiPemilik").value?.toString() ?: "admin123"
+                    val namaPemilik = snapshot.child("namaPemilik").value?.toString() ?: "Citra"
+
+                    // Login menggunakan Nama Pemilik dari DB atau fallback standar
+                    val isUsernameValid = usernameInput.equals(namaPemilik, ignoreCase = true) ||
+                                         usernameInput.lowercase() == "admin" ||
+                                         usernameInput.lowercase() == "pemilik"
                     
-                    for (data in snapshot.children) {
-                        val pegawai = data.getValue(ModelPegawai::class.java)
-                        if (pegawai != null) {
-                            val nameMatch = pegawai.namaPegawai?.equals(usernameInput, ignoreCase = true) == true
-                            val phoneMatch = pegawai.teleponPegawai == usernameInput
-                            val passwordMatch = pegawai.passwordPegawai == passwordInput
-                            
-                            if ((nameMatch || phoneMatch) && passwordMatch) {
-                                loginSuccess = true
-                                matchedPegawai = pegawai
-                                break
-                            }
-                        }
-                    }
-                    
-                    if (loginSuccess && matchedPegawai != null) {
-                        saveSession(
-                            role = "karyawan",
-                            name = matchedPegawai.namaPegawai ?: "Karyawan",
-                            phone = matchedPegawai.teleponPegawai ?: "-",
-                            jabatan = matchedPegawai.jabatanPegawai ?: "Karyawan"
-                        )
-                        Toast.makeText(this@LoginActivity, "Selamat datang, ${matchedPegawai.namaPegawai}!", Toast.LENGTH_SHORT).show()
+                    if (isUsernameValid && passwordInput == sandiDb) {
+                        saveSession("pemilik", namaPemilik, "-", "Owner/Pemilik", "", "")
+                        Toast.makeText(this@LoginActivity, getString(R.string.login_welcome_owner), Toast.LENGTH_SHORT).show()
                         startActivity(Intent(this@LoginActivity, cardActivity::class.java))
                         finish()
                     } else {
-                        Toast.makeText(this@LoginActivity, "Nama/Telepon atau Password Karyawan salah!", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@LoginActivity, getString(R.string.login_wrong_owner), Toast.LENGTH_SHORT).show()
                     }
                 }
-
+                override fun onCancelled(error: DatabaseError) {}
+            })
+        } else {
+            dbPegawai.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    var matchedPegawai: ModelPegawai? = null
+                    for (data in snapshot.children) {
+                        val pegawai = data.getValue(ModelPegawai::class.java) ?: continue
+                        pegawai.idPegawai = data.key
+                        pegawai.cabangPegawai = firstNotBlank(
+                            pegawai.cabangPegawai,
+                            data.child("cabangPegawai").value?.toString(),
+                            data.child("cabang").value?.toString(),
+                            data.child("namaCabang").value?.toString()
+                        )
+                        val nameMatch = pegawai.namaPegawai?.equals(usernameInput, ignoreCase = true) == true
+                        val phoneMatch = pegawai.teleponPegawai == usernameInput
+                        if ((nameMatch || phoneMatch) && pegawai.passwordPegawai == passwordInput) {
+                            matchedPegawai = pegawai; break
+                        }
+                    }
+                    if (matchedPegawai != null) {
+                        saveSession(
+                            "karyawan",
+                            matchedPegawai.namaPegawai ?: getString(R.string.login_tab_employee),
+                            matchedPegawai.teleponPegawai ?: "-",
+                            matchedPegawai.jabatanPegawai ?: getString(R.string.login_tab_employee),
+                            matchedPegawai.idPegawai ?: "",
+                            matchedPegawai.cabangPegawai ?: ""
+                        )
+                        Toast.makeText(this@LoginActivity, getString(R.string.login_welcome_employee, matchedPegawai.namaPegawai), Toast.LENGTH_SHORT).show()
+                        startActivity(Intent(this@LoginActivity, cardActivity::class.java))
+                        finish()
+                    } else {
+                        Toast.makeText(this@LoginActivity, getString(R.string.login_wrong_employee), Toast.LENGTH_SHORT).show()
+                    }
+                }
                 override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@LoginActivity, "Error database: ${error.message}", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@LoginActivity, getString(R.string.login_db_error, error.message), Toast.LENGTH_SHORT).show()
                 }
             })
         }
     }
 
-    private fun saveSession(role: String, name: String, phone: String, jabatan: String) {
-        val sharedPref = getSharedPreferences("user_session", Context.MODE_PRIVATE)
-        sharedPref.edit().apply {
+    private fun saveSession(role: String, name: String, phone: String, jabatan: String, idPegawai: String, cabang: String) {
+        getSharedPreferences("user_session", Context.MODE_PRIVATE).edit().apply {
             putBoolean("is_logged_in", true)
             putString("user_role", role)
             putString("user_name", name)
             putString("user_phone", phone)
             putString("user_jabatan", jabatan)
+            putString("user_id_pegawai", idPegawai)
+            putString("user_cabang", cabang)
             apply()
         }
+    }
+
+    private fun firstNotBlank(vararg values: String?): String {
+        return values.firstOrNull { !it.isNullOrBlank() }.orEmpty()
     }
 }

@@ -7,42 +7,49 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.citra.penjualan.R
-import com.citra.penjualan.databinding.ItemDataKategoriBinding
+import com.citra.penjualan.databinding.ItemKategoriCardBinding
 import com.citra.penjualan.model.ModelKategori
 
-class KategoriAdapter(private var list: List<ModelKategori>) : RecyclerView.Adapter<KategoriAdapter.ViewHolder>() {
+class KategoriAdapter(
+    private var list: List<ModelKategori>,
+    private var productCounts: Map<String, Int> = emptyMap()
+) : RecyclerView.Adapter<KategoriAdapter.ViewHolder>() {
 
-    class ViewHolder(val binding: ItemDataKategoriBinding) : RecyclerView.ViewHolder(binding.root)
+    class ViewHolder(val binding: ItemKategoriCardBinding) : RecyclerView.ViewHolder(binding.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(ItemDataKategoriBinding.inflate(LayoutInflater.from(parent.context), parent, false))
+        return ViewHolder(ItemKategoriCardBinding.inflate(LayoutInflater.from(parent.context), parent, false))
     }
-
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val k = list[position]
         with(holder.binding) {
-            // Isi Data
-            txtNamaKategori.text = k.namaKategori
-            tvCabangKategori.text = k.cabangKategori ?: "Belum Ada Cabang"
+            val categoryName = k.namaKategori ?: "Unknown"
+            val count = productCounts[categoryName] ?: 0
+            
+            tvNamaKategori.text = categoryName
+            tvStokItem.text = "$count Produk"
+            tvCabangItem.text = k.cabangKategori ?: "Semua Cabang"
+            
+            ivKatIcon.setImageResource(R.drawable.labelkategori)
+            ivKatIcon.setColorFilter(Color.parseColor("#BA68C8")) // Ungu Soft
 
-            // Logic Status Aktif / Tidak Aktif
-            if (k.statusKategori == "Aktif") {
-                chipStatus.text = "Aktif"
-                chipStatus.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#72C9FFBF")) // Hijau Pastel
+            val status = k.statusKategori ?: "Aktif"
+            chipStatus.text = status
+            
+            if (status == "Aktif") {
+                chipStatus.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#72C9FFBF"))
                 chipStatus.chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#4CAF50"))
                 chipStatus.setTextColor(Color.parseColor("#2E7D32"))
                 chipStatus.setChipIconResource(R.drawable.labeltick)
+                chipStatus.isChipIconVisible = true
             } else {
-                chipStatus.text = "Tidak Aktif"
-                chipStatus.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#FFCDD2")) // Merah Pastel
+                chipStatus.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#FFCDD2"))
                 chipStatus.chipStrokeColor = ColorStateList.valueOf(Color.parseColor("#F44336"))
                 chipStatus.setTextColor(Color.parseColor("#C62828"))
-
-                // Menggunakan ikon X bawaan Android
                 chipStatus.setChipIconResource(android.R.drawable.ic_menu_close_clear_cancel)
+                chipStatus.isChipIconVisible = true
             }
 
-            // Klik Item untuk Edit
             root.setOnClickListener {
                 val context = holder.itemView.context
                 val intent = Intent(context, TambahKategoriActivity::class.java)
@@ -54,8 +61,21 @@ class KategoriAdapter(private var list: List<ModelKategori>) : RecyclerView.Adap
 
     override fun getItemCount(): Int = list.size
 
-    fun updateData(newList: List<ModelKategori>) {
+    fun updateData(newList: List<ModelKategori>, newProductCounts: Map<String, Int>) {
         list = newList
+        productCounts = newProductCounts
+        notifyDataSetChanged()
+    }
+
+    fun filterList(query: String, originalList: List<ModelKategori>) {
+        list = if (query.isEmpty()) {
+            originalList
+        } else {
+            originalList.filter {
+                it.namaKategori?.contains(query, ignoreCase = true) == true ||
+                it.cabangKategori?.contains(query, ignoreCase = true) == true
+            }
+        }
         notifyDataSetChanged()
     }
 }

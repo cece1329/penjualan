@@ -1,151 +1,130 @@
 package com.citra.penjualan.printer
 
-import android.graphics.Color
+import android.Manifest
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothManager
+import android.content.Context
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
-import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
+import android.provider.Settings
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContextCompat
+import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityPrinterBinding
-import com.citra.penjualan.model.ModelTransaksi
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import androidx.appcompat.app.AppCompatActivity
 
 class PrinterActivity : AppCompatActivity() {
-
     private lateinit var binding: ActivityPrinterBinding
-    private var isConnected = false
-    
-    private val dbTransaksi = FirebaseDatabase.getInstance().getReference("transaksi")
-    private val transaksiList = ArrayList<ModelTransaksi>()
-    private var selectedTransaksi: ModelTransaksi? = null
+    private var bluetoothAdapter: BluetoothAdapter? = null
+
+    // Request permission launcher untuk menangani izin Bluetooth di Android 12+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissions ->
+        val allGranted = permissions.entries.all { it.value }
+        if (allGranted) {
+            updateStatusUI()
+        } else {
+            Toast.makeText(this, "Izin Bluetooth diperlukan untuk fitur ini", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // 1. Inisialisasi View Binding (PENTING: ini akan menghapus error 'Unresolved reference')
         binding = ActivityPrinterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 2. Inisialisasi Bluetooth Adapter
+        val bluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        bluetoothAdapter = bluetoothManager.adapter
+
+        setupUI()
+        updateStatusUI()
+    }
+
+    private fun setupUI() {
+        // Setup Title
+        binding.tvTitle.text = "Pengaturan Printer"
+
+        // Tombol Kembali
+        binding.btnBack.setOnClickListener { finish() }
+
+        // Tombol Hubungkan Printer
         binding.btnConnectPrinter.setOnClickListener {
-            toggleConnection()
+            if (checkBluetoothPermissions()) {
+                openBluetoothSettings()
+            }
         }
 
+        // Tombol Test Print
         binding.btnPrintTest.setOnClickListener {
-            if (selectedTransaksi != null) {
-                Toast.makeText(this, "Menyiapkan PDF Struk...", Toast.LENGTH_SHORT).show()
-                printSelectedTransaction()
-            } else {
-                Toast.makeText(this, "Pilih transaksi terlebih dahulu!", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
-
-    private fun loadTransaksi() {
-        binding.tvPilihTransaksi.visibility = View.VISIBLE
-        binding.spinnerTransaksi.visibility = View.VISIBLE
-        
-        dbTransaksi.addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                transaksiList.clear()
-                val displayList = ArrayList<String>()
-
-                for (data in snapshot.children) {
-                    val transaksi = data.getValue(ModelTransaksi::class.java)
-                    if (transaksi != null) {
-                        transaksi.idTransaksi = data.key
-                        transaksiList.add(transaksi)
-                        displayList.add("${transaksi.tanggal} - ${transaksi.namaProduk} (Rp ${transaksi.totalHarga})")
-                    }
-                }
-
-                if (transaksiList.isEmpty()) {
-                    displayList.add("Belum ada transaksi")
-                    binding.btnPrintTest.isEnabled = false
-                } else {
-                    binding.btnPrintTest.isEnabled = true
-                }
-
-                val adapter = ArrayAdapter(this@PrinterActivity, android.R.layout.simple_spinner_item, displayList)
-                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                binding.spinnerTransaksi.adapter = adapter
-
-                binding.spinnerTransaksi.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                    override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                        if (transaksiList.isNotEmpty() && position < transaksiList.size) {
-                            selectedTransaksi = transaksiList[position]
-                        }
-                    }
-                    override fun onNothingSelected(parent: AdapterView<*>?) {}
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@PrinterActivity, "Gagal memuat transaksi: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
-        })
-    }
-
-    private fun toggleConnection() {
-        if (!isConnected) {
-            binding.btnConnectPrinter.text = "Menghubungkan..."
-            binding.btnConnectPrinter.isEnabled = false
-
-            Handler(Looper.getMainLooper()).postDelayed({
-                isConnected = true
-                binding.btnConnectPrinter.text = "Putuskan Koneksi"
-                binding.btnConnectPrinter.isEnabled = true
-                binding.btnConnectPrinter.setBackgroundTintList(
-                    android.content.res.ColorStateList.valueOf(Color.parseColor("#EF5350"))
+            if (checkBluetoothPermissions()) {
+                val dummyData = ReceiptData(
+                    toko = "TOKO TEST PRINT",
+                    alamat = "Jl. Contoh Alamat No. 123",
+                    cabang = "Cabang Pusat",
+                    kasir = "Admin",
+                    tanggal = SimpleDateFormat("dd-MM-yyyy HH:mm", Locale.getDefault()).format(Date()),
+                    idTransaksi = "TEST-001",
+                    jumlah = 1,
+                    totalHarga = 0
                 )
-
-                binding.tvStatusPrinter.text = "Status: Siap Mencetak PDF"
-                binding.imgPrinterState.setColorFilter(Color.parseColor("#66BB6A"))
-                
-                // Load and show transactions when connected
-                loadTransaksi()
-
-                Toast.makeText(this, "Sistem pencetak PDF siap digunakan!", Toast.LENGTH_SHORT).show()
-            }, 1500)
-        } else {
-            isConnected = false
-            binding.btnConnectPrinter.text = "Hubungkan Sistem Pencetak"
-            binding.btnConnectPrinter.setBackgroundTintList(
-                android.content.res.ColorStateList.valueOf(Color.parseColor("#BA68C8"))
-            )
-
-            binding.tvStatusPrinter.text = "Status: Terputus"
-            binding.imgPrinterState.setColorFilter(Color.parseColor("#EF5350"))
-            binding.btnPrintTest.isEnabled = false
-            
-            // Hide transactions
-            binding.tvPilihTransaksi.visibility = View.GONE
-            binding.spinnerTransaksi.visibility = View.GONE
-            selectedTransaksi = null
-
-            Toast.makeText(this, "Sistem pencetakan dinonaktifkan.", Toast.LENGTH_SHORT).show()
+                ReceiptPdfPrinter(this).printToBluetooth(dummyData)
+            }
         }
     }
 
-    private fun printSelectedTransaction() {
-        val transaksi = selectedTransaksi ?: return
-        
+    private fun openBluetoothSettings() {
+        if (bluetoothAdapter == null) {
+            Toast.makeText(this, "Bluetooth tidak didukung di perangkat ini", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (!bluetoothAdapter!!.isEnabled) {
+            Toast.makeText(this, "Silakan aktifkan Bluetooth", Toast.LENGTH_SHORT).show()
+        }
+
+        // Membuka pengaturan Bluetooth HP agar user bisa pairing printer
         try {
-            val printer = ReceiptPdfPrinter(this)
-            val receipt = ReceiptPdfPrinter.ReceiptData(
-                toko = "Toko Citra",
-                tanggal = transaksi.tanggal ?: "-",
-                idTransaksi = transaksi.idTransaksi,
-                namaProduk = transaksi.namaProduk ?: "-",
-                jumlah = transaksi.jumlah,
-                totalHarga = transaksi.totalHarga
-            )
-            printer.printToPdf(receipt)
+            startActivity(Intent(Settings.ACTION_BLUETOOTH_SETTINGS))
+            Toast.makeText(this, "Pasangkan (Pair) printer Anda di menu ini", Toast.LENGTH_LONG).show()
         } catch (e: Exception) {
-            Toast.makeText(this, "Gagal memproses struk PDF: ${e.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Gagal membuka pengaturan: ${e.message}", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun checkBluetoothPermissions(): Boolean {
+        val permissions = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            arrayOf(Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT)
+        } else {
+            arrayOf(Manifest.permission.BLUETOOTH, Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        val notGranted = permissions.filter {
+            ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
+        }
+
+        return if (notGranted.isNotEmpty()) {
+            requestPermissionLauncher.launch(notGranted.toTypedArray())
+            false
+        } else true
+    }
+
+    private fun updateStatusUI() {
+        if (bluetoothAdapter?.isEnabled == true) {
+            binding.tvStatusPrinter.text = "Bluetooth Aktif"
+            binding.tvStatusPrinter.setTextColor(ContextCompat.getColor(this, android.R.color.black))
+            binding.imgPrinterState.setImageResource(R.drawable.printer)
+        } else {
+            binding.tvStatusPrinter.text = "Bluetooth Tidak Aktif"
+            binding.tvStatusPrinter.setTextColor(ContextCompat.getColor(this, android.R.color.holo_red_dark))
         }
     }
 }

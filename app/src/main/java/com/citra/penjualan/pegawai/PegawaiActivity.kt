@@ -2,9 +2,12 @@ package com.citra.penjualan.pegawai
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityPegawaiBinding
 import com.citra.penjualan.model.ModelPegawai
 import com.google.firebase.database.DataSnapshot
@@ -17,6 +20,7 @@ class PegawaiActivity : AppCompatActivity() {
     private lateinit var binding: ActivityPegawaiBinding
     private lateinit var adapter: PegawaiAdapter
     private val db = FirebaseDatabase.getInstance().getReference("pegawai")
+    private val listPegawaiFull = ArrayList<ModelPegawai>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +37,14 @@ class PegawaiActivity : AppCompatActivity() {
             startActivity(Intent(this, TambahPegawaiActivity::class.java))
         }
 
+        binding.etSearch.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                filter(s?.toString() ?: "")
+            }
+            override fun afterTextChanged(s: Editable?) {}
+        })
+
         fetchPegawai()
     }
 
@@ -47,12 +59,30 @@ class PegawaiActivity : AppCompatActivity() {
                         list.add(p)
                     }
                 }
-                adapter.updateData(list)
+                listPegawaiFull.clear()
+                listPegawaiFull.addAll(list)
+                filter(binding.etSearch.text?.toString() ?: "")
             }
 
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@PegawaiActivity, "Gagal memuat pegawai: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@PegawaiActivity, getString(R.string.pegawai_load_failed, error.message), Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    private fun filter(query: String) {
+        val q = query.trim()
+        val filteredList = if (q.isEmpty()) {
+            listPegawaiFull
+        } else {
+            listPegawaiFull.filter {
+                it.namaPegawai?.contains(q, ignoreCase = true) == true ||
+                    it.jabatanPegawai?.contains(q, ignoreCase = true) == true ||
+                    it.teleponPegawai?.contains(q, ignoreCase = true) == true ||
+                    it.cabangPegawai?.contains(q, ignoreCase = true) == true ||
+                    it.passwordPegawai?.contains(q, ignoreCase = true) == true
+            }
+        }
+        adapter.updateData(filteredList)
     }
 }

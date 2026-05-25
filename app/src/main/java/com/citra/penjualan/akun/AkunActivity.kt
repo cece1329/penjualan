@@ -7,8 +7,11 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.R
 import com.citra.penjualan.beranda.cardActivity
 import com.citra.penjualan.databinding.ActivityAkunBinding
 import com.google.firebase.database.DataSnapshot
@@ -25,12 +28,20 @@ class AkunActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityAkunBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setupProfileHeaderAndSession()
+        binding.btnKeluar.setOnClickListener { performLogout() }
+        
+        // Memberikan radius pada tombol agar tidak kaku
+        applyButtonStyle(binding.btnSimpanProfil, "#BA68C8")
+        applyButtonStyle(binding.btnKeluar, "#F44336")
+    }
 
-        binding.btnKeluar.setOnClickListener {
-            performLogout()
-        }
+    private fun applyButtonStyle(view: View, colorHex: String) {
+        val shape = GradientDrawable()
+        shape.shape = GradientDrawable.RECTANGLE
+        shape.cornerRadius = dp(12).toFloat()
+        shape.setColor(Color.parseColor(colorHex))
+        view.background = shape
     }
 
     private fun setupProfileHeaderAndSession() {
@@ -40,9 +51,15 @@ class AkunActivity : AppCompatActivity() {
         val phone = sharedPref.getString("user_phone", "-") ?: "-"
         val jabatan = sharedPref.getString("user_jabatan", "Pemilik") ?: "Pemilik"
 
-        // Set initials avatar dynamically with gradient
+        // Setup Profil Header: Logo Akun tanpa warna (tint) agar asli
+        binding.tvAvatarInitials.visibility = View.GONE
+        binding.avatarFrame.removeAllViews()
+        val ivAvatar = ImageView(this).apply {
+            setImageResource(R.drawable.acc)
+        }
+        binding.avatarFrame.addView(ivAvatar)
+
         binding.tvProfileName.text = name
-        binding.tvAvatarInitials.text = name.take(1).uppercase()
         
         val colors = if (role == "pemilik") {
             intArrayOf(Color.parseColor("#BA68C8"), Color.parseColor("#AB47BC"))
@@ -50,42 +67,30 @@ class AkunActivity : AppCompatActivity() {
             intArrayOf(Color.parseColor("#CE93D8"), Color.parseColor("#BA68C8"))
         }
         val gd = GradientDrawable(GradientDrawable.Orientation.TL_BR, colors)
-        gd.cornerRadius = 36f
+        gd.cornerRadius = dp(50).toFloat() // Radius 50dp untuk FrameLayout 100dp agar bulat sempurna
         binding.avatarFrame.background = gd
 
-        // Handle Role Badge & Specific Views
         if (role == "pemilik") {
-            binding.tvProfileRoleBadge.text = "PEMILIK / OWNER"
+            binding.tvProfileRoleBadge.text = getString(R.string.akun_role_owner)
             binding.tvProfileRoleBadge.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#BA68C8"))
             binding.layoutEmployeeDetails.visibility = View.GONE
-            
-            // Enable Toko Profile Fields for Pemilik
             binding.etNamaPemilik.isEnabled = true
             binding.etNamaToko.isEnabled = true
             binding.etEmailToko.isEnabled = true
+            binding.etSandiPemilik.isEnabled = true 
             binding.btnSimpanProfil.visibility = View.VISIBLE
-            
-            // Load Toko Profile
             loadTokoProfile()
-            
-            binding.btnSimpanProfil.setOnClickListener {
-                saveTokoProfile()
-            }
+            binding.btnSimpanProfil.setOnClickListener { saveTokoProfile() }
         } else {
-            binding.tvProfileRoleBadge.text = "KARYAWAN"
+            binding.tvProfileRoleBadge.text = getString(R.string.akun_role_employee)
             binding.tvProfileRoleBadge.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#AB47BC"))
-            
             binding.layoutEmployeeDetails.visibility = View.VISIBLE
-            binding.tvProfileJabatan.text = "Jabatan: $jabatan"
-            binding.tvProfileTelepon.text = "No. Telepon: $phone"
-            
-            // Disable Toko Profile Fields and Hide Save Button for Employees
+            binding.tvProfileJabatan.text = getString(R.string.akun_position, jabatan)
+            binding.tvProfileTelepon.text = getString(R.string.akun_phone, phone)
             binding.etNamaPemilik.isEnabled = false
             binding.etNamaToko.isEnabled = false
             binding.etEmailToko.isEnabled = false
             binding.btnSimpanProfil.visibility = View.GONE
-            
-            // Load Toko Profile as read-only info
             loadTokoProfile()
         }
     }
@@ -96,16 +101,25 @@ class AkunActivity : AppCompatActivity() {
                 if (snapshot.exists()) {
                     val namaPemilik = snapshot.child("namaPemilik").value?.toString() ?: ""
                     val namaToko = snapshot.child("namaToko").value?.toString() ?: ""
-                    val emailToko = snapshot.child("emailToko").value?.toString() ?: ""
-
+                    val sandi = snapshot.child("sandiPemilik").value?.toString() ?: "admin123"
+                    val email = snapshot.child("emailToko").value?.toString() ?: ""
+                    val alamat = snapshot.child("alamatToko").value?.toString() ?: ""
+                    
                     binding.etNamaPemilik.setText(namaPemilik)
                     binding.etNamaToko.setText(namaToko)
-                    binding.etEmailToko.setText(emailToko)
+                    binding.etEmailToko.setText(email)
+                    try { binding.javaClass.getMethod("getEtAlamatToko").invoke(binding).let { (it as android.widget.EditText).setText(alamat) } } catch(e: Exception) {}
+
+                    // Muat sandi ke field input
+                    binding.etSandiPemilik.setText(sandi)
+                    
+                    if (namaPemilik.isNotBlank() && getSharedPreferences("user_session", Context.MODE_PRIVATE).getString("user_role", "pemilik") == "pemilik") {
+                        binding.tvProfileName.text = namaPemilik
+                    }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@AkunActivity, "Gagal memuat profil toko: ${error.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@AkunActivity, getString(R.string.akun_load_failed, error.message), Toast.LENGTH_SHORT).show()
             }
         })
     }
@@ -114,35 +128,43 @@ class AkunActivity : AppCompatActivity() {
         val namaPemilik = binding.etNamaPemilik.text.toString().trim()
         val namaToko = binding.etNamaToko.text.toString().trim()
         val emailToko = binding.etEmailToko.text.toString().trim()
+        val sandiBaru = binding.etSandiPemilik.text.toString().trim()
+        val alamatToko = try { (binding.javaClass.getMethod("getEtAlamatToko").invoke(binding) as android.widget.EditText).text.toString().trim() } catch(e: Exception) { "" }
 
         if (namaPemilik.isEmpty() || namaToko.isEmpty() || emailToko.isEmpty()) {
-            Toast.makeText(this, "Lengkapi semua data ya!", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
             return
         }
 
         val data = hashMapOf(
             "namaPemilik" to namaPemilik,
             "namaToko" to namaToko,
-            "emailToko" to emailToko
+            "emailToko" to emailToko,
+            "alamatToko" to alamatToko,
+            "sandiPemilik" to if (sandiBaru.isNotEmpty()) sandiBaru else "admin123"
         )
 
         db.setValue(data).addOnSuccessListener {
-            Toast.makeText(this, "Profil toko berhasil diperbarui!", Toast.LENGTH_SHORT).show()
+            getSharedPreferences("user_session", Context.MODE_PRIVATE).edit()
+                .putString("user_name", namaPemilik)
+                .apply()
+            Toast.makeText(this, getString(R.string.akun_save_success), Toast.LENGTH_SHORT).show()
             finish()
         }.addOnFailureListener {
-            Toast.makeText(this, "Gagal: ${it.message}", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, getString(R.string.msg_failed, it.message), Toast.LENGTH_SHORT).show()
         }
     }
 
     private fun performLogout() {
-        val sharedPref = getSharedPreferences("user_session", Context.MODE_PRIVATE)
-        sharedPref.edit().clear().apply()
-        
-        Toast.makeText(this, "Berhasil keluar dari akun", Toast.LENGTH_SHORT).show()
-        
+        getSharedPreferences("user_session", Context.MODE_PRIVATE).edit().clear().apply()
+        Toast.makeText(this, getString(R.string.akun_logout_success), Toast.LENGTH_SHORT).show()
         val intent = Intent(this, LoginActivity::class.java)
         intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         startActivity(intent)
         finishAffinity()
+    }
+
+    private fun dp(value: Int): Int {
+        return (value * resources.displayMetrics.density).toInt()
     }
 }

@@ -4,13 +4,19 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ItemDataProdukBinding
 import com.citra.penjualan.model.ModelProduk
+import com.citra.penjualan.produk.TambahProdukActivity
 
-class ProdukAdapter(private var list: List<ModelProduk>) : RecyclerView.Adapter<ProdukAdapter.ViewHolder>() {
+class ProdukAdapter(
+    private var list: List<ModelProduk>,
+    private val onItemClick: ((ModelProduk) -> Unit)? = null,
+    private var selectedCategory: String = "Semua"
+) : RecyclerView.Adapter<ProdukAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemDataProdukBinding) : RecyclerView.ViewHolder(binding.root)
 
@@ -24,36 +30,16 @@ class ProdukAdapter(private var list: List<ModelProduk>) : RecyclerView.Adapter<
         with(holder.binding) {
             // Isi Data Produk
             tvNamaProduk.text = p.namaProduk
-            tvHargaProduk.text = "Rp. ${p.hargaProduk}"
+            tvHargaProduk.text = "Rp ${formatNumber(p.hargaProduk)}"
             tvKategoriItem.text = p.namaKategori ?: "Kategori"
-            tvStokItem.text = p.stokProduk?.toString() ?: "0"
+            tvStokItem.text = formatNumber(p.stokProduk ?: 0)
 
             // Menampilkan Cabang Produk
             tvCabangItem.text = p.cabangProduk ?: "Belum Ada Cabang"
 
-            // Automatic Gradient Avatar/Image Generation
-            try {
-                val initials = if (p.namaProduk.isNotEmpty()) p.namaProduk.take(1).uppercase() else "?"
-                tvInitials.text = initials
-                
-                val colors1 = intArrayOf(Color.parseColor("#BA68C8"), Color.parseColor("#8E24AA"))
-                val colors2 = intArrayOf(Color.parseColor("#9575CD"), Color.parseColor("#673AB7"))
-                val colors3 = intArrayOf(Color.parseColor("#7986CB"), Color.parseColor("#3F51B5"))
-                val colors4 = intArrayOf(Color.parseColor("#E040FB"), Color.parseColor("#9C27B0"))
-                val gradientsList = listOf(colors1, colors2, colors3, colors4)
-                
-                val hashIdx = Math.abs(p.namaProduk.hashCode()) % gradientsList.size
-                val selectedGradient = gradientsList[hashIdx]
-                
-                val gd = android.graphics.drawable.GradientDrawable(
-                    android.graphics.drawable.GradientDrawable.Orientation.TL_BR,
-                    selectedGradient
-                )
-                gd.cornerRadius = 24f
-                tvInitials.background = gd
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
+            imgProduk.setImageResource(R.drawable.product)
+            imgProduk.visibility = View.VISIBLE
+            tvInitials.visibility = View.GONE
 
             // Logic Status Aktif / Tidak Aktif
             if (p.statusProduk == "Aktif") {
@@ -74,10 +60,14 @@ class ProdukAdapter(private var list: List<ModelProduk>) : RecyclerView.Adapter<
 
             // Tambahan agar item produk bisa diklik untuk diupdate
             root.setOnClickListener {
-                val context = holder.itemView.context
-                val intent = Intent(context, TambahProdukActivity::class.java)
-                intent.putExtra("DATA_PRODUK", p)
-                context.startActivity(intent)
+                if (onItemClick != null) {
+                    onItemClick.invoke(p)
+                } else {
+                    val context = holder.itemView.context
+                    val intent = Intent(context, TambahProdukActivity::class.java)
+                    intent.putExtra("DATA_PRODUK", p)
+                    context.startActivity(intent)
+                }
             }
         }
     }
@@ -86,6 +76,34 @@ class ProdukAdapter(private var list: List<ModelProduk>) : RecyclerView.Adapter<
 
     fun updateData(newList: List<ModelProduk>) {
         list = newList
+        notifyDataSetChanged()
+    }
+
+    private fun formatNumber(amount: Int): String {
+        val s = amount.toString()
+        val sb = StringBuilder()
+        var count = 0
+        for (i in s.length - 1 downTo 0) {
+            if (count > 0 && count % 3 == 0) sb.insert(0, ".")
+            sb.insert(0, s[i])
+            count++
+        }
+        return sb.toString()
+    }
+
+    fun filterList(query: String, category: String, originalList: List<ModelProduk>) {
+        selectedCategory = category
+        val filtered = originalList.filter { produk ->
+            val matchesCategory = category == "Semua" || 
+                                 produk.namaKategori.equals(category, ignoreCase = true)
+            val matchesSearch = query.isEmpty() || 
+                               produk.namaProduk.contains(query, ignoreCase = true) ||
+                               (produk.namaKategori?.contains(query, ignoreCase = true) == true) ||
+                               (produk.cabangProduk?.contains(query, ignoreCase = true) == true)
+            
+            matchesCategory && matchesSearch
+        }
+        list = filtered
         notifyDataSetChanged()
     }
 }

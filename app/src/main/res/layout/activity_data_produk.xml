@@ -16,45 +16,61 @@
         android:layout_height="50dp"
         android:orientation="horizontal"
         android:gravity="center_vertical"
-        android:paddingStart="16dp"
-        android:paddingEnd="8dp"
+        android:paddingHorizontal="14dp"
         android:background="@drawable/bg_border"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
+
+        <ImageView
+            android:id="@+id/iconSearch"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:src="@drawable/search"
+            android:alpha="0.65"
+            android:contentDescription="Search Icon"
+            android:clickable="true"
+            android:focusable="true"
+            android:padding="1dp"/>
 
         <EditText
             android:id="@+id/editSearch"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:hint="Cari Produk..."
+            android:hint="@string/produk_search_hint"
             android:background="@null"
             android:singleLine="true"
             android:imeOptions="actionSearch"
             android:textSize="15sp"
             android:textColor="@color/textColorPrimary"
-            android:textColorHint="@color/textColorSecondary"/>
-
-        <ImageView
-            android:id="@+id/iconSearch"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginStart="8dp"
-            android:src="@drawable/search"
-            android:contentDescription="Search Icon"
-            android:clickable="true"
-            android:focusable="true"
-            android:padding="6dp"/>
+            android:textColorHint="@color/textColorSecondary"
+            android:paddingStart="12dp"/>
     </LinearLayout>
+
+    <HorizontalScrollView
+        android:id="@+id/scrollKategori"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:scrollbars="none"
+        app:layout_constraintTop_toBottomOf="@id/searchContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/chipGroupKategori"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:singleSelection="true" />
+    </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerProduk"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="8dp"
         tools:listitem="@layout/item_data_produk"
-        app:layout_constraintTop_toBottomOf="@id/searchContainer"
+        app:layout_constraintTop_toBottomOf="@id/scrollKategori"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>

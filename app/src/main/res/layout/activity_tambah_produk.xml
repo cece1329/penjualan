@@ -15,7 +15,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Data Produk"
+            android:text="@string/produk_form_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -26,7 +26,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Produk"
+            android:text="@string/produk_name_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -35,7 +35,7 @@
             android:id="@+id/inNamaProduk"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Masukkan nama produk"
+            android:hint="@string/produk_name_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="text"
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Harga Jual"
+            android:text="@string/produk_price_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -56,7 +56,7 @@
             android:id="@+id/inHargaBeli"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: 38000"
+            android:hint="@string/produk_price_hint"
             android:inputType="number"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
@@ -68,7 +68,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jumlah Stok"
+            android:text="@string/produk_stock_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -77,7 +77,7 @@
             android:id="@+id/inStokProduk"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: 7"
+            android:hint="@string/produk_stock_hint"
             android:inputType="number"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
@@ -89,7 +89,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pilih Cabang"
+            android:text="@string/produk_branch_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -105,7 +105,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Pilih Kategori"
+            android:text="@string/produk_category_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -121,7 +121,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Status Produk:"
+            android:text="@string/produk_status_label"
             android:textColor="@color/textColorPrimary"
             android:textStyle="bold"
             android:textSize="14sp"/>
@@ -130,7 +130,7 @@
             android:id="@+id/chipStatus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aktif"
+            android:text="@string/msg_active"
             android:textColor="#4CAF50"
             app:chipBackgroundColor="#E8F5E9"
             app:chipStrokeWidth="1dp"
@@ -144,7 +144,7 @@
             android:id="@+id/btnSimpanProduk"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:text="Simpan Data Produk"
+            android:text="@string/produk_save_btn"
             android:backgroundTint="@color/colorSoftPurple"
             android:layout_marginTop="40dp"
             android:textAllCaps="false"
@@ -153,6 +153,17 @@
             android:textColor="#FFFFFF"
             app:cornerRadius="18dp"
             app:elevation="4dp"/>
+
+        <Button
+            android:id="@+id/btnHapusProduk"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/produk_delete_btn"
+            android:backgroundTint="#FFEBEE"
+            android:textColor="#C62828"
+            android:textAllCaps="false"
+            android:visibility="gone"/>
 
     </LinearLayout>
 </ScrollView>

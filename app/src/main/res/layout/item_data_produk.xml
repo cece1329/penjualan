@@ -38,8 +38,11 @@
                     android:id="@+id/img_produk"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:scaleType="centerCrop"
-                    android:visibility="gone" />
+                    android:background="@color/colorSoftPurpleLight"
+                    android:padding="18dp"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/product"
+                    android:visibility="visible" />
 
                 <TextView
                     android:id="@+id/tv_initials"
@@ -59,7 +62,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="8dp"
-            android:text="Nama Produk"
+            android:text="@string/produk_name_label"
             android:textColor="@color/textColorPrimary"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -166,7 +169,7 @@
             android:id="@+id/chip_status"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Aktif"
+            android:text="@string/msg_active"
             android:textColor="@color/textColorPrimary"
             android:textSize="11sp"
             app:chipBackgroundColor="#72C9FFBF"

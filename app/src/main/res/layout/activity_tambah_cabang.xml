@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Form Cabang Toko"
+            android:text="@string/cabang_form_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Cabang"
+            android:text="@string/cabang_name_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -34,7 +34,7 @@
             android:id="@+id/etNamaCabang"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Cabang Kopo"
+            android:hint="@string/cabang_name_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="text"
@@ -55,7 +55,7 @@
             android:id="@+id/etKotaCabang"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Bandung"
+            android:hint="@string/cabang_city_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="text"
@@ -67,7 +67,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alamat Lengkap"
+            android:text="@string/cabang_address_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -76,7 +76,7 @@
             android:id="@+id/etAlamatCabang"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:hint="Contoh: Jl. Kopo Indah No. 4"
+            android:hint="@string/cabang_address_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
@@ -97,6 +97,18 @@
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
+            app:cornerRadius="18dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnHapusCabang"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/btn_delete"
+            android:backgroundTint="#FFEBEE"
+            android:textColor="#C62828"
+            android:textAllCaps="false"
+            android:visibility="gone"
             app:cornerRadius="18dp"/>
 
     </LinearLayout>

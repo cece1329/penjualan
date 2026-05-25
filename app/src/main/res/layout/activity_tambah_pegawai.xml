@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Form Pegawai"
+            android:text="@string/pegawai_form_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -22,10 +22,11 @@
             android:layout_marginBottom="32dp"
             android:textColor="@color/textColorPrimary"/>
 
+        <!-- Nama Pegawai -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Pegawai"
+            android:text="@string/pegawai_name_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -34,40 +35,37 @@
             android:id="@+id/etNamaPegawai"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Rian Pratama"
+            android:hint="@string/pegawai_name_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
-            android:inputType="text"
+            android:inputType="textPersonName"
             android:textSize="15sp"
             android:textColor="@color/textColorEditText"
             android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="16dp"/>
 
+        <!-- Jabatan Pegawai -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Jabatan"
+            android:text="@string/pegawai_position_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
-        <EditText
-            android:id="@+id/etJabatanPegawai"
+        <Spinner
+            android:id="@+id/spinnerJabatanPegawai"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Kasir, Gudang"
-            android:background="@drawable/bg_border"
+            android:background="@drawable/spinner_background"
             android:paddingHorizontal="16dp"
-            android:inputType="text"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="16dp"/>
 
+        <!-- Telepon Pegawai -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nomor Telepon"
+            android:text="@string/pegawai_phone_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -76,7 +74,7 @@
             android:id="@+id/etTeleponPegawai"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: 0876543210"
+            android:hint="@string/pegawai_phone_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="phone"
@@ -85,37 +83,80 @@
             android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="16dp"/>
 
+        <!-- Password / PIN (Bisa Dilihat / Toggle Visible) -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Password / PIN Karyawan"
+            android:text="@string/pegawai_password_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
 
-        <EditText
-            android:id="@+id/etPasswordPegawai"
+        <com.google.android.material.textfield.TextInputLayout
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="16dp"
+            app:hintEnabled="false"
+            app:boxStrokeWidth="0dp"
+            app:boxStrokeWidthFocused="0dp"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/colorSoftPurple">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/etPasswordPegawai"
+                android:layout_width="match_parent"
+                android:layout_height="54dp"
+                android:hint="@string/pegawai_password_hint"
+                android:background="@drawable/bg_border"
+                android:paddingHorizontal="16dp"
+                android:inputType="textPassword"
+                android:textSize="15sp"
+                android:textColor="@color/textColorEditText"
+                android:textColorHint="@color/textColorSecondary"/>
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <!-- Penugasan Cabang -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/produk_branch_label"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerCabangPegawai"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Masukkan password karyawan"
-            android:background="@drawable/bg_border"
+            android:background="@drawable/spinner_background"
             android:paddingHorizontal="16dp"
-            android:inputType="textPassword"
-            android:textSize="15sp"
-            android:textColor="@color/textColorEditText"
-            android:textColorHint="@color/textColorSecondary"
             android:layout_marginBottom="32dp"/>
 
+        <!-- Tombol Simpan -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSimpanPegawai"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:text="Simpan Pegawai"
+            android:text="@string/pegawai_save_btn"
             android:backgroundTint="@color/colorSoftPurple"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
+            app:cornerRadius="18dp"/>
+
+        <!-- Tombol Hapus -->
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnHapusPegawai"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/btn_delete"
+            android:backgroundTint="#FFEBEE"
+            android:textColor="#C62828"
+            android:textAllCaps="false"
+            android:visibility="gone"
             app:cornerRadius="18dp"/>
 
     </LinearLayout>

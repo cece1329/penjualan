@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Form Pelanggan"
+            android:text="@string/pelanggan_form_title"
             android:textSize="24sp"
             android:textStyle="bold"
             android:gravity="center"
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nama Pelanggan"
+            android:text="@string/pelanggan_name_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -34,7 +34,7 @@
             android:id="@+id/etNamaPelanggan"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: Budi Santoso"
+            android:hint="@string/pelanggan_name_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="text"
@@ -46,7 +46,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Nomor Telepon"
+            android:text="@string/pelanggan_phone_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -55,7 +55,7 @@
             android:id="@+id/etTeleponPelanggan"
             android:layout_width="match_parent"
             android:layout_height="54dp"
-            android:hint="Contoh: 08123456789"
+            android:hint="@string/pelanggan_phone_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:inputType="phone"
@@ -67,7 +67,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Alamat"
+            android:text="@string/pelanggan_address_label"
             android:textColor="@color/textColorSecondary"
             android:textSize="14sp"
             android:layout_marginBottom="8dp"/>
@@ -76,7 +76,7 @@
             android:id="@+id/etAlamatPelanggan"
             android:layout_width="match_parent"
             android:layout_height="80dp"
-            android:hint="Contoh: Jl. Mawar No. 12"
+            android:hint="@string/pelanggan_address_hint"
             android:background="@drawable/bg_border"
             android:paddingHorizontal="16dp"
             android:paddingVertical="8dp"
@@ -85,18 +85,46 @@
             android:textSize="15sp"
             android:textColor="@color/textColorEditText"
             android:textColorHint="@color/textColorSecondary"
+            android:layout_marginBottom="16dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Jenis Pelanggan"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <Spinner
+            android:id="@+id/spinnerJenisPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="54dp"
+            android:background="@drawable/spinner_background"
+            android:paddingHorizontal="16dp"
             android:layout_marginBottom="32dp"/>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSimpanPelanggan"
             android:layout_width="match_parent"
             android:layout_height="55dp"
-            android:text="Simpan Pelanggan"
+            android:text="@string/pelanggan_save_btn"
             android:backgroundTint="@color/colorSoftPurple"
             android:textAllCaps="false"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
+            app:cornerRadius="18dp"/>
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnHapusPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/btn_delete"
+            android:backgroundTint="#FFEBEE"
+            android:textColor="#C62828"
+            android:textAllCaps="false"
+            android:visibility="gone"
             app:cornerRadius="18dp"/>
 
     </LinearLayout>
