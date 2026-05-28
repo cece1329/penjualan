@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/backgroundColor">
+
+    <!-- LEFT COLUMN: Filters & Info (40% width) -->
+    <LinearLayout
+        android:id="@+id/leftPanel"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/backgroundFormColor"
+        android:padding="12dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="0.4"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Header Row -->
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp">
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@drawable/bg_border"
+                android:src="@drawable/arrow"
+                android:rotation="180"
+                android:padding="6dp"
+                android:scaleType="fitCenter"
+                app:tint="@color/textColorTitle"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Transaksi"
+                android:textStyle="bold"
+                android:textColor="@color/textColorTitle"
+                android:textSize="15sp"/>
+        </RelativeLayout>
+
+        <!-- Search Bar -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/bg_border"
+            android:gravity="center_vertical"
+            android:paddingHorizontal="10dp"
+            android:layout_marginBottom="8dp">
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/search"
+                app:tint="@color/textColorSecondary"/>
+            <EditText
+                android:id="@+id/etSearch"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="Cari..."
+                android:textColor="@color/textColorPrimary"
+                android:textColorHint="@color/textColorSecondary"
+                android:textSize="12sp"
+                android:paddingStart="8dp"
+                android:inputType="text"
+                android:singleLine="true"/>
+        </LinearLayout>
+
+        <!-- Kategori Chips -->
+        <HorizontalScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:scrollbars="none"
+            android:layout_marginBottom="8dp">
+            <LinearLayout
+                android:id="@+id/chipGroupKategori"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"/>
+        </HorizontalScrollView>
+
+        <!-- Pilih Pelanggan -->
+        <LinearLayout
+            android:id="@+id/btnPilihPelanggan"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border"
+            android:padding="8dp"
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/customer"
+                app:tint="@color/colorSoftPurple"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvPelangganTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Umum"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColorTitle"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+                <TextView
+                    android:id="@+id/tvJenisPelangganTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Opsional"
+                    android:textSize="10sp"
+                    android:textColor="@color/textColorSecondary"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/add"
+                app:tint="@color/colorSoftPurple"/>
+        </LinearLayout>
+
+        <!-- Pilih Kasir -->
+        <LinearLayout
+            android:id="@+id/btnPilihKasir"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_border"
+            android:padding="8dp"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:src="@drawable/employee"
+                app:tint="@color/colorSoftPurple"/>
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvKasirTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Kasir"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/textColorTitle"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+                <TextView
+                    android:id="@+id/tvInfoKasirTransaksi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Otomatis"
+                    android:textSize="10sp"
+                    android:textColor="@color/textColorSecondary"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
+            </LinearLayout>
+            <ImageView
+                android:id="@+id/imgArrowKasir"
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:src="@drawable/arrow"
+                app:tint="@color/colorSoftPurple"/>
+        </LinearLayout>
+
+        <View android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1"/>
+
+        <!-- Total & Checkout -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/colorSoftPurple"
+            android:padding="12dp"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tvItemTerpilih"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0 Item"
+                android:textColor="#F3E5F5"
+                android:textSize="11sp"/>
+            <TextView
+                android:id="@+id/tvTotalHarga"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Rp 0"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:textSize="18sp"/>
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnCheckout"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:text="CHECKOUT"
+                android:background="@drawable/bg_border"
+                android:backgroundTint="@color/white"
+                android:textColor="@color/colorSoftPurple"
+                android:textStyle="bold"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- RIGHT COLUMN: Product List (60% width) -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvProduk"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="8dp"
+        app:layout_constraintStart_toEndOf="@id/leftPanel"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <TextView
+        android:id="@+id/tvEmpty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tidak ada produk"
+        android:textColor="@color/textColorSecondary"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="@id/rvProduk"
+        app:layout_constraintBottom_toBottomOf="@id/rvProduk"
+        app:layout_constraintStart_toStartOf="@id/rvProduk"
+        app:layout_constraintEnd_toEndOf="@id/rvProduk"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

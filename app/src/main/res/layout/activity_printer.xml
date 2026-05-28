@@ -1,77 +1,137 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="24dp"
-    android:gravity="center_horizontal"
-    android:background="#FAF5FF"
-    >
+    android:background="@color/backgroundColor">
 
-    <TextView
-        android:id="@+id/tvTitle"
+    <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Pengaturan Printer"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        android:textColor="#4A2B66"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="24dp"/>
+        android:background="@color/backgroundColor">
 
-    <ImageView
-        android:id="@+id/imgPrinterState"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
-        android:src="@drawable/printer"
-        android:layout_marginBottom="16dp"/>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:paddingHorizontal="16dp">
 
-    <TextView
-        android:id="@+id/tvStatusPrinter"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Status: Tidak Diketahui"
-        android:textSize="16sp"
-        android:textColor="#8E74A6"
-        android:layout_marginBottom="32dp"/>
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_border"
+                android:contentDescription="Kembali"
+                android:src="@drawable/arrow"
+                android:scaleType="centerInside"
+                android:padding="10dp"
+                android:rotation="180"
+                app:tint="@color/textColorTitle" />
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnConnectPrinter"
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Sistem Pencetak"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorTitle" />
+
+        </RelativeLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Hubungkan Printer Bluetooth"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="#BA68C8"
-        app:cornerRadius="16dp"
-        android:layout_marginBottom="16dp"/>
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:padding="16dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnPrintTest"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Cetak Halaman Test"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        app:backgroundTint="#66BB6A"
-        app:cornerRadius="16dp"
-        android:layout_marginBottom="32dp"/>
+        <!-- Status Card -->
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/cardBackground"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/borderColor">
 
-    <com.google.android.material.button.MaterialButton
-        android:id="@+id/btnBack"
-        android:layout_width="match_parent"
-        android:layout_height="56dp"
-        android:text="Kembali"
-        android:textAllCaps="false"
-        android:textSize="16sp"
-        android:textStyle="bold"
-        android:textColor="#4A2B66"
-        app:backgroundTint="#EAD9F7"
-        app:cornerRadius="16dp"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                android:gravity="center_vertical">
 
-</LinearLayout>
+                <ImageView
+                    android:id="@+id/imgPrinterState"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:src="@drawable/printer"
+                    app:tint="@color/colorSoftPurple" />
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="16dp"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tvStatusPrinter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Bluetooth Tidak Aktif"
+                        android:textColor="@color/textColorTitle"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Pasangkan printer di setelan"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnConnectPrinter"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="SETELAN"
+                    android:textColor="@color/colorSoftPurple" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Riwayat Transaksi"
+            android:textStyle="bold"
+            android:layout_marginTop="24dp"
+            android:layout_marginBottom="12dp"
+            android:textColor="@color/textColorTitle" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvTransactions"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            tools:listitem="@layout/item_laporan" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnPrintTest"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:layout_marginTop="16dp"
+            android:text="Cetak Nota Test"
+            app:cornerRadius="12dp"
+            android:backgroundTint="@color/colorSoftPurple"
+            android:textColor="@color/white" />
+
+    </LinearLayout>
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

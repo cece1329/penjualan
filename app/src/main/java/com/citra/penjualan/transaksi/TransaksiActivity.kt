@@ -12,6 +12,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.citra.penjualan.databinding.ActivityTransaksiBinding
@@ -33,13 +34,12 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.ImageView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-
-
 
 class TransaksiActivity : AppCompatActivity() {
 
@@ -53,7 +53,7 @@ class TransaksiActivity : AppCompatActivity() {
 
     private val produkList = ArrayList<ModelProduk>()
     private val filteredProdukList = ArrayList<ModelProduk>()
-    private val cartMap = HashMap<String, Pair<ModelProduk, Int>>() // ID Produk -> (Data, Qty)
+    private val cartMap = HashMap<String, Pair<ModelProduk, Int>>() 
     private lateinit var produkAdapter: TransaksiProdukAdapter
     private var totalHarga = 0
     private var selectedCategory = "Semua"
@@ -66,13 +66,12 @@ class TransaksiActivity : AppCompatActivity() {
     private var idKasir: String? = null
     private var jabatanKasir: String? = null
     private var cabangKasir: String? = null
-    private var currentReceiptData: ReceiptData? = null
 
     private data class PickerOption(
         val title: String,
-        val info1: String, // Jabatan / Tipe
-        val info2: String, // Alamat / Cabang
-        val info3: String, // Telp
+        val info1: String, 
+        val info2: String, 
+        val info3: String, 
         val icon: String,
         val typeIcon: Int = R.drawable.location,
         val searchableText: String = "",
@@ -89,7 +88,6 @@ class TransaksiActivity : AppCompatActivity() {
         loadStoreProfile()
         loadProdukData()
 
-        // Samakan ukuran arrow icon dengan standar (24dp) agar tidak terlalu besar
         binding.imgArrowKasir.layoutParams.width = dp(24)
         binding.imgArrowKasir.layoutParams.height = dp(24)
 
@@ -174,8 +172,7 @@ class TransaksiActivity : AppCompatActivity() {
     }
 
     private fun loadProdukData() {
-        // Ambil produk dulu agar bisa menghitung jumlah per kategori
-        dbProduk.addListenerForSingleValueEvent(object : ValueEventListener {
+        dbProduk.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(prodSnapshot: DataSnapshot) {
                 produkList.clear()
                 for (data in prodSnapshot.children) {
@@ -186,17 +183,11 @@ class TransaksiActivity : AppCompatActivity() {
                     }
                 }
 
-                // Setelah produk didapat, baru ambil kategori
                 dbKategori.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(katSnapshot: DataSnapshot) {
                         binding.chipGroupKategori.removeAllViews()
-                        
-                        // Hitung jumlah produk per kategori
                         val counts = produkList.groupingBy { it.namaKategori }.eachCount()
-                        
-                        // Tambah chip "Semua"
                         addCategoryChip("Semua", produkList.size)
-                        
                         for (data in katSnapshot.children) {
                             val kat = data.getValue(ModelKategori::class.java)
                             val name = kat?.namaKategori ?: continue
@@ -214,17 +205,14 @@ class TransaksiActivity : AppCompatActivity() {
     private fun addCategoryChip(categoryName: String, count: Int) {
         val chip = Chip(this)
         chip.text = "$categoryName ($count)"
-        chip.tag = categoryName // Gunakan tag untuk menyimpan nama asli kategori
+        chip.tag = categoryName
         chip.isCheckable = true
         chip.isChecked = categoryName == selectedCategory
         chip.chipCornerRadius = dp(16).toFloat()
         chip.chipMinHeight = dp(40).toFloat()
         chip.chipStrokeWidth = 1.5f
         
-        val isSelected = categoryName == selectedCategory
-        chip.setTextColor(Color.parseColor(if (isSelected) "#4A2B66" else "#8E74A6"))
-        chip.chipStrokeColor = ColorStateList.valueOf(Color.parseColor(if (isSelected) "#4A2B66" else "#F3E5F5"))
-        chip.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(if (isSelected) "#EAD9F7" else "#FBF8FF"))
+        applyChipColors(chip, categoryName == selectedCategory)
 
         chip.setOnClickListener {
             selectedCategory = categoryName
@@ -234,15 +222,24 @@ class TransaksiActivity : AppCompatActivity() {
         binding.chipGroupKategori.addView(chip)
     }
 
+    private fun applyChipColors(chip: Chip, isSelected: Boolean) {
+        if (isSelected) {
+            chip.setTextColor(ContextCompat.getColor(this, R.color.chipTextSelected))
+            chip.chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.chipStrokeSelected))
+            chip.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.chipBgSelected))
+        } else {
+            chip.setTextColor(ContextCompat.getColor(this, R.color.chipText))
+            chip.chipStrokeColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.chipStroke))
+            chip.chipBackgroundColor = ColorStateList.valueOf(ContextCompat.getColor(this, R.color.chipBg))
+        }
+    }
+
     private fun refreshCategoryChips() {
         for (i in 0 until binding.chipGroupKategori.childCount) {
             val chip = binding.chipGroupKategori.getChildAt(i) as? Chip ?: continue
             val isSelected = chip.tag.toString() == selectedCategory
             chip.isChecked = isSelected
-            
-            chip.setTextColor(Color.parseColor(if (isSelected) "#4A2B66" else "#8E74A6"))
-            chip.chipStrokeColor = ColorStateList.valueOf(Color.parseColor(if (isSelected) "#4A2B66" else "#F3E5F5"))
-            chip.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor(if (isSelected) "#EAD9F7" else "#FBF8FF"))
+            applyChipColors(chip, isSelected)
         }
     }
 
@@ -298,7 +295,7 @@ class TransaksiActivity : AppCompatActivity() {
                         info2 = "Pusat",
                         info3 = "-",
                         icon = "+",
-                        searchableText = "tambah baru add new customer", action = { startActivity(android.content.Intent(this@TransaksiActivity, TambahPelangganActivity::class.java)) })
+                        searchableText = "tambah baru add new customer", action = { startActivity(Intent(this@TransaksiActivity, TambahPelangganActivity::class.java)) })
                 )
                 options.addAll(pelangganList.map { pelanggan ->
                     PickerOption(
@@ -333,33 +330,39 @@ class TransaksiActivity : AppCompatActivity() {
         val tvTitle = view.findViewById<TextView>(R.id.tvPickerTitle)
         val tvSubtitle = view.findViewById<TextView>(R.id.tvPickerSubtitle)
         val container = view.findViewById<LinearLayout>(R.id.containerPickerOptions)
-        val etSearch = view.findViewById<EditText>(R.id.etSearchPicker) // Pastikan ID ini ada di XML
+        val etSearch = view.findViewById<EditText>(R.id.etSearchPicker)
 
-        tvTitle.text = title
-        tvSubtitle.text = subtitle
+        tvTitle?.text = title
+        tvSubtitle?.text = subtitle
 
         fun renderOptions(filter: String = "") {
-            container.removeAllViews()
+            container?.removeAllViews()
             options.filter { 
                 filter.isEmpty() || it.searchableText.contains(filter, ignoreCase = true) || it.title.contains(filter, ignoreCase = true)
             }.forEach { option ->
-            val itemView = layoutInflater.inflate(R.layout.item_picker_card, container, false)
-                itemView.findViewById<TextView>(R.id.tvOptionIcon).text = option.icon
-                itemView.findViewById<TextView>(R.id.tvOptionTitle).text = option.title
-
-                itemView.findViewById<TextView>(R.id.tvPickerJabatan).text = option.info1
-                itemView.findViewById<TextView>(R.id.tvPickerInfo).text = option.info2
-                itemView.findViewById<TextView>(R.id.tvPickerTelp).text = option.info3
-
-                // Set Ikon Dinamis
-                itemView.findViewById<android.widget.ImageView>(R.id.ivPickerIconInfo).setImageResource(option.typeIcon)
+                val itemView = layoutInflater.inflate(R.layout.item_picker_card, container, false)
+                itemView.findViewById<TextView>(R.id.tvOptionIcon)?.let { it.text = option.icon }
+                itemView.findViewById<TextView>(R.id.tvOptionTitle)?.let { it.text = option.title }
+                itemView.findViewById<TextView>(R.id.tvPickerJabatan)?.let { it.text = option.info1 }
+                itemView.findViewById<TextView>(R.id.tvPickerInfo)?.let { it.text = option.info2 }
+                itemView.findViewById<TextView>(R.id.tvPickerTelp)?.let { it.text = option.info3 }
+                itemView.findViewById<ImageView>(R.id.ivPickerIconInfo)?.setImageResource(option.typeIcon)
             
-            // Karena kita menggunakan MaterialCardView, kita pasang klik di root-nya atau view khusus
-            itemView.findViewById<View>(R.id.viewClickEffect).setOnClickListener {
+                // Fix: Correct way to set click listener for dynamic view in BottomSheet
+                val clickEffect = itemView.findViewById<View>(R.id.viewClickEffect)
+                clickEffect?.setOnClickListener {
                     sheet.dismiss()
                     option.action()
                 }
-                container.addView(itemView)
+                // Fallback for root click if overlay is not found
+                if (clickEffect == null) {
+                    itemView.setOnClickListener {
+                        sheet.dismiss()
+                        option.action()
+                    }
+                }
+
+                container?.addView(itemView)
             }
         }
 
@@ -412,13 +415,12 @@ class TransaksiActivity : AppCompatActivity() {
                 alamatToko = snapshot.child("alamatToko").value?.toString() ?: ""
                 if (roleLogin == "pemilik") {
                     val namaPemilik = snapshot.child("namaPemilik").value?.toString()
-                    if (!namaPemilik.isNullOrBlank() && selectedKasir == null) {
+                    if (!namaPemilik.isNullOrBlank() && KasirSessionHelper.selectedKasir == null) {
                         namaKasir = namaPemilik
                         binding.tvKasirTransaksi.text = "Kasir: $namaKasir"
                     }
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {}
         })
     }
@@ -431,12 +433,6 @@ class TransaksiActivity : AppCompatActivity() {
                     val pegawai = data.getValue(ModelPegawai::class.java)
                     if (pegawai != null && isJabatanKasir(pegawai.jabatanPegawai)) {
                         pegawai.idPegawai = data.key
-                        pegawai.cabangPegawai = firstNotBlank(
-                            pegawai.cabangPegawai,
-                            data.child("cabangPegawai").value?.toString(),
-                            data.child("cabang").value?.toString(),
-                            data.child("namaCabang").value?.toString()
-                        )
                         pegawaiList.add(pegawai)
                     }
                 }
@@ -457,7 +453,7 @@ class TransaksiActivity : AppCompatActivity() {
                             val sessionName = getSharedPreferences("user_session", Context.MODE_PRIVATE).getString("user_name", "Admin") ?: "Admin"
                             namaKasir = sessionName
                             binding.tvKasirTransaksi.text = "Kasir: $namaKasir"
-                            binding.tvInfoKasirTransaksi.text = "${jabatanKasir ?: "-"} - Cabang: ${displayCabang(cabangKasir)}"
+                            binding.tvInfoKasirTransaksi.text = "Pemilik - Semua Cabang"
                         }
                     )
                 )
@@ -465,10 +461,10 @@ class TransaksiActivity : AppCompatActivity() {
                     PickerOption(
                         title = kasir.namaPegawai ?: "Kasir",
                         info1 = kasir.jabatanPegawai ?: "Karyawan",
-                        info2 = displayCabang(kasir.cabangPegawai),
-                        info3 = kasir.teleponPegawai ?: "-",
+                        info2 = kasir.cabangPegawai ?: "Pusat",
+                        info3 = kasir.teleponPegawai ?: "-", 
                         icon = (kasir.namaPegawai?.take(1)?.uppercase() ?: "K"),
-                        searchableText = "${kasir.idPegawai} ${kasir.namaPegawai} ${kasir.jabatanPegawai} ${kasir.cabangPegawai} ${kasir.teleponPegawai}"
+                        searchableText = "${kasir.idPegawai} ${kasir.namaPegawai} ${kasir.jabatanPegawai} ${kasir.cabangPegawai}"
                     ) {
                         selectedKasir = kasir
                         idKasir = kasir.idPegawai
@@ -476,20 +472,17 @@ class TransaksiActivity : AppCompatActivity() {
                         jabatanKasir = kasir.jabatanPegawai
                         cabangKasir = kasir.cabangPegawai
                         binding.tvKasirTransaksi.text = "Kasir: $namaKasir"
-                        binding.tvInfoKasirTransaksi.text = "${jabatanKasir ?: "-"} - Cabang: ${displayCabang(cabangKasir)}"
+                        binding.tvInfoKasirTransaksi.text = "${jabatanKasir} - Cabang: ${cabangKasir ?: "Pusat"}"
                     }
                 })
 
                 showPickerSheet(
                     title = "Pilih Kasir",
-                    subtitle = if (pegawaiList.isEmpty()) "Belum ada pegawai dengan jabatan Kasir" else "Hanya pegawai berjabatan Kasir yang ditampilkan",
+                    subtitle = if (pegawaiList.isEmpty()) "Belum ada pegawai berjabatan Kasir" else "Pilih kasir yang bertugas",
                     options = options
                 )
             }
-
-            override fun onCancelled(error: DatabaseError) {
-                Toast.makeText(this@TransaksiActivity, "Gagal memuat kasir: ${error.message}", Toast.LENGTH_SHORT).show()
-            }
+            override fun onCancelled(error: DatabaseError) {}
         })
     }
 
@@ -497,32 +490,11 @@ class TransaksiActivity : AppCompatActivity() {
         return jabatan?.contains("kasir", ignoreCase = true) == true
     }
 
-    private fun displayCabang(cabang: String?): String {
-        return cabang?.takeIf { it.isNotBlank() } ?: "Belum dipilih"
-    }
-
-    private fun firstNotBlank(vararg values: String?): String {
-        return values.firstOrNull { !it.isNullOrBlank() }.orEmpty()
-    }
-
     private fun formatNumber(amount: Int): String {
-        val s = amount.toString()
-        val sb = StringBuilder()
-        var count = 0
-        for (i in s.length - 1 downTo 0) {
-            if (count > 0 && count % 3 == 0) sb.insert(0, ".")
-            sb.insert(0, s[i])
-            count++
-        }
-        return sb.toString()
+        return String.format("%,d", amount).replace(",", ".")
     }
 
     private fun showMetodePembayaranSheet() {
-        if (cartMap.isEmpty()) {
-            Toast.makeText(this, getString(R.string.transaksi_cart_empty), Toast.LENGTH_SHORT).show()
-            return
-        }
-
         val sheet = BottomSheetDialog(this)
         val sheetView = layoutInflater.inflate(R.layout.bottom_sheet_metode_pembayaran, null)
         sheet.setContentView(sheetView)
@@ -531,7 +503,6 @@ class TransaksiActivity : AppCompatActivity() {
         val btnCash = sheetView.findViewById<MaterialButton>(R.id.btnCash)
         val btnQris = sheetView.findViewById<MaterialButton>(R.id.btnQris)
         val btnGopay = sheetView.findViewById<MaterialButton>(R.id.btnGopay)
-
         val tvCashSectionLabel = sheetView.findViewById<TextView>(R.id.tvCashSectionLabel)
         val etUangDiterima = sheetView.findViewById<EditText>(R.id.etUangDiterima)
         val tvPreviewKembalian = sheetView.findViewById<TextView>(R.id.tvPreviewKembalian)
@@ -547,270 +518,139 @@ class TransaksiActivity : AppCompatActivity() {
         var noGopay: String? = null
 
         fun resetAllInput() {
-            tvCashSectionLabel.visibility = View.GONE
-            etUangDiterima.visibility = View.GONE
-            tvPreviewKembalian.visibility = View.GONE
-            tvGopaySectionLabel.visibility = View.GONE
-            etNoGopay.visibility = View.GONE
-            tvPreviewNota.visibility = View.GONE
-            tvPreviewNota.text = ""
-
-            btnPrint.visibility = View.GONE
-            etUangDiterima.text?.clear()
-            etNoGopay.text?.clear()
+            tvCashSectionLabel?.visibility = View.GONE
+            etUangDiterima?.visibility = View.GONE
+            tvPreviewKembalian?.visibility = View.GONE
+            tvGopaySectionLabel?.visibility = View.GONE
+            etNoGopay?.visibility = View.GONE
+            tvPreviewNota?.visibility = View.GONE
+            tvPreviewNota?.let { it.text = "" }
+            btnPrint?.visibility = View.GONE
         }
 
-        fun setCashMode(enabled: Boolean) {
-            resetAllInput()
-            tvCashSectionLabel.visibility = if (enabled) View.VISIBLE else View.GONE
-            etUangDiterima.visibility = if (enabled) View.VISIBLE else View.GONE
-            if (enabled) etUangDiterima.requestFocus() else etUangDiterima.text?.clear()
-        }
-
-        fun setGopayMode(enabled: Boolean) {
-            resetAllInput()
-            tvGopaySectionLabel.visibility = if (enabled) View.VISIBLE else View.GONE
-            etNoGopay.visibility = if (enabled) View.VISIBLE else View.GONE
-            if (enabled) etNoGopay.requestFocus() else etNoGopay.text?.clear()
-        }
-
-        btnCash.setOnClickListener {
+        btnCash?.setOnClickListener {
             metodePembayaran = "Cash"
-            noGopay = null
-            uangDiterima = null
-            kembalian = null
-            setCashMode(true)
-        }
-
-        btnQris.setOnClickListener {
-            metodePembayaran = "QRIS"
-            noGopay = null
-            uangDiterima = null
-            kembalian = null
             resetAllInput()
-            tvPreviewNota.text = "Nota siap dicetak ($metodePembayaran)"
-            tvPreviewNota.visibility = View.VISIBLE
-            btnPrint.visibility = View.VISIBLE
+            tvCashSectionLabel?.visibility = View.VISIBLE
+            etUangDiterima?.visibility = View.VISIBLE
+            etUangDiterima?.requestFocus()
         }
 
-        btnGopay.setOnClickListener {
+        btnQris?.setOnClickListener {
+            metodePembayaran = "QRIS"
+            resetAllInput()
+            tvPreviewNota?.let { it.text = "Nota siap dicetak (QRIS)" }
+            tvPreviewNota?.visibility = View.VISIBLE
+            btnPrint?.visibility = View.VISIBLE
+        }
+
+        btnGopay?.setOnClickListener {
             metodePembayaran = "GoPay"
-            noGopay = null
-            uangDiterima = null
-            kembalian = null
-            setGopayMode(true)
+            resetAllInput()
+            tvGopaySectionLabel?.visibility = View.VISIBLE
+            etNoGopay?.visibility = View.VISIBLE
+            etNoGopay?.requestFocus()
         }
 
-        fun updatePreviewNota() {
-            if (metodePembayaran.isNullOrBlank()) return
-
-            when (metodePembayaran) {
-                "Cash" -> {
-                    // Nota preview bisa muncul setelah input cash valid
-                    val uangStr = etUangDiterima.text?.toString()?.trim().orEmpty()
-                    val uang = uangStr.toIntOrNull() ?: 0
-                    if (uang <= 0 || uang < totalHarga) {
-                        tvPreviewKembalian.visibility = View.GONE
-                        tvPreviewNota.visibility = View.GONE
-                        btnPrint.visibility = View.GONE
-                        return
-                    }
-                    val change = uang - totalHarga
-                    uangDiterima = uang
-                    kembalian = change
-                    tvPreviewKembalian.text = "Kembalian: Rp $change"
-                    tvPreviewKembalian.visibility = View.VISIBLE
-                    tvPreviewNota.text = "Nota siap dicetak (Cash)"
-                    tvPreviewNota.visibility = View.VISIBLE
-                    btnPrint.visibility = View.VISIBLE
+        fun updatePreview() {
+            if (metodePembayaran == "Cash") {
+                val input = etUangDiterima?.text.toString().toIntOrNull() ?: 0
+                if (input >= totalHarga) {
+                    uangDiterima = input
+                    kembalian = input - totalHarga
+                    tvPreviewKembalian?.let { it.text = "Kembalian: Rp ${formatNumber(kembalian!!)}" }
+                    tvPreviewKembalian?.visibility = View.VISIBLE
+                    tvPreviewNota?.let { it.text = "Nota siap dicetak (Cash)" }
+                    tvPreviewNota?.visibility = View.VISIBLE
+                    btnPrint?.visibility = View.VISIBLE
+                } else {
+                    tvPreviewKembalian?.visibility = View.GONE
+                    tvPreviewNota?.visibility = View.GONE
+                    btnPrint?.visibility = View.GONE
                 }
-
-                "GoPay" -> {
-                    val noStr = etNoGopay.text?.toString()?.trim().orEmpty()
-                    if (noStr.length < 10 || !noStr.all { it.isDigit() }) {
-                        tvPreviewNota.visibility = View.GONE
-                        btnPrint.visibility = View.GONE
-                        return
-                    }
-                    noGopay = noStr
-                    tvPreviewNota.text = "Nota siap dicetak (Gopay: $noGopay)"
-                    tvPreviewNota.visibility = View.VISIBLE
-                    btnPrint.visibility = View.VISIBLE
-                }
-
-                else -> {
-                    // QRIS: langsung bisa print setelah pilih
-                    tvPreviewNota.text = "Nota siap dicetak ($metodePembayaran)"
-                    tvPreviewNota.visibility = View.VISIBLE
-                    btnPrint.visibility = View.VISIBLE
+            } else if (metodePembayaran == "GoPay") {
+                val input = etNoGopay?.text.toString()
+                if (input.length >= 10) {
+                    noGopay = input
+                    tvPreviewNota?.let { it.text = "Nota siap (GoPay: $noGopay)" }
+                    tvPreviewNota?.visibility = View.VISIBLE
+                    btnPrint?.visibility = View.VISIBLE
+                } else {
+                    tvPreviewNota?.visibility = View.GONE
+                    btnPrint?.visibility = View.GONE
                 }
             }
         }
 
-        // Listener input
-        val commonWatcher = object : TextWatcher {
-            override fun afterTextChanged(s: Editable?) { updatePreviewNota() }
+        etUangDiterima?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { updatePreview() }
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-        }
-        etUangDiterima.addTextChangedListener(commonWatcher)
-        etNoGopay.addTextChangedListener(commonWatcher)
-        btnPrint.setOnClickListener {
-            Toast.makeText(this, "Konfirmasi pembayaran dulu untuk membuat nota", Toast.LENGTH_SHORT).show()
-        }
+        })
 
-        // Inisialisasi awal
-        resetAllInput()
+        etNoGopay?.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) { updatePreview() }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
 
-        btnKonfirmasi.setOnClickListener {
-            if (metodePembayaran.isNullOrBlank()) {
+        btnKonfirmasi?.setOnClickListener {
+            if (metodePembayaran == null) {
                 Toast.makeText(this, "Pilih metode pembayaran", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
             }
-
-            if (metodePembayaran == "Cash") {
-                val uangStr = etUangDiterima.text?.toString()?.trim().orEmpty()
-                val uang = uangStr.toIntOrNull() ?: 0
-                if (uang <= 0) {
-                    Toast.makeText(this, "Masukkan uang diterima", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                if (uang < totalHarga) {
-                    Toast.makeText(this, "Uang diterima kurang", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                uangDiterima = uang
-                kembalian = uang - totalHarga
-            }
-
-            if (metodePembayaran == "GoPay") {
-                val noStr = etNoGopay.text?.toString()?.trim().orEmpty()
-                if (noStr.length < 10 || !noStr.all { it.isDigit() }) {
-                    Toast.makeText(this, "Masukkan No GoPay minimal 10 digit", Toast.LENGTH_SHORT).show()
-                    return@setOnClickListener
-                }
-                noGopay = noStr
-            }
-
-            // Proses simpan, lalu tampilkan pilihan cetak nota.
             sheet.dismiss()
-            saveTransaction(
-                metodePembayaran = metodePembayaran!!,
-                uangDiterima = uangDiterima,
-                kembalian = kembalian,
-                noGopay = noGopay
-            )
-        }
-    }
-
-    private fun saveTransaction(
-        metodePembayaran: String,
-        uangDiterima: Int?,
-        kembalian: Int?,
-        noGopay: String?
-    ) {
-        val id = dbTransaksi.push().key
-        val tanggal = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
-
-        val listItems = cartMap.values.map {
-            hashMapOf(
-                "idProduk" to it.first.idProduk,
-                "namaProduk" to it.first.namaProduk,
-                "harga" to it.first.hargaProduk,
-                "jumlah" to it.second,
-                "subtotal" to (it.first.hargaProduk * it.second)
-            )
+            saveTransaction(metodePembayaran!!, uangDiterima, kembalian, noGopay)
         }
         
-        // Detail produk untuk Nota (menggabungkan semua item agar lebih detail)
-        val detailProdukNota = cartMap.values.joinToString("\n") { 
-            "${it.first.namaProduk} (${it.second}x)" 
+        btnPrint?.setOnClickListener {
+            Toast.makeText(this, "Silahkan Konfirmasi Pembayaran terlebih dahulu", Toast.LENGTH_SHORT).show()
         }
-        val totalItems = cartMap.values.sumOf { it.second }
+    }
 
-        val data = hashMapOf(
-            "idTransaksi" to id,
-            "namaProduk" to detailProdukNota,
-            "jumlah" to totalItems,
-            "items" to listItems,
-            "totalHarga" to totalHarga,
-            "tanggal" to tanggal,
-            "metodePembayaran" to metodePembayaran,
-            "uangDiterima" to uangDiterima,
-            "kembalian" to kembalian,
-            "noGopay" to noGopay,
-            "idPelanggan" to selectedPelanggan?.idPelanggan,
-            "namaPelanggan" to (selectedPelanggan?.namaPelanggan ?: "Pelanggan Umum"),
-            "teleponPelanggan" to selectedPelanggan?.teleponPelanggan,
-            "jenisPelanggan" to (selectedPelanggan?.jenisPelanggan ?: "Umum"),
-            "idKasir" to idKasir,
-            "namaKasir" to namaKasir,
-            "jabatanKasir" to jabatanKasir,
-            "cabangKasir" to cabangKasir,
-            "namaToko" to namaToko,
-            "alamatToko" to alamatToko
+    private fun saveTransaction(metode: String, received: Int?, change: Int?, gopay: String?) {
+        val id = dbTransaksi.push().key ?: return
+        val tanggal = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
+        
+        val items = cartMap.values.map { 
+            ReceiptItem(it.first.namaProduk ?: "-", it.second, it.first.hargaProduk)
+        }
+
+        val receipt = ReceiptData(
+            toko = namaToko,
+            alamat = alamatToko,
+            cabang = cabangKasir,
+            kasir = namaKasir,
+            tanggal = tanggal,
+            idTransaksi = id,
+            items = items,
+            jumlah = cartMap.values.sumOf { it.second },
+            totalHarga = totalHarga,
+            metodePembayaran = metode,
+            uangDiterima = received,
+            kembalian = change,
+            noGopay = gopay,
+            namaPelanggan = selectedPelanggan?.namaPelanggan ?: "Pelanggan Umum",
+            jenisPelanggan = selectedPelanggan?.jenisPelanggan ?: "Umum"
         )
 
-
-        if (id != null) {
-            dbTransaksi.child(id).setValue(data).addOnSuccessListener {
-                // Update Stok untuk semua barang di keranjang
-                cartMap.forEach { (idProd, pair) ->
-                    val newStok = pair.first.stokProduk - pair.second
-                    dbProduk.child(idProd).child("stokProduk").setValue(newStok)
-                }
-
-                Toast.makeText(this, "Transaksi Berhasil Disimpan", Toast.LENGTH_SHORT).show()
-
-                val receipt = ReceiptData(
-                    toko = namaToko,
-                    alamat = alamatToko,
-                    cabang = cabangKasir,
-                    kasir = namaKasir,
-                    tanggal = tanggal,
-                    idTransaksi = id ?: "",
-                    items = cartMap.values.map { 
-                        ReceiptItem(it.first.namaProduk, it.second, it.first.hargaProduk)
-                    },
-                    jumlah = totalItems,
-                    totalHarga = totalHarga,
-                    metodePembayaran = metodePembayaran,
-                    uangDiterima = uangDiterima,
-                    kembalian = kembalian,
-                    noGopay = noGopay,
-                    namaPelanggan = selectedPelanggan?.namaPelanggan ?: "Pelanggan Umum",
-                    jenisPelanggan = selectedPelanggan?.jenisPelanggan ?: "Umum"
-                )
-                cartMap.clear()
-                updateCartUI()
-                currentReceiptData = receipt
-                showReceiptPrintOptions(receipt)
-            }.addOnFailureListener {
-                Toast.makeText(this, getString(R.string.transaksi_failed, it.message), Toast.LENGTH_SHORT).show()
+        dbTransaksi.child(id).setValue(receipt).addOnSuccessListener {
+            cartMap.forEach { (prodId, pair) ->
+                dbProduk.child(prodId).child("stokProduk").setValue(pair.first.stokProduk - pair.second)
             }
-        }
-    }
-
-    private fun showReceiptPrintOptions(receipt: ReceiptData) {
-        // Langsung pindah ke NotaActivity (Full Layout)
-        val intent = Intent(this, NotaActivity::class.java).apply {
-            putExtra("EXTRA_RECEIPT", receipt)
-        }
-        startActivity(intent)
-        finish() // Menutup halaman transaksi agar tidak bisa 'back' ke keranjang yang sudah kosong
-    }
-    private fun printReceipt(receipt: ReceiptData) {
-        try {
-            ReceiptPdfPrinter(this).printToPdf(receipt)
-        } catch (e: Exception) {
-            Toast.makeText(this, "Gagal membuka cetak nota: ${e.message}", Toast.LENGTH_SHORT).show()
+            cartMap.clear()
+            updateCartUI()
+            val intent = Intent(this, NotaActivity::class.java).apply {
+                putExtra("EXTRA_RECEIPT", receipt)
+            }
+            startActivity(intent)
+            finish()
         }
     }
 
     private fun dp(value: Int): Int {
         return (value * resources.displayMetrics.density).toInt()
     }
-
 }
 
 private class TransaksiProdukAdapter(
@@ -829,21 +669,22 @@ private class TransaksiProdukAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val produk = list[position]
         val qty = getQty(produk)
-
         with(holder.binding) {
             imgProduk.setImageResource(R.drawable.product)
             tvNamaProduk.text = produk.namaProduk
-            tvHargaProduk.text = "Rp ${formatRupiah(produk.hargaProduk)}"
-            tvInfoProduk.text = "${produk.namaKategori.ifBlank { "Kategori" }} - Stok ${produk.stokProduk}"
+            tvHargaProduk.text = "Rp ${String.format("%,d", produk.hargaProduk).replace(",", ".")}"
+            tvInfoProduk.text = "${produk.namaKategori} - Stok ${produk.stokProduk}"
             tvQty.text = qty.toString()
-            tvStatus.text = produk.statusProduk.ifBlank { "Aktif" }
-
             val active = produk.statusProduk.equals("Aktif", ignoreCase = true) || produk.statusProduk.isBlank()
+            tvStatus.text = if (active) "Aktif" else "Nonaktif"
             tvStatus.setTextColor(Color.parseColor(if (active) "#2E7D32" else "#C62828"))
+            
+            // Ensure buttons maintain correct visibility and responsiveness
             btnPlus.isEnabled = active
             btnPlus.alpha = if (active) 1f else 0.35f
+            btnMinus.isEnabled = true
             btnMinus.alpha = if (qty > 0) 1f else 0.35f
-
+            
             btnMinus.setOnClickListener { onMinus(produk) }
             btnPlus.setOnClickListener { onPlus(produk) }
             root.setOnClickListener { onPlus(produk) }
@@ -860,8 +701,8 @@ private class TransaksiProdukAdapter(
     fun refreshQuantities() {
         notifyDataSetChanged()
     }
+}
 
-    private fun formatRupiah(amount: Int): String {
-        return "%,d".format(amount).replace(",", ".")
-    }
+private object KasirSessionHelper {
+    var selectedKasir: ModelPegawai? = null
 }

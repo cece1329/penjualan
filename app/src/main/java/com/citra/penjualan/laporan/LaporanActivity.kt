@@ -2,7 +2,6 @@ package com.citra.penjualan.laporan
 
 import android.os.Bundle
 import android.view.View
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -18,7 +17,7 @@ import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-// Data class lokal agar LaporanActivity mandiri dan tidak error jika model global belum diupdate
+// Data class lokal agar LaporanActivity mandiri
 data class LaporanItem(
     val namaProduk: String? = null,
     val jumlah: Int = 0,
@@ -52,34 +51,24 @@ class LaporanActivity : AppCompatActivity() {
         binding = ActivityLaporanBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.toolbar.setNavigationOnClickListener { finish() }
-
-        // Perbaikan ukuran ikon arrow agar tetap 24dp (tidak kegedean)
-        binding.toolbar.post {
-            val icon = binding.toolbar.navigationIcon
-            icon?.let {
-                it.setBounds(0, 0, dp(24), dp(24))
-                binding.toolbar.navigationIcon = it
-            }
-        }
-        
-        // Menghilangkan tint default agar logo CSV tampil dengan warna aslinya/asli drawable
+        binding.btnBack.setOnClickListener { finish() }
         binding.fabExport.iconTint = null
 
         setupFilters()
         fetchData()
 
-        // Fix: Gunakan ID fabExport langsung untuk cetak PDF
         binding.fabExport.setOnClickListener { printLaporanPDF() }
     }
 
     private fun setupFilters() {
-        binding.chipGroupFilter.setOnCheckedChangeListener { group, checkedId ->
-            when (checkedId) {
-                R.id.chipToday -> filterByDateRange(0)
-                R.id.chipWeekly -> filterByDateRange(7)
-                R.id.chipMonthly -> filterByDateRange(30)
-                R.id.chipCustom -> showDatePicker()
+        binding.chipGroupFilter.setOnCheckedStateChangeListener { _, checkedIds ->
+            if (checkedIds.isNotEmpty()) {
+                when (checkedIds[0]) {
+                    R.id.chipToday -> filterByDateRange(0)
+                    R.id.chipWeekly -> filterByDateRange(7)
+                    R.id.chipMonthly -> filterByDateRange(30)
+                    R.id.chipCustom -> showDatePicker()
+                }
             }
         }
         binding.chipToday.isChecked = true
@@ -145,20 +134,18 @@ class LaporanActivity : AppCompatActivity() {
         this.currentProductMap = productMap
         this.currentPaymentMap = paymentMap
 
-        binding.tvTotalOmzet.text = "Rp ${formatNumber(omzet)}"
-        binding.tvTotalLaba.text = "Rp ${formatNumber(laba)}"
+        binding.tvTotalOmzet.text = getString(R.string.price_format, formatNumber(omzet))
+        binding.tvTotalLaba.text = getString(R.string.price_format, formatNumber(laba))
         
         renderTopSelling(productMap)
         renderPaymentSummary(paymentMap)
 
-        // Setup/Update list transaksi di bagian bawah
         if (!::adapter.isInitialized) {
             adapter = LaporanAdapter(arrayListOf())
             binding.rvTransactions.layoutManager = LinearLayoutManager(this)
             binding.rvTransactions.adapter = adapter
         }
 
-        // Konversi data lokal ke ModelTransaksi yang diharapkan Adapter
         val adapterData = filteredTransactions.map { t ->
             ModelTransaksi().apply {
                 idTransaksi = t.idTransaksi
@@ -178,7 +165,7 @@ class LaporanActivity : AppCompatActivity() {
         map.toList().sortedByDescending { it.second }.take(5).forEach {
             val view = layoutInflater.inflate(R.layout.item_simple_row, binding.containerTopSelling, false)
             view.findViewById<TextView>(R.id.tvLabel).text = it.first
-            view.findViewById<TextView>(R.id.tvValue).text = "${it.second} terjual"
+            view.findViewById<TextView>(R.id.tvValue).text = getString(R.string.sold_format, it.second)
             binding.containerTopSelling.addView(view)
         }
     }
@@ -188,7 +175,7 @@ class LaporanActivity : AppCompatActivity() {
         map.forEach { (method, total) ->
             val view = layoutInflater.inflate(R.layout.item_simple_row, binding.containerPaymentSummary, false)
             view.findViewById<TextView>(R.id.tvLabel).text = method
-            view.findViewById<TextView>(R.id.tvValue).text = "Rp ${formatNumber(total)}"
+            view.findViewById<TextView>(R.id.tvValue).text = getString(R.string.price_format, formatNumber(total))
             binding.containerPaymentSummary.addView(view)
         }
     }
@@ -232,7 +219,7 @@ class LaporanActivity : AppCompatActivity() {
     private fun parseDate(dateStr: String?): Long? {
         return try {
             SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).parse(dateStr ?: "")?.time
-        } catch (e: Exception) { null }
+        } catch (_: Exception) { null }
     }
 
     private fun getStartOfDay(): Long {
@@ -241,10 +228,6 @@ class LaporanActivity : AppCompatActivity() {
             set(Calendar.MINUTE, 0)
             set(Calendar.SECOND, 0)
         }.timeInMillis
-    }
-
-    private fun dp(value: Int): Int {
-        return (value * resources.displayMetrics.density).toInt()
     }
 
     private fun formatNumber(amount: Int): String {

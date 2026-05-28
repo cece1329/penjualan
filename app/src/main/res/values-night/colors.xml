@@ -1,16 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Dark Theme Colors - Soft Dark Purple Theme -->
-    <color name="backgroundColor">#120E16</color>
-    <color name="backgroundFormColor">#1A1422</color>
-    <color name="textColorPrimary">#E1D5EC</color>
-    <color name="textColorSecondary">#A594B8</color>
+    <color name="backgroundColor">#121212</color>
+    <color name="backgroundFormColor">#1A1A1A</color>
+    <color name="textColorPrimary">#E0E0E0</color>
+    <color name="textColorSecondary">#9E9E9E</color>
     <color name="textColorTitle">#FFFFFF</color>
-    <color name="cardBackground">#1E1926</color>
-    <color name="borderColor">#2E2538</color>
-    <color name="textColorEditText">#E1D5EC</color>
+    <color name="cardBackground">#242424</color>
+    <color name="borderColor">#333333</color>
+    <color name="textColorEditText">#FFFFFF</color>
 
-    <color name="colorSoftPurple">#BA68C8</color>
-    <color name="colorSoftPurpleLight">#352940</color>
-    <color name="colorSoftPurpleDark">#AB47BC</color>
+    <color name="colorSoftPurple">#CE93D8</color>
+    <color name="colorSoftPurpleLight">#2D2133</color>
+    <color name="colorSoftPurpleDark">#BA68C8</color>
+
+    <!-- Chip Colors Semantic for Dark Mode -->
+    <color name="chipBg">#242424</color>
+    <color name="chipText">#B0B0B0</color>
+    <color name="chipStroke">#333333</color>
+    <color name="chipBgSelected">#311B92</color>
+    <color name="chipTextSelected">#E1BEE7</color>
+    <color name="chipStrokeSelected">#CE93D8</color>
+
+    <!-- Semantic Status Colors -->
+    <color name="errorColor">#EF5350</color>
+    <color name="successColor">#66BB6A</color>
+
+    <!-- Fixed Colors -->
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
 </resources>

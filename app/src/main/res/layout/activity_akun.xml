@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#F8F9FA">
+    android:background="@color/backgroundColor">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -41,7 +41,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
                 android:text="Nama Pengguna"
-                android:textColor="#212121"
+                android:textColor="@color/textColorTitle"
                 android:textSize="20sp"
                 android:textStyle="bold" />
 
@@ -65,6 +65,7 @@
             android:layout_marginBottom="16dp"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/cardBackground"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -83,7 +84,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/jabatan"
-                        app:tint="#757575"/>
+                        app:tint="@color/textColorSecondary"/>
                     <TextView
                         android:id="@+id/tvProfileJabatan"
                         android:layout_width="wrap_content"
@@ -91,7 +92,7 @@
                         android:layout_marginStart="16dp"
                         android:text="Jabatan"
                         android:textSize="14sp"
-                        android:textColor="#616161" />
+                        android:textColor="@color/textColorPrimary" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -104,7 +105,7 @@
                         android:layout_width="20dp"
                         android:layout_height="20dp"
                         android:src="@drawable/telp"
-                        app:tint="#757575"/>
+                        app:tint="@color/textColorSecondary"/>
                     <TextView
                         android:id="@+id/tvProfileTelepon"
                         android:layout_width="wrap_content"
@@ -112,7 +113,7 @@
                         android:layout_marginStart="16dp"
                         android:text="Telepon"
                         android:textSize="14sp"
-                        android:textColor="#616161" />
+                        android:textColor="@color/textColorPrimary" />
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
@@ -123,6 +124,7 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="16dp"
             app:cardElevation="2dp"
+            app:cardBackgroundColor="@color/cardBackground"
             app:strokeWidth="0dp">
 
             <LinearLayout
@@ -139,11 +141,14 @@
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp">
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintTextColor="@color/colorSoftPurple"
+                    app:boxStrokeColor="@color/colorSoftPurple">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNamaPemilik"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -155,11 +160,14 @@
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp">
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintTextColor="@color/colorSoftPurple"
+                    app:boxStrokeColor="@color/colorSoftPurple">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etNamaToko"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
@@ -171,15 +179,19 @@
                     app:boxCornerRadiusBottomEnd="12dp"
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
-                    app:boxCornerRadiusTopStart="12dp">
+                    app:boxCornerRadiusTopStart="12dp"
+                    app:hintTextColor="@color/colorSoftPurple"
+                    app:boxStrokeColor="@color/colorSoftPurple">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etEmailToko"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textEmailAddress" />
+                        android:inputType="textEmailAddress"
+                        android:textColor="@color/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/tilSandiPemilik"
                     style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -189,12 +201,15 @@
                     app:boxCornerRadiusBottomStart="12dp"
                     app:boxCornerRadiusTopEnd="12dp"
                     app:boxCornerRadiusTopStart="12dp"
-                    app:endIconMode="password_toggle">
+                    app:endIconMode="password_toggle"
+                    app:hintTextColor="@color/colorSoftPurple"
+                    app:boxStrokeColor="@color/colorSoftPurple">
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etSandiPemilik"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:inputType="textPassword" />
+                        android:inputType="textPassword"
+                        android:textColor="@color/textColorPrimary" />
                 </com.google.android.material.textfield.TextInputLayout>
 
                 <com.google.android.material.button.MaterialButton
@@ -206,6 +221,8 @@
                     android:textAllCaps="false"
                     android:textSize="16sp"
                     android:textStyle="bold"
+                    android:textColor="@color/white"
+                    app:backgroundTint="@color/colorSoftPurple"
                     app:cornerRadius="12dp" />
 
                 <com.google.android.material.button.MaterialButton
@@ -215,7 +232,7 @@
                     android:layout_height="56dp"
                     android:layout_marginTop="8dp"
                     android:text="Keluar dari Akun"
-                    android:textColor="#F44336"
+                    android:textColor="@color/errorColor"
                     android:textAllCaps="false" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

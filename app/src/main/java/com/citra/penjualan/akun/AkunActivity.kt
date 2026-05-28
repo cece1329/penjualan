@@ -7,12 +7,10 @@ import android.graphics.Color
 import android.graphics.drawable.GradientDrawable
 import android.os.Bundle
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.citra.penjualan.R
-import com.citra.penjualan.beranda.cardActivity
 import com.citra.penjualan.databinding.ActivityAkunBinding
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,9 +29,7 @@ class AkunActivity : AppCompatActivity() {
         setupProfileHeaderAndSession()
         binding.btnKeluar.setOnClickListener { performLogout() }
         
-        // Memberikan radius pada tombol agar tidak kaku
         applyButtonStyle(binding.btnSimpanProfil, "#BA68C8")
-        applyButtonStyle(binding.btnKeluar, "#F44336")
     }
 
     private fun applyButtonStyle(view: View, colorHex: String) {
@@ -51,7 +47,6 @@ class AkunActivity : AppCompatActivity() {
         val phone = sharedPref.getString("user_phone", "-") ?: "-"
         val jabatan = sharedPref.getString("user_jabatan", "Pemilik") ?: "Pemilik"
 
-        // Setup Profil Header: Logo Akun tanpa warna (tint) agar asli
         binding.tvAvatarInitials.visibility = View.GONE
         binding.avatarFrame.removeAllViews()
         val ivAvatar = ImageView(this).apply {
@@ -67,19 +62,16 @@ class AkunActivity : AppCompatActivity() {
             intArrayOf(Color.parseColor("#CE93D8"), Color.parseColor("#BA68C8"))
         }
         val gd = GradientDrawable(GradientDrawable.Orientation.TL_BR, colors)
-        gd.cornerRadius = dp(50).toFloat() // Radius 50dp untuk FrameLayout 100dp agar bulat sempurna
+        gd.cornerRadius = dp(50).toFloat()
         binding.avatarFrame.background = gd
 
         if (role == "pemilik") {
             binding.tvProfileRoleBadge.text = getString(R.string.akun_role_owner)
             binding.tvProfileRoleBadge.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#BA68C8"))
             binding.layoutEmployeeDetails.visibility = View.GONE
-            binding.etNamaPemilik.isEnabled = true
-            binding.etNamaToko.isEnabled = true
-            binding.etEmailToko.isEnabled = true
-            binding.etSandiPemilik.isEnabled = true 
+            binding.tilSandiPemilik.visibility = View.VISIBLE
             binding.btnSimpanProfil.visibility = View.VISIBLE
-            loadTokoProfile()
+            loadTokoProfile(true)
             binding.btnSimpanProfil.setOnClickListener { saveTokoProfile() }
         } else {
             binding.tvProfileRoleBadge.text = getString(R.string.akun_role_employee)
@@ -87,15 +79,18 @@ class AkunActivity : AppCompatActivity() {
             binding.layoutEmployeeDetails.visibility = View.VISIBLE
             binding.tvProfileJabatan.text = getString(R.string.akun_position, jabatan)
             binding.tvProfileTelepon.text = getString(R.string.akun_phone, phone)
+            
+            // Employee cannot see or edit owner info
             binding.etNamaPemilik.isEnabled = false
             binding.etNamaToko.isEnabled = false
             binding.etEmailToko.isEnabled = false
+            binding.tilSandiPemilik.visibility = View.GONE
             binding.btnSimpanProfil.visibility = View.GONE
-            loadTokoProfile()
+            loadTokoProfile(false)
         }
     }
 
-    private fun loadTokoProfile() {
+    private fun loadTokoProfile(isOwner: Boolean) {
         db.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
@@ -103,17 +98,16 @@ class AkunActivity : AppCompatActivity() {
                     val namaToko = snapshot.child("namaToko").value?.toString() ?: ""
                     val sandi = snapshot.child("sandiPemilik").value?.toString() ?: "admin123"
                     val email = snapshot.child("emailToko").value?.toString() ?: ""
-                    val alamat = snapshot.child("alamatToko").value?.toString() ?: ""
                     
                     binding.etNamaPemilik.setText(namaPemilik)
                     binding.etNamaToko.setText(namaToko)
                     binding.etEmailToko.setText(email)
-                    try { binding.javaClass.getMethod("getEtAlamatToko").invoke(binding).let { (it as android.widget.EditText).setText(alamat) } } catch(e: Exception) {}
 
-                    // Muat sandi ke field input
-                    binding.etSandiPemilik.setText(sandi)
+                    if (isOwner) {
+                        binding.etSandiPemilik.setText(sandi)
+                    }
                     
-                    if (namaPemilik.isNotBlank() && getSharedPreferences("user_session", Context.MODE_PRIVATE).getString("user_role", "pemilik") == "pemilik") {
+                    if (namaPemilik.isNotBlank() && isOwner) {
                         binding.tvProfileName.text = namaPemilik
                     }
                 }
@@ -129,7 +123,6 @@ class AkunActivity : AppCompatActivity() {
         val namaToko = binding.etNamaToko.text.toString().trim()
         val emailToko = binding.etEmailToko.text.toString().trim()
         val sandiBaru = binding.etSandiPemilik.text.toString().trim()
-        val alamatToko = try { (binding.javaClass.getMethod("getEtAlamatToko").invoke(binding) as android.widget.EditText).text.toString().trim() } catch(e: Exception) { "" }
 
         if (namaPemilik.isEmpty() || namaToko.isEmpty() || emailToko.isEmpty()) {
             Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
@@ -140,7 +133,6 @@ class AkunActivity : AppCompatActivity() {
             "namaPemilik" to namaPemilik,
             "namaToko" to namaToko,
             "emailToko" to emailToko,
-            "alamatToko" to alamatToko,
             "sandiPemilik" to if (sandiBaru.isNotEmpty()) sandiBaru else "admin123"
         )
 

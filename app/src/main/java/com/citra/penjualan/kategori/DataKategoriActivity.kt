@@ -134,7 +134,9 @@ class DataKategoriActivity : AppCompatActivity() {
             (selectedCategoryFilter == "Semua" || it.namaKategori == selectedCategoryFilter) &&
             (query.isEmpty() || it.namaKategori?.contains(query, ignoreCase = true) == true)
         }
-        adapter.updateData(filtered, productCounts)
+        if (::adapter.isInitialized) {
+            adapter.updateData(filtered, productCounts)
+        }
     }
 
     private fun updateKategoriAdapter() {

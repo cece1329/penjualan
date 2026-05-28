@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">penjualan</string>
 
@@ -15,6 +16,13 @@
 
     <string name="language_changed_toast">Bahasa berhasil diperbarui</string>
     <string name="language_cancel">Batal</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Pengaturan</string>
+    <string name="settings_appearance">Tampilan</string>
+    <string name="settings_theme_mode">Mode Tema</string>
+    <string name="settings_language">Bahasa</string>
+    <string name="settings_app_language">Bahasa Aplikasi</string>
 
     <!-- Home / Welcome -->
     <string name="welcome_halo">Halo</string>
@@ -51,7 +59,6 @@
     <string name="receipt_paid">✓  LUNAS</string>
 
     <string name="receipt_gopay_number_label">No GoPay</string>
-
 
     <string name="receipt_footer_1">Simpan nota ini sebagai bukti pembelian Anda.</string>
     <string name="receipt_footer_2">Barang yang sudah dibeli tidak dapat dikembalikan.</string>
@@ -152,6 +159,8 @@
     <string name="laporan_title">Laporan Penjualan</string>
     <string name="laporan_total_label">Total Akumulasi Penjualan</string>
     <string name="laporan_load_failed">Gagal memuat laporan: %1$s</string>
+    <string name="price_format">Rp %1$s</string>
+    <string name="sold_format">%1$d terjual</string>
 
     <!-- Produk -->
     <string name="produk_form_title">Data Produk</string>

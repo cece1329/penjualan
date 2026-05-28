@@ -100,6 +100,11 @@
             android:exported="false" />
 
         <activity
+            android:name=".beranda.SettingsActivity"
+            android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
+            android:exported="false" />
+
+        <activity
             android:name=".akun.LoginActivity"
             android:configChanges="orientation|screenSize|screenLayout|keyboardHidden"
             android:exported="true">

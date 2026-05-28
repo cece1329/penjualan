@@ -9,13 +9,34 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/backgroundColor">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:title="Laporan Penjualan"
-            app:titleTextColor="@color/textColorTitle"
-            app:navigationIcon="@drawable/arrow" />
+            android:paddingHorizontal="16dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:background="@drawable/bg_border"
+                android:contentDescription="Kembali"
+                android:src="@drawable/arrow"
+                android:scaleType="centerInside"
+                android:padding="8dp"
+                android:rotation="180" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="Laporan Penjualan"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:textColor="@color/textColorTitle" />
+
+        </RelativeLayout>
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.core.widget.NestedScrollView

@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="2dp"
+    android:layout_marginBottom="10dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="2dp"
+    app:cardBackgroundColor="@color/cardBackground"
+    app:strokeWidth="1dp"
+    app:strokeColor="@color/borderColor">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:id="@+id/pickerMainContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:padding="12dp"
+            android:gravity="center_vertical">
+
+            <!-- Employee Icon - Border only, no solid block purple -->
+            <TextView
+                android:id="@+id/tvOptionIcon"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:background="@drawable/bg_border"
+                android:gravity="center"
+                android:text="P"
+                android:textColor="@color/colorSoftPurple"
+                android:textSize="18sp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_marginStart="14dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvOptionTitle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Title"
+                    android:textColor="@color/textColorTitle"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvPickerJabatan"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Jabatan"
+                    android:textColor="@color/colorSoftPurple"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:layout_marginTop="2dp">
+                    <ImageView
+                        android:id="@+id/ivPickerIconInfo"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/location"
+                        app:tint="@color/textColorSecondary"/>
+                    <TextView
+                        android:id="@+id/tvPickerInfo"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Info"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="10sp"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical">
+                    <ImageView
+                        android:id="@+id/ivPickerIconTelp"
+                        android:layout_width="12dp"
+                        android:layout_height="12dp"
+                        android:src="@drawable/telp"
+                        app:tint="@color/textColorSecondary"/>
+                    <TextView
+                        android:id="@+id/tvPickerTelp"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="4dp"
+                        android:text="Telp"
+                        android:textColor="@color/textColorSecondary"
+                        android:textSize="10sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:src="@drawable/arrow"
+                app:tint="@color/colorSoftPurple"
+                android:alpha="0.6"/>
+
+        </LinearLayout>
+
+        <!-- Use an ID that matches what TransaksiActivity expects: viewClickEffect -->
+        <View
+            android:id="@+id/viewClickEffect"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignTop="@id/pickerMainContent"
+            android:layout_alignBottom="@id/pickerMainContent"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true" />
+            
+    </RelativeLayout>
+</com.google.android.material.card.MaterialCardView>

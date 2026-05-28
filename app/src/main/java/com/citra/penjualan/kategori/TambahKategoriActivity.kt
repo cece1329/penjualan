@@ -95,10 +95,9 @@ class TambahKategoriActivity : AppCompatActivity() {
     private fun setupViewEdit() {
         binding.apply {
             etNamaKategori.setText(dataEdit?.namaKategori)
-            chipStatus.text = dataEdit?.statusKategori
+            chipStatus.text = dataEdit?.statusKategori ?: getString(R.string.msg_active)
             btnSimpan.text = getString(R.string.kategori_update_btn)
 
-            // Set selected branch in spinner
             val branchIndex = listCabang.indexOf(dataEdit?.cabangKategori)
             if (branchIndex != -1) {
                 spinnerCabangKategori.setSelection(branchIndex)
@@ -126,7 +125,6 @@ class TambahKategoriActivity : AppCompatActivity() {
         val nama = binding.etNamaKategori.text.toString().trim()
         val cabang = binding.spinnerCabangKategori.selectedItem?.toString()?.trim() ?: ""
         val status = binding.chipStatus.text.toString()
-
         if (nama.isEmpty() || cabang.isEmpty()) {
             Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
             return

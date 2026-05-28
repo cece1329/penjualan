@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Sales App</string>
+
+    <string name="language_dialog_title">Select Language</string>
+    <string name="language_option_default">System Default</string>
+    <string name="language_option_id">Indonesian</string>
+    <string name="language_option_en">English</string>
+
+    <string name="theme_dialog_title">Select Theme</string>
+    <string name="theme_option_default">System Default</string>
+    <string name="theme_option_light">Light Mode</string>
+    <string name="theme_option_dark">Dark Mode</string>
+    <string name="theme_changed_toast">Theme updated successfully</string>
+    <string name="theme_cancel">Cancel</string>
+
+    <string name="language_changed_toast">Language updated successfully</string>
+    <string name="language_cancel">Cancel</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+    <string name="settings_appearance">Appearance</string>
+    <string name="settings_theme_mode">Theme Mode</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_app_language">App Language</string>
+
+    <!-- Home / Welcome -->
+    <string name="welcome_halo">Hello</string>
+    <string name="welcome_day">Good Afternoon</string>
+
+    <!-- Home UI (cardActivity.xml) -->
+    <string name="home_welcome_fallback">Good Afternoon, Citra</string>
+    <string name="home_estimasi_hari_ini">Today\'s Estimate</string>
+    <string name="home_persen_tercapai">65% Achieved</string>
+    <string name="home_target">Target: Rp 1,000,000</string>
+    <string name="home_target_penjualan_hari_ini">Today\'s Sales Target</string>
+    <string name="home_siap_melayani_pelanggan">Ready to serve customers</string>
+    <string name="home_jangan_kecewakan_pelanggan">Don\'t disappoint customers</string>
+
+    <!-- Home Nav -->
+    <string name="home_nav_transaction">Transaction</string>
+
+    <!-- Receipt PDF -->
+    <string name="receipt_thanks">Thank you for shopping ♥</string>
+    <string name="receipt_title">✦ TRANSACTION RECEIPT ✦</string>
+    <string name="receipt_date_label">Date</string>
+    <string name="receipt_invoice_label">Invoice No.</string>
+    <string name="receipt_cashier_label">Cashier</string>
+    <string name="receipt_payment_method_label">PAYMENT METHOD</string>
+    <string name="receipt_received_amount_label">RECEIVED AMOUNT</string>
+    <string name="receipt_change_label">CHANGE</string>
+    <string name="receipt_product_header">PRODUCT</string>
+
+    <string name="receipt_qty_header">QTY</string>
+    <string name="receipt_price_header">PRICE</string>
+    <string name="receipt_subtotal">Subtotal (%1$d item)</string>
+    <string name="receipt_service_fee">Service Fee</string>
+    <string name="receipt_total_payment">TOTAL PAYMENT</string>
+    <string name="receipt_paid">✓ PAID</string>
+
+    <string name="receipt_gopay_number_label">GoPay No.</string>
+
+    <string name="receipt_footer_1">Keep this receipt as proof of your purchase.</string>
+    <string name="receipt_footer_2">Purchased items cannot be returned.</string>
+    <string name="receipt_footer_3">Thank you for your trust! ♥</string>
+
+    <!-- Errors / Transaksi -->
+    <string name="err_gagalambil_produk">Failed to load product data: %1$s</string>
+
+    <!-- Common -->
+    <string name="msg_complete_all_data">Please complete all fields!</string>
+    <string name="msg_failed">Failed: %1$s</string>
+    <string name="msg_active">Active</string>
+    <string name="msg_inactive">Inactive</string>
+    <string name="msg_center">Center</string>
+    <string name="msg_general">General</string>
+
+    <!-- Login -->
+    <string name="login_app_title">Citra Smart Cashier</string>
+    <string name="login_app_subtitle">Manage Store Easily &amp; Fast</string>
+    <string name="login_tab_owner">Owner</string>
+    <string name="login_tab_employee">Employee</string>
+    <string name="login_as_owner">Login as Owner</string>
+    <string name="login_as_employee">Login as Employee</string>
+    <string name="login_username_owner">Owner Username</string>
+    <string name="login_username_employee">Employee Name / Phone</string>
+    <string name="login_hint_owner">Ex: owner / admin</string>
+    <string name="login_hint_employee">Enter name or phone no</string>
+    <string name="login_password_label">Password / PIN</string>
+    <string name="login_hint_password">Enter password</string>
+    <string name="login_button">Login App</string>
+    <string name="login_copyright">© 2026 Citra Sales App</string>
+    <string name="login_fill_all">Please complete all fields!</string>
+    <string name="login_welcome_owner">Welcome Owner!</string>
+    <string name="login_wrong_owner">Wrong Owner Username or Password!</string>
+    <string name="login_welcome_employee">Welcome, %1$s!</string>
+    <string name="login_wrong_employee">Wrong Employee Info or Password!</string>
+    <string name="login_db_error">Database error: %1$s</string>
+
+    <string name="show_pin">Show PIN</string>
+    <string name="hide_pin">Hide PIN</string>
+
+    <!-- Account / Profil -->
+    <string name="akun_title">Account Profile</string>
+    <string name="akun_username">Username</string>
+    <string name="akun_role_owner">OWNER</string>
+    <string name="akun_role_employee">EMPLOYEE</string>
+    <string name="akun_position">Position: %1$s</string>
+    <string name="akun_phone">Phone: %1$s</string>
+    <string name="akun_store_info">Store Information</string>
+    <string name="akun_owner_name">Owner Name</string>
+    <string name="akun_hint_owner_name">Ex: Citra</string>
+    <string name="akun_store_name">Store Name</string>
+    <string name="akun_hint_store_name">Ex: Citra Mart</string>
+    <string name="akun_email">Email</string>
+    <string name="akun_hint_email">Ex: citra@store.com</string>
+    <string name="akun_save_profile">Save Profile</string>
+    <string name="akun_logout">Logout</string>
+    <string name="akun_load_failed">Failed to load store profile: %1$s</string>
+    <string name="akun_save_success">Profile updated successfully!</string>
+    <string name="akun_logout_success">Logged out successfully</string>
+
+    <!-- Transaksi -->
+    <string name="transaksi_title">New Transaction</string>
+    <string name="transaksi_select_product">Select Product</string>
+    <string name="transaksi_select_category">Select Category</string>
+    <string name="transaksi_qty_label">Item Quantity</string>
+    <string name="transaksi_qty_hint">Ex: 1</string>
+    <string name="transaksi_total_label">Total Payment</string>
+    <string name="transaksi_btn_pay">Complete Transaction</string>
+    <string name="transaksi_no_product">No products available</string>
+    <string name="transaksi_select_valid">Please select a valid product and quantity</string>
+    <string name="transaksi_select_cat_first">Select category first</string>
+    <string name="transaksi_stock_insufficient">Insufficient stock! Available: %1$d</string>
+    <string name="transaksi_success">Transaction saved successfully!</string>
+    <string name="transaksi_added_to_cart">Added to cart</string>
+    <string name="transaksi_cart_empty">Cart is still empty!</string>
+    <string name="transaksi_failed">Failed to save transaction: %1$s</string>
+
+    <!-- Printer -->
+    <string name="printer_title">Printer System</string>
+    <string name="printer_subtitle">Connect app with printing device</string>
+    <string name="printer_status_disconnected">Status: Disconnected</string>
+    <string name="printer_btn_connect">Connect System</string>
+    <string name="printer_btn_disconnect">Disconnect</string>
+    <string name="printer_btn_connecting">Connecting…</string>
+    <string name="printer_select_transaction">Please Select Transaction</string>
+    <string name="printer_btn_print">Print Receipt</string>
+    <string name="printer_no_transaction">No transactions yet</string>
+    <string name="printer_status_ready">Status: Ready</string>
+    <string name="printer_ready_toast">Printing system ready!</string>
+    <string name="printer_disabled_toast">Printing system disabled.</string>
+    <string name="printer_preparing">Preparing Receipt…</string>
+    <string name="printer_select_first">Select transaction first!</string>
+    <string name="printer_load_failed">Failed to load transactions: %1$s</string>
+    <string name="printer_pdf_failed">Failed to process PDF: %1$s</string>
+
+    <!-- Laporan -->
+    <string name="laporan_title">Sales Report</string>
+    <string name="laporan_total_label">Total Sales</string>
+    <string name="laporan_load_failed">Failed to load report: %1$s</string>
+    <string name="price_format">Rp %1$s</string>
+    <string name="sold_format">%1$d sold</string>
+
+    <!-- Produk -->
+    <string name="produk_form_title">Product Data</string>
+    <string name="produk_name_label">Product Name</string>
+    <string name="produk_name_hint">Enter product name</string>
+    <string name="produk_price_label">Selling Price</string>
+    <string name="produk_price_hint">Ex: 38000</string>
+    <string name="produk_stock_label">Stock</string>
+    <string name="produk_stock_hint">Ex: 7</string>
+    <string name="produk_branch_label">Select Branch</string>
+    <string name="produk_category_label">Select Category</string>
+    <string name="produk_status_label">Product Status:</string>
+    <string name="produk_save_btn">Save Product</string>
+    <string name="produk_update_btn">Update Product</string>
+    <string name="produk_delete_btn">Delete Product</string>
+    <string name="produk_delete_success">Product deleted successfully!</string>
+    <string name="produk_save_success">Product saved successfully!</string>
+    <string name="produk_search_hint">Search Product…</string>
+    <string name="produk_load_category_failed">Failed to load categories: %1$s</string>
+    <string name="produk_load_branch_failed">Failed to load branches: %1$s</string>
+
+    <!-- Kategori -->
+    <string name="kategori_form_title">Category Form</string>
+    <string name="kategori_name_label">Category Name</string>
+    <string name="kategori_name_hint">Ex: Food, Drink</string>
+    <string name="kategori_branch_label">Select Branch</string>
+    <string name="kategori_status_label">Category Status</string>
+    <string name="kategori_save_btn">Save Data</string>
+    <string name="kategori_update_btn">Update Category</string>
+    <string name="kategori_save_success">Data saved successfully!</string>
+    <string name="kategori_delete_success">Category deleted successfully!</string>
+    <string name="kategori_search_hint">Search Category…</string>
+    <string name="kategori_delete_btn">Delete Category</string>
+    <string name="kategori_no_branch">No Branches Yet</string>
+    <string name="kategori_load_branch_failed">Failed to load branch: %1$s</string>
+
+    <!-- Pelanggan -->
+    <string name="pelanggan_form_title">Customer Form</string>
+    <string name="pelanggan_name_label">Customer Name</string>
+    <string name="pelanggan_name_hint">Example: John Doe</string>
+    <string name="pelanggan_phone_label">Phone Number</string>
+    <string name="pelanggan_phone_hint">Example: 08123456789</string>
+    <string name="pelanggan_address_label">Address</string>
+    <string name="pelanggan_address_hint">Example: 123 Main St.</string>
+    <string name="pelanggan_save_btn">Save Customer</string>
+    <string name="pelanggan_update_btn">Update Customer Data</string>
+    <string name="pelanggan_delete_btn">Delete Customer</string>
+    <string name="pelanggan_delete_success">Customer deleted successfully!</string>
+    <string name="pelanggan_save_success">Customer data saved successfully!</string>
+    <string name="pelanggan_load_failed">Failed to load customer: %1$s</string>
+
+    <!-- Pegawai -->
+    <string name="pegawai_form_title">Employee Form</string>
+    <string name="pegawai_name_label">Employee Name</string>
+    <string name="pegawai_name_hint">Example: Jane Doe</string>
+    <string name="pegawai_position_label">Position</string>
+    <string name="pegawai_position_hint">Example: Cashier, Warehouse</string>
+    <string name="pegawai_phone_label">Phone Number</string>
+    <string name="pegawai_phone_hint">Example: 0876543210</string>
+    <string name="pegawai_password_label">Employee Password</string>
+    <string name="pegawai_password_hint">Enter password</string>
+    <string name="pegawai_save_btn">Save Employee Data</string>
+    <string name="pegawai_update_btn">Update Employee Data</string>
+    <string name="pegawai_delete_btn">Delete Employee</string>
+    <string name="pegawai_save_success">Employee data saved successfully!</string>
+    <string name="pegawai_load_failed">Failed to load employee: %1$s</string>
+
+    <!-- Cabang -->
+    <string name="cabang_form_title">Store Branch Form</string>
+    <string name="cabang_name_label">Branch Name</string>
+    <string name="cabang_name_hint">Example: Downtown Branch</string>
+    <string name="cabang_city_label">City / Regency</string>
+    <string name="cabang_city_hint">Example: Bandung</string>
+    <string name="cabang_address_label">Full Address</string>
+    <string name="cabang_address_hint">Example: 4th Maple St.</string>
+    <string name="cabang_save_btn">Save Branch Data</string>
+    <string name="cabang_update_btn">Update Branch Data</string>
+    <string name="cabang_delete_btn">Delete Branch</string>
+    <string name="cabang_delete_success">Branch deleted successfully!</string>
+    <string name="cabang_save_success">Branch data saved successfully!</string>
+    <string name="cabang_load_failed">Failed to load branch: %1$s</string>
+
+    <!-- Item Placeholders -->
+    <string name="item_phone_prefix">Phone: %1$s</string>
+    <string name="item_address_prefix">Address: %1$s</string>
+    <string name="item_city_prefix">City: %1$s</string>
+    <string name="item_position_prefix">Position: %1$s</string>
+    <string name="item_qty_prefix">Quantity: %1$d item(s)</string>
+    <string name="item_date_prefix">Date: %1$s</string>
+
+    <string name="nav_pelanggan">Customer</string>
+    <string name="nav_laporan">Report</string>
+    <string name="nav_akun">Account</string>
+    <string name="nav_produk">Product</string>
+    <string name="nav_kategori">Category</string>
+    <string name="nav_pegawai">Employee</string>
+    <string name="nav_cabang">Branch</string>
+    <string name="nav_printer">Printer</string>
+
+    <!-- Search -->
+    <string name="search_hint_pelanggan">Search Customer...</string>
+    <string name="search_hint_pegawai">Search Employee...</string>
+    <string name="search_hint_cabang">Search Branch...</string>
+
+    <!-- Pegawai Actions -->
+    <string name="pegawai_delete_title">Delete Employee</string>
+    <string name="pegawai_delete_msg">Are you sure you want to delete this employee?</string>
+    <string name="pegawai_delete_success">Employee deleted successfully!</string>
+    <string name="pegawai_delete_failed">Failed to delete employee: %1$s</string>
+    <string name="btn_delete">Delete</string>
+    <string name="btn_cancel">Cancel</string>
+
+    <!-- Spinner Jabatan -->
+    <string name="jabatan_prompt">Select Position</string>
+    
+    <!-- Delete Confirmation -->
+    <string name="delete_confirm_title">Delete Confirmation</string>
+    <string name="delete_confirm_msg">Are you sure you want to delete this data? This action cannot be undone.</string>
+    
+    <string name="cabang_delete_title">Delete Branch</string>
+    <string name="cabang_delete_msg">Are you sure you want to delete this store branch?</string>
+    
+    <string name="pelanggan_delete_title">Delete Customer</string>
+    <string name="pelanggan_delete_msg">Are you sure you want to delete this customer?</string>
+    
+    <string name="laporan_delete_success">Transaction report deleted successfully!</string>
+</resources>

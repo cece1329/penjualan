@@ -22,5 +22,6 @@ data class ModelTransaksi(
     var namaKasir: String? = null,
     var jabatanKasir: String? = null,
     var cabangKasir: String? = null,
-    var namaToko: String? = null
+    var namaToko: String? = null,
+    var isPrinted: Boolean = false
 ) : Parcelable

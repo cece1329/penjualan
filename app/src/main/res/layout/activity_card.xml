@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:padding="20dp">
 
+        <!-- HEADER -->
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -25,7 +26,8 @@
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:src="@drawable/settings"
                 android:padding="6dp"
-                android:scaleType="fitCenter" />
+                android:scaleType="fitCenter"
+                app:tint="@color/textColorTitle"/>
 
             <TextView
                 android:id="@+id/tvWelcome"
@@ -61,6 +63,7 @@
             android:text="08 Januari 2026"
             android:textColor="@color/textColorSecondary" />
 
+        <!-- SALES SUMMARY BOX -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -88,8 +91,9 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentEnd="true"
                     android:text="Rp 0"
-                    android:textColor="@color/textColorPrimary"
-                    android:textSize="18sp" />
+                    android:textColor="@color/colorSoftPurple"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
             </RelativeLayout>
 
             <LinearLayout
@@ -99,14 +103,15 @@
                 android:layout_marginTop="20dp"
                 android:background="@drawable/bg_border"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:padding="16dp"
+                android:backgroundTint="@color/colorSoftPurpleLight">
 
                 <TextView
                     android:id="@+id/tvTargetTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/home_target_penjualan_hari_ini"
-                    android:textColor="@color/textColorPrimary"
+                    android:textColor="@color/textColorTitle"
                     android:textStyle="bold" />
 
                 <ProgressBar
@@ -116,7 +121,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:progress="65"
-                    android:progressTint="#6200EE" />
+                    android:progressTint="@color/colorSoftPurple" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -146,37 +151,42 @@
                     android:layout_width="match_parent"
                     android:layout_height="42dp"
                     android:layout_marginTop="10dp"
-                    android:backgroundTint="@color/colorSoftPurpleLight"
+                    android:background="@drawable/bg_border"
+                    android:backgroundTint="@color/colorSoftPurple"
                     android:text="Atur Target"
                     android:textAllCaps="false"
-                    android:textColor="@color/colorSoftPurpleDark"
+                    android:textColor="@color/white"
                     android:textStyle="bold" />
             </LinearLayout>
 
+            <!-- MAIN MENU -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:weightSum="3">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:id="@+id/btntransaction"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/transaction" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/textColorPrimary"
-                        android:text="@string/home_nav_transaction" />
+                        android:text="@string/home_nav_transaction"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -184,19 +194,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:id="@+id/btncust"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/customer" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/textColorPrimary"
-                        android:text="@string/nav_pelanggan" />
+                        android:text="@string/nav_pelanggan"
+                        android:textSize="12sp" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -205,19 +217,21 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:orientation="vertical">
-
+                    android:orientation="vertical"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:background="?attr/selectableItemBackground">
                     <ImageView
                         android:id="@+id/btnreport"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
                         android:src="@drawable/report" />
-
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textColor="@color/textColorPrimary"
-                        android:text="@string/nav_laporan" />
+                        android:text="@string/nav_laporan"
+                        android:textSize="12sp" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
@@ -227,7 +241,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="25dp"
             android:text="@string/home_siap_melayani_pelanggan"
-            android:textColor="@color/textColorPrimary"
+            android:textColor="@color/textColorTitle"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -237,151 +251,171 @@
             android:text="@string/home_jangan_kecewakan_pelanggan"
             android:textColor="@color/textColorSecondary" />
 
+        <!-- GRID MENU ROW 1 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <LinearLayout
+                android:id="@+id/btnacc_container"
                 android:layout_width="0dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_border"
                 android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
                     android:id="@+id/btnacc"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/acc" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/textColorPrimary"
-                    android:text="@string/nav_akun" />
+                    android:text="@string/nav_akun"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btnproduct_container"
                 android:layout_width="0dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_border"
                 android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
                     android:id="@+id/btnproduct"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/product" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/textColorPrimary"
-                    android:text="@string/nav_produk" />
+                    android:text="@string/nav_produk"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btnkategori_container"
                 android:layout_width="0dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_border"
                 android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
                     android:id="@+id/btnkategori"
-                    android:layout_width="65dp"
-                    android:layout_height="65dp"
+                    android:layout_width="55dp"
+                    android:layout_height="55dp"
                     android:src="@drawable/plus" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginTop="4dp"
                     android:textColor="@color/textColorPrimary"
-                    android:text="@string/nav_kategori" />
+                    android:text="@string/nav_kategori"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 
+        <!-- GRID MENU ROW 2 -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:weightSum="3">
 
             <LinearLayout
                 android:id="@+id/containerEmployee"
                 android:layout_width="0dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_border"
                 android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
                     android:id="@+id/employee"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/employee" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/textColorPrimary"
-                    android:text="@string/nav_pegawai" />
+                    android:text="@string/nav_pegawai"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/containerBranch"
                 android:layout_width="0dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_border"
                 android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
                     android:id="@+id/btnbranch"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/branch" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/textColorPrimary"
-                    android:text="@string/nav_cabang" />
+                    android:text="@string/nav_cabang"
+                    android:textSize="12sp" />
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/btnprinter_container"
                 android:layout_width="0dp"
-                android:layout_height="130dp"
+                android:layout_height="120dp"
                 android:layout_margin="5dp"
                 android:layout_weight="1"
                 android:background="@drawable/bg_border"
                 android:gravity="center"
-                android:orientation="vertical">
-
+                android:orientation="vertical"
+                android:clickable="true"
+                android:focusable="true">
                 <ImageView
                     android:id="@+id/btnprinter"
-                    android:layout_width="50dp"
-                    android:layout_height="50dp"
+                    android:layout_width="45dp"
+                    android:layout_height="45dp"
                     android:src="@drawable/printer" />
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:textColor="@color/textColorPrimary"
-                    android:text="@string/nav_printer" />
+                    android:text="@string/nav_printer"
+                    android:textSize="12sp" />
             </LinearLayout>
         </LinearLayout>
 

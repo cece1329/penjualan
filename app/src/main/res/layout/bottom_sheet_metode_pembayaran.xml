@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="20dp"
+    android:background="@drawable/spinner_background">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:background="#E0E0E0"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Metode Pembayaran"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="@color/textColorTitle"
+        android:layout_marginBottom="16dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:layout_marginBottom="20dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnCash"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="CASH"
+            android:layout_marginEnd="4dp"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/colorSoftPurple"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnQris"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="QRIS"
+            android:layout_marginHorizontal="4dp"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/colorSoftPurple"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnGopay"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="GOPAY"
+            android:layout_marginStart="4dp"
+            app:cornerRadius="8dp"
+            app:strokeColor="@color/colorSoftPurple"/>
+    </LinearLayout>
+
+    <!-- Cash Section -->
+    <TextView
+        android:id="@+id/tvCashSectionLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Uang Diterima"
+        android:textSize="14sp"
+        android:textColor="@color/textColorTitle"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/etUangDiterima"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="Rp 0"
+        android:inputType="number"
+        android:background="@drawable/bg_border"
+        android:paddingHorizontal="12dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvPreviewKembalian"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Kembalian: Rp 0"
+        android:textColor="@color/colorSoftPurple"
+        android:textStyle="bold"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"/>
+
+    <!-- Gopay Section -->
+    <TextView
+        android:id="@+id/tvGopaySectionLabel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nomor GoPay"
+        android:textSize="14sp"
+        android:textColor="@color/textColorTitle"
+        android:layout_marginTop="8dp"
+        android:visibility="gone"/>
+
+    <EditText
+        android:id="@+id/etNoGopay"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:hint="08xxxx"
+        android:inputType="phone"
+        android:background="@drawable/bg_border"
+        android:paddingHorizontal="12dp"
+        android:layout_marginTop="4dp"
+        android:visibility="gone"/>
+
+    <TextView
+        android:id="@+id/tvPreviewNota"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Nota siap dicetak"
+        android:textColor="@color/textColorSecondary"
+        android:layout_marginTop="12dp"
+        android:gravity="center"
+        android:visibility="gone"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnKonfirmasiBayar"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:text="KONFIRMASI PEMBAYARAN"
+        android:layout_marginTop="20dp"
+        app:cornerRadius="12dp"
+        android:backgroundTint="@color/colorSoftPurple"/>
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnPrint"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LIHAT PREVIEW NOTA"
+        android:textColor="@color/colorSoftPurple"
+        android:visibility="gone"/>
+
+</LinearLayout>

@@ -10,6 +10,7 @@
     android:background="@color/backgroundColor"
     tools:context=".kategori.DataKategoriActivity">
 
+    <!-- Fixed: removed backgroundTint to follow theme from bg_border -->
     <LinearLayout
         android:id="@+id/searchContainer"
         android:layout_width="0dp"
@@ -18,7 +19,6 @@
         android:gravity="center_vertical"
         android:paddingHorizontal="16dp"
         android:background="@drawable/bg_border"
-        android:backgroundTint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -29,7 +29,7 @@
             android:layout_height="22dp"
             android:src="@drawable/search"
             android:alpha="0.5"
-            app:tint="@color/colorSoftPurple"
+            app:tint="@color/textColorSecondary"
             android:clickable="true"
             android:focusable="true"
             android:padding="1dp"/>
@@ -44,7 +44,7 @@
             android:singleLine="true"
             android:imeOptions="actionSearch"
             android:textSize="15sp"
-            android:textColor="@color/textColorTitle"
+            android:textColor="@color/textColorPrimary"
             android:textColorHint="@color/textColorSecondary"
             android:paddingStart="12dp"/>
     </LinearLayout>
@@ -70,7 +70,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginTop="8dp"
-        tools:listitem="@layout/item_kategori_card"
+        tools:listitem="@layout/item_data_kategori"
         app:layout_constraintTop_toBottomOf="@id/scrollKategori"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"

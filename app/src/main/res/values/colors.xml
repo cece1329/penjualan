@@ -3,18 +3,28 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Light Theme Colors - Soft Cute Purple Theme -->
-    <color name="backgroundColor">#FBF8FF</color> <!-- Softest lavender-white -->
-    <color name="backgroundFormColor">#F5EEFD</color> <!-- Soft lavender backdrop -->
-    <color name="textColorPrimary">#5C3D75</color> <!-- Soft deep purple-grey for text readability -->
-    <color name="textColorSecondary">#8E74A6</color> <!-- Soft violet for subtitles -->
-    <color name="textColorTitle">#4A2B66</color> <!-- Soft dark purple for headers -->
+    <!-- Light Theme Colors -->
+    <color name="backgroundColor">#FBF8FF</color>
+    <color name="backgroundFormColor">#F5EEFD</color>
+    <color name="textColorPrimary">#5C3D75</color>
+    <color name="textColorSecondary">#8E74A6</color>
+    <color name="textColorTitle">#4A2B66</color>
     <color name="cardBackground">#FFFFFF</color>
-    <color name="borderColor">#E8DDF2</color> <!-- Softest violet border -->
+    <color name="borderColor">#E8DDF2</color>
     <color name="textColorEditText">#5C3D75</color>
 
-    <!-- Dedicated Soft Cute Purple Brand Tokens -->
-    <color name="colorSoftPurple">#BA68C8</color> <!-- Soft Medium Pastel Purple -->
-    <color name="colorSoftPurpleLight">#F3E5F5</color> <!-- Very Light Soft Purple -->
-    <color name="colorSoftPurpleDark">#AB47BC</color> <!-- Medium Dark Purple for outlines/active text -->
+    <color name="colorSoftPurple">#BA68C8</color>
+    <color name="colorSoftPurpleLight">#F3E5F5</color>
+    <color name="colorSoftPurpleDark">#AB47BC</color>
+    
+    <color name="errorColor">#F44336</color>
+    <color name="successColor">#4CAF50</color>
+
+    <!-- Chip Colors Semantic -->
+    <color name="chipBg">#FFFFFF</color>
+    <color name="chipText">#8E74A6</color>
+    <color name="chipStroke">#E8DDF2</color>
+    <color name="chipBgSelected">#EAD9F7</color>
+    <color name="chipTextSelected">#4A2B66</color>
+    <color name="chipStrokeSelected">#4A2B66</color>
 </resources>
