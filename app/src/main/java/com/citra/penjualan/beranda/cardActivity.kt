@@ -4,9 +4,11 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
+import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.R
 import com.citra.penjualan.akun.AkunActivity
 import com.citra.penjualan.cabang.CabangActivity
@@ -18,6 +20,9 @@ import com.citra.penjualan.printer.PrinterActivity
 import com.citra.penjualan.produk.DataProdukActivity
 import com.citra.penjualan.transaksi.TransaksiActivity
 import com.citra.penjualan.akun.LoginActivity
+import com.citra.penjualan.notifikasi.NotifikasiActivity
+import com.citra.penjualan.notifikasi.PengumumanActivity
+import com.citra.penjualan.notifikasi.CatatanHarianActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -26,7 +31,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class cardActivity : AppCompatActivity() {
+class cardActivity : BaseActivity() {
 
     private val dbSettings = FirebaseDatabase.getInstance().getReference("settings")
     private val dbTransaksi = FirebaseDatabase.getInstance().getReference("transaksi")
@@ -35,13 +40,16 @@ class cardActivity : AppCompatActivity() {
     private var totalPenjualanHariIni = 0
     private var totalTransaksiHariIni = 0
     private var namaToko = "Citra Penjualan"
+    private lateinit var drawerLayout: DrawerLayout
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_card)
 
+        drawerLayout = findViewById(R.id.drawerLayout)
+
         setupDate()
-        
+
         val sharedPref = getSharedPreferences("user_session", Context.MODE_PRIVATE)
         val role = sharedPref.getString("user_role", "pemilik") ?: "pemilik"
         val name = sharedPref.getString("user_name", "Citra") ?: "Citra"
@@ -58,6 +66,7 @@ class cardActivity : AppCompatActivity() {
         }
 
         setupClickListeners()
+        setupDrawerMenu()
     }
 
     private fun setupDate() {
@@ -73,20 +82,111 @@ class cardActivity : AppCompatActivity() {
 
     private fun setupWelcomeHeader(role: String, name: String, cabang: String) {
         val tvWelcome: TextView = findViewById(R.id.tvWelcome)
+        val jabatan = getUserJabatan()
+
         if (role == "karyawan") {
-            tvWelcome.text = "Selamat datang, $name"
+            tvWelcome.text = getString(R.string.login_welcome_employee, name)
             findViewById<TextView>(R.id.tvWorkInfo)?.apply {
                 visibility = android.view.View.VISIBLE
-                text = "Bekerja di $namaToko cabang ${cabang.ifBlank { "-" }}"
+                text = getString(R.string.work_info_format, namaToko, cabang.ifBlank { "-" })
             }
-            
-            findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.GONE
-            findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.GONE
-            findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.GONE
-            findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.GONE
-            findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.GONE
         } else {
-            tvWelcome.text = getString(R.string.welcome_day) + ", " + name
+            val greeting = getTimeBasedGreeting()
+            tvWelcome.text = "$greeting, $name"
+        }
+
+        // Sembunyikan menu berdasarkan role/jabatan
+        when {
+            isPemilik() -> {
+                // Pemilik: Full access, tampilkan semua
+                findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btntransaction_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btncustContainer)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnacc_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnproduct_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnkategori_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnprinter_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.VISIBLE
+                // Reset weight
+                findViewById<android.view.View>(R.id.btntransaction_container)?.layoutParams = (findViewById<android.view.View>(R.id.btntransaction_container).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.btncustContainer)?.layoutParams = (findViewById<android.view.View>(R.id.btncustContainer).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.containerReport)?.layoutParams = (findViewById<android.view.View>(R.id.containerReport).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.btnacc_container)?.layoutParams = (findViewById<android.view.View>(R.id.btnacc_container).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.btnproduct_container)?.layoutParams = (findViewById<android.view.View>(R.id.btnproduct_container).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.btnkategori_container)?.layoutParams = (findViewById<android.view.View>(R.id.btnkategori_container).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.containerEmployee)?.layoutParams = (findViewById<android.view.View>(R.id.containerEmployee).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.btnprinter_container)?.layoutParams = (findViewById<android.view.View>(R.id.btnprinter_container).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+                findViewById<android.view.View>(R.id.containerBranch)?.layoutParams = (findViewById<android.view.View>(R.id.containerBranch).layoutParams as LinearLayout.LayoutParams).apply { weight = 1f }
+            }
+            isAdmin() -> {
+                // Admin: Produk, kategori, pelanggan, laporan, pegawai, cabang. Tidak transaksi, target penjualan
+                findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btntransaction_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btncustContainer)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnacc_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnproduct_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnkategori_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnprinter_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.VISIBLE
+                // Adjust weight for 2 items in first row (cust, report)
+                findViewById<android.view.View>(R.id.btncustContainer)?.layoutParams = (findViewById<android.view.View>(R.id.btncustContainer).layoutParams as LinearLayout.LayoutParams).apply { weight = 1.5f }
+                findViewById<android.view.View>(R.id.containerReport)?.layoutParams = (findViewById<android.view.View>(R.id.containerReport).layoutParams as LinearLayout.LayoutParams).apply { weight = 1.5f }
+            }
+            isSupervisor() -> {
+                // Supervisor: Laporan, pelanggan, produk/kategori (read-only). Tidak transaksi/pegawai/cabang/target
+                findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btntransaction_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btncustContainer)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnacc_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnproduct_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnkategori_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btnprinter_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.GONE
+                // Adjust weight for 2 items in first row (cust, report)
+                findViewById<android.view.View>(R.id.btncustContainer)?.layoutParams = (findViewById<android.view.View>(R.id.btncustContainer).layoutParams as LinearLayout.LayoutParams).apply { weight = 1.5f }
+                findViewById<android.view.View>(R.id.containerReport)?.layoutParams = (findViewById<android.view.View>(R.id.containerReport).layoutParams as LinearLayout.LayoutParams).apply { weight = 1.5f }
+            }
+            isKasir() -> {
+                // Kasir: Transaksi, pelanggan saja. Tidak produk/kategori/laporan/pegawai/cabang/target
+                findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btntransaction_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btncustContainer)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btnacc_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnproduct_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btnkategori_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btnprinter_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.GONE
+                // Adjust weight for 2 items in first row (transaction, cust)
+                findViewById<android.view.View>(R.id.btntransaction_container)?.layoutParams = (findViewById<android.view.View>(R.id.btntransaction_container).layoutParams as LinearLayout.LayoutParams).apply { weight = 1.5f }
+                findViewById<android.view.View>(R.id.btncustContainer)?.layoutParams = (findViewById<android.view.View>(R.id.btncustContainer).layoutParams as LinearLayout.LayoutParams).apply { weight = 1.5f }
+            }
+            isGudang() -> {
+                // Gudang: Produk, kategori saja. Tidak transaksi/pelanggan/laporan/pegawai/cabang/target
+                findViewById<android.view.View>(R.id.rowEstimasi)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerTargetPenjualan)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btntransaction_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btncustContainer)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerReport)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btnacc_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnproduct_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.btnkategori_container)?.visibility = android.view.View.VISIBLE
+                findViewById<android.view.View>(R.id.containerEmployee)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.btnprinter_container)?.visibility = android.view.View.GONE
+                findViewById<android.view.View>(R.id.containerBranch)?.visibility = android.view.View.GONE
+                // First row is empty, second row has 3 items (acc, product, kategori) - keep default weight
+            }
         }
     }
 
@@ -96,15 +196,15 @@ class cardActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
-        findViewById<android.view.View>(R.id.btntransaction).setOnClickListener {
+        findViewById<android.view.View>(R.id.btntransaction)?.setOnClickListener {
             startActivity(Intent(this, TransaksiActivity::class.java))
         }
 
-        findViewById<android.view.View>(R.id.btncust).setOnClickListener {
+        findViewById<android.view.View>(R.id.btncust)?.setOnClickListener {
             startActivity(Intent(this, PelangganActivity::class.java))
         }
 
-        findViewById<android.view.View>(R.id.btnreport).setOnClickListener {
+        findViewById<android.view.View>(R.id.btnreport)?.setOnClickListener {
             startActivity(Intent(this, LaporanActivity::class.java))
         }
 
@@ -152,11 +252,12 @@ class cardActivity : AppCompatActivity() {
                 namaToko = snapshot.child("namaToko").value?.toString()?.takeIf { it.isNotBlank() } ?: "Citra Penjualan"
 
                 if (role == "pemilik") {
+                    val greeting = getTimeBasedGreeting()
                     findViewById<TextView>(R.id.tvWelcome)?.text =
-                        getString(R.string.welcome_day) + ", " + profileOwner.ifBlank { fallbackName }
+                        "$greeting, " + profileOwner.ifBlank { fallbackName }
                 } else {
-                    findViewById<TextView>(R.id.tvWelcome)?.text = "Selamat datang, $fallbackName"
-                    findViewById<TextView>(R.id.tvWorkInfo)?.text = "Bekerja di $namaToko cabang ${cabang.ifBlank { "-" }}"
+                    findViewById<TextView>(R.id.tvWelcome)?.text = getString(R.string.login_welcome_employee, fallbackName)
+                    findViewById<TextView>(R.id.tvWorkInfo)?.text = getString(R.string.work_info_format, namaToko, cabang.ifBlank { "-" })
                 }
             }
             override fun onCancelled(error: DatabaseError) {}
@@ -236,5 +337,43 @@ class cardActivity : AppCompatActivity() {
 
     private fun formatNumber(amount: Int): String {
         return String.format("%,d", amount).replace(",", ".")
+    }
+
+    private fun setupDrawerMenu() {
+        findViewById<ImageView>(R.id.btnMenu).setOnClickListener {
+            drawerLayout.openDrawer(android.view.Gravity.START)
+        }
+
+        findViewById<android.view.View>(R.id.menuNotifications).setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            startActivity(Intent(this, NotifikasiActivity::class.java))
+        }
+
+        findViewById<android.view.View>(R.id.menuAnnouncements).setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            startActivity(Intent(this, PengumumanActivity::class.java))
+        }
+
+        findViewById<android.view.View>(R.id.menuDailyNotes).setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            startActivity(Intent(this, CatatanHarianActivity::class.java))
+        }
+
+        findViewById<android.view.View>(R.id.menuLogout).setOnClickListener {
+            drawerLayout.closeDrawer(android.view.Gravity.START)
+            // Exit app without clearing session (keep login state)
+            finishAffinity()
+        }
+    }
+
+    private fun getTimeBasedGreeting(): String {
+        val calendar = Calendar.getInstance()
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        return when (hour) {
+            in 0..11 -> getString(R.string.welcome_morning)
+            in 12..17 -> getString(R.string.welcome_afternoon)
+            else -> getString(R.string.welcome_evening)
+        }
     }
 }

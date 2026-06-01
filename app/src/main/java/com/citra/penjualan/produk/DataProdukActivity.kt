@@ -4,7 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.widget.Toast
+import com.citra.penjualan.BaseActivity
+import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import androidx.lifecycle.ViewModelProvider
@@ -19,7 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class DataProdukActivity : AppCompatActivity() {
+class DataProdukActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDataProdukBinding
     private lateinit var adapter: ProdukAdapter
@@ -33,11 +36,27 @@ class DataProdukActivity : AppCompatActivity() {
         binding = ActivityDataProdukBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Cek hak akses: Pemilik, Admin, Gudang bisa CRUD, Supervisor read-only
+        val canCRUD = canAccessProdukCRUD()
+        val canReadOnly = canAccessProdukReadOnly()
+
+        // Jika tidak punya akses sama sekali
+        if (!canCRUD && !canReadOnly) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
+        // Sembunyikan FAB untuk yang tidak bisa CRUD
+        if (!canCRUD) {
+            binding.fabTambahProduk.visibility = View.GONE
+        }
+
         // Setup ViewModel
         viewModel = ViewModelProvider(this)[ProdukViewModel::class.java]
 
-        // Setup RecyclerView
-        adapter = ProdukAdapter(arrayListOf())
+        // Setup RecyclerView dengan flag isReadOnly
+        adapter = ProdukAdapter(arrayListOf(), isReadOnly = !canCRUD)
         binding.recyclerProduk.apply {
             layoutManager = LinearLayoutManager(this@DataProdukActivity)
             adapter = this@DataProdukActivity.adapter

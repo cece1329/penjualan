@@ -6,7 +6,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.view.View
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -41,7 +41,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class TransaksiActivity : AppCompatActivity() {
+class TransaksiActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTransaksiBinding
     private val dbProduk = FirebaseDatabase.getInstance().getReference("produk")
@@ -52,6 +52,7 @@ class TransaksiActivity : AppCompatActivity() {
     private val dbProfil = FirebaseDatabase.getInstance().getReference("profil")
 
     private val produkList = ArrayList<ModelProduk>()
+    private val kategoriMap = HashMap<String, ModelKategori>()
     private val filteredProdukList = ArrayList<ModelProduk>()
     private val cartMap = HashMap<String, Pair<ModelProduk, Int>>() 
     private lateinit var produkAdapter: TransaksiProdukAdapter
@@ -83,6 +84,13 @@ class TransaksiActivity : AppCompatActivity() {
         binding = ActivityTransaksiBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Cek hak akses: hanya Pemilik, Admin, Supervisor, Kasir yang bisa akses
+        if (!canAccessTransaksi()) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
         setupRecyclerView()
         setupKasirFromSession()
         loadStoreProfile()
@@ -108,13 +116,13 @@ class TransaksiActivity : AppCompatActivity() {
         }
 
         binding.btnPilihKasir.setOnClickListener {
-            if (roleLogin == "pemilik") {
+            if (isPemilik() || isAdmin()) {
                 showPilihKasirDialog()
             } else {
                 Toast.makeText(this, "Kasir otomatis sesuai akun login", Toast.LENGTH_SHORT).show()
             }
         }
-        
+
         binding.btnBack.setOnClickListener { finish() }
     }
 
@@ -130,7 +138,10 @@ class TransaksiActivity : AppCompatActivity() {
     }
 
     private fun increaseQty(produk: ModelProduk) {
-        if (!produk.statusProduk.equals("Aktif", ignoreCase = true) && produk.statusProduk.isNotBlank()) {
+        val kategori = kategoriMap[produk.namaKategori]
+        val isKategoriAktif = kategori?.statusKategori?.equals("Aktif", ignoreCase = true) ?: true
+
+        if ((!produk.statusProduk.equals("Aktif", ignoreCase = true) && produk.statusProduk.isNotBlank()) || !isKategoriAktif) {
             Toast.makeText(this, "Produk tidak aktif", Toast.LENGTH_SHORT).show()
             return
         }
@@ -140,7 +151,7 @@ class TransaksiActivity : AppCompatActivity() {
 
         val currentQty = cartMap[id]?.second ?: 0
         if (currentQty >= produk.stokProduk) {
-            Toast.makeText(this, getString(R.string.transaksi_stock_insufficient, produk.stokProduk), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Stok tidak mencukupi, sisa: ${produk.stokProduk}", Toast.LENGTH_SHORT).show()
             return
         }
 
@@ -186,11 +197,32 @@ class TransaksiActivity : AppCompatActivity() {
                 dbKategori.addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(katSnapshot: DataSnapshot) {
                         binding.chipGroupKategori.removeAllViews()
+                        kategoriMap.clear()
+                        
+                        // Simpan SEMUA kategori ke map untuk pengecekan status produk nanti
+                        for (dataKat in katSnapshot.children) {
+                            val kat = dataKat.getValue(ModelKategori::class.java)
+                            if (kat?.namaKategori != null) {
+                                kategoriMap[kat.namaKategori!!] = kat
+                            }
+                        }
+                        
+                        // Filter kategori berdasarkan cabang kasir (mendukung multi-cabang)
+                        val listKategoriFiltered = kategoriMap.values.filter { kat ->
+                                // Jika kasir adalah pemilik, tampilkan semua kategori
+                                if (roleLogin == "pemilik") true
+                                else if (cabangKasir.isNullOrBlank()) true 
+                                else {
+                                    // Cek apakah cabang kasir ada di dalam list cabang kategori
+                                    val branches = kat.cabangKategori?.split(",")?.map { it.trim() } ?: listOf("Pusat")
+                                    branches.any { it.equals(cabangKasir, ignoreCase = true) } || branches.contains("Semua Cabang")
+                                }
+                            }
+
                         val counts = produkList.groupingBy { it.namaKategori }.eachCount()
                         addCategoryChip("Semua", produkList.size)
-                        for (data in katSnapshot.children) {
-                            val kat = data.getValue(ModelKategori::class.java)
-                            val name = kat?.namaKategori ?: continue
+                        for (kat in listKategoriFiltered) {
+                            val name = kat.namaKategori ?: continue
                             addCategoryChip(name, counts[name] ?: 0)
                         }
                         filterProdukByCategory(selectedCategory)
@@ -253,12 +285,25 @@ class TransaksiActivity : AppCompatActivity() {
         val query = binding.etSearch.text?.toString()?.trim().orEmpty()
         filteredProdukList.clear()
         val filtered = produkList.filter { produk ->
+            val kat = kategoriMap[produk.namaKategori]
+            
+            // Sinkronisasi: Jika kategori tidak ditemukan (null), anggap aktif (seperti kategori 'Umum')
+            val isKategoriAktif = kat?.statusKategori?.let { it.equals("Aktif", ignoreCase = true) } ?: true
+            val isProdukAktif = produk.statusProduk.equals("Aktif", ignoreCase = true) || produk.statusProduk.isBlank()
+            val finalStatusAktif = isProdukAktif && isKategoriAktif
+
+            // 2. Filter Cabang: Mendukung lebih dari 1 cabang (misal produk di simpan "Bandung, Jakarta")
+            val matchesBranch = if (roleLogin == "pemilik" || cabangKasir.isNullOrBlank()) true 
+            else {
+                val prodBranches = produk.cabangProduk?.split(",")?.map { it.trim() } ?: listOf("Pusat")
+                prodBranches.any { it.equals(cabangKasir, ignoreCase = true) } || prodBranches.contains("Semua Cabang") || produk.cabangProduk.isNullOrBlank()
+            }
+
             val matchesCategory = selectedCategory == "Semua" || produk.namaKategori.equals(selectedCategory, ignoreCase = true)
             val matchesSearch = query.isBlank() ||
                 produk.namaProduk.contains(query, ignoreCase = true) ||
-                produk.namaKategori.contains(query, ignoreCase = true) ||
-                produk.cabangProduk.contains(query, ignoreCase = true)
-            matchesCategory && matchesSearch
+                produk.namaKategori.contains(query, ignoreCase = true)
+            matchesCategory && matchesSearch && finalStatusAktif && matchesBranch
         }
         filteredProdukList.addAll(filtered)
         produkAdapter.updateData(filteredProdukList)
@@ -431,7 +476,9 @@ class TransaksiActivity : AppCompatActivity() {
                 val pegawaiList = ArrayList<ModelPegawai>()
                 for (data in snapshot.children) {
                     val pegawai = data.getValue(ModelPegawai::class.java)
-                    if (pegawai != null && isJabatanKasir(pegawai.jabatanPegawai)) {
+                    // Filter: Harus berjabatan Kasir DAN statusnya Aktif
+                    val isAktif = pegawai?.statusPegawai?.equals("Tidak Aktif", ignoreCase = true) == false
+                    if (pegawai != null && isJabatanKasir(pegawai.jabatanPegawai) && isAktif) {
                         pegawai.idPegawai = data.key
                         pegawaiList.add(pegawai)
                     }
@@ -452,6 +499,7 @@ class TransaksiActivity : AppCompatActivity() {
                             cabangKasir = null
                             val sessionName = getSharedPreferences("user_session", Context.MODE_PRIVATE).getString("user_name", "Admin") ?: "Admin"
                             namaKasir = sessionName
+                            KasirSessionHelper.selectedKasir = null
                             binding.tvKasirTransaksi.text = "Kasir: $namaKasir"
                             binding.tvInfoKasirTransaksi.text = "Pemilik - Semua Cabang"
                         }
@@ -471,6 +519,14 @@ class TransaksiActivity : AppCompatActivity() {
                         namaKasir = kasir.namaPegawai ?: "Kasir"
                         jabatanKasir = kasir.jabatanPegawai
                         cabangKasir = kasir.cabangPegawai
+                        KasirSessionHelper.selectedKasir = kasir
+                        
+                        // PENTING: Reset filter kategori ke "Semua" saat ganti kasir/cabang
+                        selectedCategory = "Semua"
+                        
+                        // Hubungkan Ulang: Refresh data produk & kategori saat kasir/cabang berubah
+                        loadProdukData() 
+                        
                         binding.tvKasirTransaksi.text = "Kasir: $namaKasir"
                         binding.tvInfoKasirTransaksi.text = "${jabatanKasir} - Cabang: ${cabangKasir ?: "Pusat"}"
                     }
@@ -613,7 +669,12 @@ class TransaksiActivity : AppCompatActivity() {
         val tanggal = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale.getDefault()).format(Date())
         
         val items = cartMap.values.map { 
-            ReceiptItem(it.first.namaProduk ?: "-", it.second, it.first.hargaProduk)
+            ReceiptItem(
+                namaProduk = it.first.namaProduk ?: "-",
+                jumlah = it.second,
+                harga = it.first.hargaProduk,
+                hargaBeli = it.first.hargaBeli   // Simpan harga modal untuk kalkulasi laba
+            )
         }
 
         val receipt = ReceiptData(
@@ -648,9 +709,6 @@ class TransaksiActivity : AppCompatActivity() {
         }
     }
 
-    private fun dp(value: Int): Int {
-        return (value * resources.displayMetrics.density).toInt()
-    }
 }
 
 private class TransaksiProdukAdapter(
@@ -671,23 +729,35 @@ private class TransaksiProdukAdapter(
         val qty = getQty(produk)
         with(holder.binding) {
             imgProduk.setImageResource(R.drawable.product)
+            
+            // Menggunakan icon baru berwarna hitam karena background tombol putih
+            btnPlus.setImageResource(R.drawable.btnplus)
+            btnMinus.setImageResource(R.drawable.btnminus)
+            btnPlus.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            btnMinus.setColorFilter(ContextCompat.getColor(holder.itemView.context, R.color.black))
+            btnPlus.backgroundTintList = null
+            btnMinus.backgroundTintList = null
+
             tvNamaProduk.text = produk.namaProduk
             tvHargaProduk.text = "Rp ${String.format("%,d", produk.hargaProduk).replace(",", ".")}"
             tvInfoProduk.text = "${produk.namaKategori} - Stok ${produk.stokProduk}"
             tvQty.text = qty.toString()
-            val active = produk.statusProduk.equals("Aktif", ignoreCase = true) || produk.statusProduk.isBlank()
-            tvStatus.text = if (active) "Aktif" else "Nonaktif"
-            tvStatus.setTextColor(Color.parseColor(if (active) "#2E7D32" else "#C62828"))
             
-            // Ensure buttons maintain correct visibility and responsiveness
+            // Cek status produk (logic ini bisa dikembangkan untuk cek kategori juga jika context kategori dikirim ke adapter)
+            val isProdukAktif = produk.statusProduk.equals("Aktif", ignoreCase = true) || produk.statusProduk.isBlank()
+            
+            tvStatus.text = if (isProdukAktif) holder.itemView.context.getString(R.string.msg_active) else holder.itemView.context.getString(R.string.msg_inactive)
+            tvStatus.setTextColor(ContextCompat.getColor(holder.itemView.context, if (isProdukAktif) R.color.successColor else R.color.errorColor))
+
+            val active = isProdukAktif
+            // Pastikan tombol merespon stok dan status aktif
             btnPlus.isEnabled = active
             btnPlus.alpha = if (active) 1f else 0.35f
-            btnMinus.isEnabled = true
+            btnMinus.isEnabled = qty > 0
             btnMinus.alpha = if (qty > 0) 1f else 0.35f
             
             btnMinus.setOnClickListener { onMinus(produk) }
             btnPlus.setOnClickListener { onPlus(produk) }
-            root.setOnClickListener { onPlus(produk) }
         }
     }
 

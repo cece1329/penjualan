@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityCabangBinding
@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class CabangActivity : AppCompatActivity() {
+class CabangActivity : BaseActivity() {
 
     private lateinit var binding: ActivityCabangBinding
     private lateinit var adapter: CabangAdapter
@@ -27,6 +27,13 @@ class CabangActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityCabangBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Cek hak akses: hanya Pemilik, Admin yang bisa akses
+        if (!canAccessCabang()) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         adapter = CabangAdapter(arrayListOf())
         binding.recyclerCabang.apply {

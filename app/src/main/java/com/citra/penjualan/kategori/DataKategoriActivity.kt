@@ -1,10 +1,13 @@
 package com.citra.penjualan.kategori
 
 import android.content.Intent
+import android.content.Context
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
-import androidx.appcompat.app.AppCompatActivity
+import android.view.View
+import android.widget.Toast
+import com.citra.penjualan.BaseActivity
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -20,7 +23,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class DataKategoriActivity : AppCompatActivity() {
+class DataKategoriActivity : BaseActivity() {
 
     private lateinit var binding: ActivityDataKategoriBinding
     private lateinit var adapter: KategoriAdapter
@@ -35,11 +38,22 @@ class DataKategoriActivity : AppCompatActivity() {
         binding = ActivityDataKategoriBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Cek hak akses: Pemilik, Admin, Gudang bisa CRUD, Supervisor read-only
+        val canCRUD = canAccessKategoriCRUD()
+        val canReadOnly = canAccessKategoriReadOnly()
+
+        // Jika tidak punya akses sama sekali
+        if (!canCRUD && !canReadOnly) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
+
         viewModel = ViewModelProvider(this)[DataKategoriViewModel::class.java]
 
         // PERBAIKAN: Inisialisasi adapter hanya membutuhkan parameter list data saja
         // Logika klik sudah dipindah ke dalam KategoriAdapter mirip ProdukAdapter
-        adapter = KategoriAdapter(originalKategoriList, productCounts)
+        adapter = KategoriAdapter(originalKategoriList, productCounts, isReadOnly = !canCRUD)
 
         binding.recyclerKategori.apply {
             layoutManager = LinearLayoutManager(this@DataKategoriActivity)
@@ -53,8 +67,13 @@ class DataKategoriActivity : AppCompatActivity() {
             setupCategoryChips()
         }
 
-        binding.fabTambahKategori.setOnClickListener {
-            startActivity(Intent(this, TambahKategoriActivity::class.java))
+        // Sembunyikan FAB tambah kategori untuk yang tidak bisa CRUD
+        if (!canCRUD) {
+            binding.fabTambahKategori.visibility = View.GONE
+        } else {
+            binding.fabTambahKategori.setOnClickListener {
+                startActivity(Intent(this, TambahKategoriActivity::class.java))
+            }
         }
 
         binding.editSearch.addTextChangedListener(object : TextWatcher {

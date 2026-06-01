@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityLaporanBinding
@@ -33,7 +33,7 @@ data class LaporanTransaksi(
     val items: List<LaporanItem>? = null
 )
 
-class LaporanActivity : AppCompatActivity() {
+class LaporanActivity : BaseActivity() {
     private lateinit var binding: ActivityLaporanBinding
     private val dbTransaksi = FirebaseDatabase.getInstance().getReference("transaksi")
     private var allTransactions = mutableListOf<LaporanTransaksi>()
@@ -50,6 +50,13 @@ class LaporanActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLaporanBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Cek hak akses: hanya Pemilik, Admin, Supervisor yang bisa akses
+        if (!canAccessLaporan()) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         binding.btnBack.setOnClickListener { finish() }
         binding.fabExport.iconTint = null
@@ -134,8 +141,8 @@ class LaporanActivity : AppCompatActivity() {
         this.currentProductMap = productMap
         this.currentPaymentMap = paymentMap
 
-        binding.tvTotalOmzet.text = getString(R.string.price_format, formatNumber(omzet))
-        binding.tvTotalLaba.text = getString(R.string.price_format, formatNumber(laba))
+        binding.tvTotalOmzet.text = "Rp ${formatNumber(omzet)}"
+        binding.tvTotalLaba.text = "Rp ${formatNumber(laba)}"
         
         renderTopSelling(productMap)
         renderPaymentSummary(paymentMap)
@@ -165,7 +172,7 @@ class LaporanActivity : AppCompatActivity() {
         map.toList().sortedByDescending { it.second }.take(5).forEach {
             val view = layoutInflater.inflate(R.layout.item_simple_row, binding.containerTopSelling, false)
             view.findViewById<TextView>(R.id.tvLabel).text = it.first
-            view.findViewById<TextView>(R.id.tvValue).text = getString(R.string.sold_format, it.second)
+            view.findViewById<TextView>(R.id.tvValue).text = "${it.second} unit"
             binding.containerTopSelling.addView(view)
         }
     }
@@ -175,7 +182,7 @@ class LaporanActivity : AppCompatActivity() {
         map.forEach { (method, total) ->
             val view = layoutInflater.inflate(R.layout.item_simple_row, binding.containerPaymentSummary, false)
             view.findViewById<TextView>(R.id.tvLabel).text = method
-            view.findViewById<TextView>(R.id.tvValue).text = getString(R.string.price_format, formatNumber(total))
+            view.findViewById<TextView>(R.id.tvValue).text = "Rp ${formatNumber(total)}"
             binding.containerPaymentSummary.addView(view)
         }
     }

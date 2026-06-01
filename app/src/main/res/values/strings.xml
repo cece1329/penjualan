@@ -26,6 +26,9 @@
 
     <!-- Home / Welcome -->
     <string name="welcome_halo">Halo</string>
+    <string name="welcome_morning">Selamat Pagi</string>
+    <string name="welcome_afternoon">Selamat Siang</string>
+    <string name="welcome_evening">Selamat Malam</string>
     <string name="welcome_day">Selamat Siang</string>
 
     <!-- Home UI (cardActivity.xml) -->
@@ -39,6 +42,42 @@
 
     <!-- Home Nav -->
     <string name="home_nav_transaction">Transaksi</string>
+
+    <!-- Sidebar Menu -->
+    <string name="menu_title">Menu</string>
+    <string name="menu_notifications">Notifikasi</string>
+    <string name="menu_announcements">Pengumuman</string>
+    <string name="menu_daily_notes">Catatan Harian</string>
+    <string name="menu_exit">Keluar Aplikasi</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Notifikasi</string>
+    <string name="delete_notification_title">Hapus Notifikasi</string>
+    <string name="delete_notification_message">Apakah Anda yakin ingin menghapus notifikasi ini?</string>
+
+    <!-- Announcements -->
+    <string name="announcements_title">Pengumuman</string>
+    <string name="create_announcement">Buat Pengumuman</string>
+    <string name="announcement_title">Judul Pengumuman</string>
+    <string name="announcement_message">Isi Pengumuman</string>
+    <string name="send">Kirim</string>
+    <string name="cancel">Batal</string>
+    <string name="announcement_sent">Pengumuman berhasil dikirim</string>
+    <string name="announcement_failed">Gagal mengirim pengumuman</string>
+    <string name="complete_all_fields">Lengkapi semua data</string>
+    <string name="delete_announcement_title">Hapus Pengumuman</string>
+    <string name="delete_announcement_message">Apakah Anda yakin ingin menghapus pengumuman ini?</string>
+
+    <!-- Daily Notes -->
+    <string name="daily_notes_title">Catatan Harian</string>
+    <string name="add_note">Tambah Catatan</string>
+    <string name="write_note">Tulis catatan...</string>
+    <string name="note_saved">Catatan berhasil disimpan</string>
+    <string name="note_failed">Gagal menyimpan catatan</string>
+    <string name="note_empty">Catatan tidak boleh kosong</string>
+    <string name="delete_note_title">Hapus Catatan</string>
+    <string name="delete_note_message">Apakah Anda yakin ingin menghapus catatan ini?</string>
+    <string name="by">Oleh</string>
 
     <!-- Receipt PDF -->
     <string name="receipt_thanks">Terima kasih sudah berbelanja ♥</string>
@@ -76,7 +115,7 @@
     <string name="msg_general">Umum</string>
 
     <!-- Login -->
-    <string name="login_app_title">Kasir Pintar Citra</string>
+    <string name="login_app_title">Eazy.id</string>
     <string name="login_app_subtitle">Kelola Toko Dengan Mudah &amp; Cepat</string>
     <string name="login_tab_owner">Pemilik</string>
     <string name="login_tab_employee">Karyawan</string>
@@ -250,6 +289,7 @@
     <string name="item_position_prefix">Jabatan: %1$s</string>
     <string name="item_qty_prefix">Jumlah: %1$d item</string>
     <string name="item_date_prefix">Tanggal: %1$s</string>
+    <string name="work_info_format">Bekerja di %1$s cabang %2$s</string>
 
     <string name="nav_pelanggan">Pelanggan</string>
     <string name="nav_laporan">Laporan</string>

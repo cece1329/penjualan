@@ -7,7 +7,7 @@ import android.graphics.Color
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityPelangganBinding
@@ -18,7 +18,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class PelangganActivity : AppCompatActivity() {
+class PelangganActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPelangganBinding
     private lateinit var adapter: PelangganAdapter
@@ -31,6 +31,13 @@ class PelangganActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPelangganBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Cek hak akses: hanya Pemilik, Admin, Supervisor, Kasir yang bisa akses
+        if (!canAccessPelangganCRUD()) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         adapter = PelangganAdapter(arrayListOf())
         binding.recyclerPelanggan.apply {
@@ -127,7 +134,4 @@ class PelangganActivity : AppCompatActivity() {
         }
     }
 
-    private fun dp(value: Int): Int {
-        return (value * resources.displayMetrics.density).toInt()
-    }
 }

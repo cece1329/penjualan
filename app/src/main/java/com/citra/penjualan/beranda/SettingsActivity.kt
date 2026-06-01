@@ -4,13 +4,13 @@ import android.content.Context
 import android.content.res.Configuration
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivitySettingsBinding
 import java.util.*
 
-class SettingsActivity : AppCompatActivity() {
+class SettingsActivity : BaseActivity() {
 
     private lateinit var binding: ActivitySettingsBinding
 
@@ -82,10 +82,6 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         Locale.setDefault(locale)
-        val config = resources.configuration
-        config.setLocale(locale)
-        resources.updateConfiguration(config, resources.displayMetrics)
-
         recreate() // Reload activity to apply changes
     }
 }

@@ -26,6 +26,9 @@
 
     <!-- Home / Welcome -->
     <string name="welcome_halo">Hello</string>
+    <string name="welcome_morning">Good Morning</string>
+    <string name="welcome_afternoon">Good Afternoon</string>
+    <string name="welcome_evening">Good Evening</string>
     <string name="welcome_day">Good Afternoon</string>
 
     <!-- Home UI (cardActivity.xml) -->
@@ -39,6 +42,42 @@
 
     <!-- Home Nav -->
     <string name="home_nav_transaction">Transaction</string>
+
+    <!-- Sidebar Menu -->
+    <string name="menu_title">Menu</string>
+    <string name="menu_notifications">Notifications</string>
+    <string name="menu_announcements">Announcements</string>
+    <string name="menu_daily_notes">Daily Notes</string>
+    <string name="menu_exit">Exit App</string>
+
+    <!-- Notifications -->
+    <string name="notifications_title">Notifications</string>
+    <string name="delete_notification_title">Delete Notification</string>
+    <string name="delete_notification_message">Are you sure you want to delete this notification?</string>
+
+    <!-- Announcements -->
+    <string name="announcements_title">Announcements</string>
+    <string name="create_announcement">Create Announcement</string>
+    <string name="announcement_title">Announcement Title</string>
+    <string name="announcement_message">Announcement Message</string>
+    <string name="send">Send</string>
+    <string name="cancel">Cancel</string>
+    <string name="announcement_sent">Announcement sent successfully</string>
+    <string name="announcement_failed">Failed to send announcement</string>
+    <string name="complete_all_fields">Please complete all fields</string>
+    <string name="delete_announcement_title">Delete Announcement</string>
+    <string name="delete_announcement_message">Are you sure you want to delete this announcement?</string>
+
+    <!-- Daily Notes -->
+    <string name="daily_notes_title">Daily Notes</string>
+    <string name="add_note">Add Note</string>
+    <string name="write_note">Write a note...</string>
+    <string name="note_saved">Note saved successfully</string>
+    <string name="note_failed">Failed to save note</string>
+    <string name="note_empty">Note cannot be empty</string>
+    <string name="delete_note_title">Delete Note</string>
+    <string name="delete_note_message">Are you sure you want to delete this note?</string>
+    <string name="by">By</string>
 
     <!-- Receipt PDF -->
     <string name="receipt_thanks">Thank you for shopping ♥</string>
@@ -250,6 +289,7 @@
     <string name="item_position_prefix">Position: %1$s</string>
     <string name="item_qty_prefix">Quantity: %1$d item(s)</string>
     <string name="item_date_prefix">Date: %1$s</string>
+    <string name="work_info_format">Working at %1$s branch %2$s</string>
 
     <string name="nav_pelanggan">Customer</string>
     <string name="nav_laporan">Report</string>

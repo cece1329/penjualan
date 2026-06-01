@@ -12,7 +12,8 @@ import com.citra.penjualan.model.ModelKategori
 
 class KategoriAdapter(
     private var list: List<ModelKategori>,
-    private var counts: Map<String, Int> = emptyMap()
+    private var counts: Map<String, Int> = emptyMap(),
+    private val isReadOnly: Boolean = false   // true = karyawan tidak bisa edit
 ) : RecyclerView.Adapter<KategoriAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemDataKategoriBinding) : RecyclerView.ViewHolder(binding.root)
@@ -50,12 +51,17 @@ class KategoriAdapter(
                 chipStatus.isChipIconVisible = true
             }
 
-            // Klik Item untuk Edit
-            root.setOnClickListener {
-                val context = holder.itemView.context
-                val intent = Intent(context, TambahKategoriActivity::class.java)
-                intent.putExtra("DATA_KATEGORI", k)
-                context.startActivity(intent)
+            // Klik Item untuk Edit (hanya pemilik)
+            if (!isReadOnly) {
+                root.setOnClickListener {
+                    val context = holder.itemView.context
+                    val intent = Intent(context, TambahKategoriActivity::class.java)
+                    intent.putExtra("DATA_KATEGORI", k)
+                    context.startActivity(intent)
+                }
+            } else {
+                root.setOnClickListener(null)
+                root.isClickable = false
             }
         }
     }

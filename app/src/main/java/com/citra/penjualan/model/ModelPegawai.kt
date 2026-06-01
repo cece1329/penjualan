@@ -11,5 +11,6 @@ data class ModelPegawai(
     var jabatanPegawai: String? = "",
     var teleponPegawai: String? = "",
     var passwordPegawai: String? = "",
-    var cabangPegawai: String? = ""
+    var cabangPegawai: String? = "",
+    var statusPegawai: String? = "Aktif"
 ) : Parcelable

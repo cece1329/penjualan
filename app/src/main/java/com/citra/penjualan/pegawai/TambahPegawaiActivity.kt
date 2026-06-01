@@ -4,7 +4,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityTambahPegawaiBinding
 import com.citra.penjualan.model.ModelPegawai
@@ -13,7 +13,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class TambahPegawaiActivity : AppCompatActivity() {
+class TambahPegawaiActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTambahPegawaiBinding
     private val db = FirebaseDatabase.getInstance().getReference("pegawai")
@@ -43,6 +43,15 @@ class TambahPegawaiActivity : AppCompatActivity() {
 
         // Load branches first
         loadBranches()
+
+        // Logika ganti status via Chip (Pastikan ID chipStatus ada di activity_tambah_pegawai.xml)
+        binding.chipStatus.setOnClickListener {
+            if (binding.chipStatus.text == getString(R.string.msg_active)) {
+                binding.chipStatus.text = getString(R.string.msg_inactive)
+            } else {
+                binding.chipStatus.text = getString(R.string.msg_active)
+            }
+        }
 
         binding.btnSimpanPegawai.setOnClickListener {
             validateAndSave()
@@ -93,6 +102,7 @@ class TambahPegawaiActivity : AppCompatActivity() {
             etNamaPegawai.setText(dataEdit?.namaPegawai)
             etTeleponPegawai.setText(dataEdit?.teleponPegawai)
             etPasswordPegawai.setText(dataEdit?.passwordPegawai)
+            chipStatus.text = dataEdit?.statusPegawai ?: getString(R.string.msg_active)
             btnSimpanPegawai.text = getString(R.string.pegawai_update_btn)
 
             val jabatanIndex = listJabatan.indexOfFirst { it.equals(dataEdit?.jabatanPegawai, ignoreCase = true) }
@@ -130,6 +140,7 @@ class TambahPegawaiActivity : AppCompatActivity() {
         val telp = binding.etTeleponPegawai.text.toString().trim()
         val password = binding.etPasswordPegawai.text.toString().trim()
         val cabang = binding.spinnerCabangPegawai.selectedItem?.toString()?.trim() ?: ""
+        val status = binding.chipStatus.text.toString()
 
         if (nama.isEmpty() || jabatan.isEmpty() || telp.isEmpty() || password.isEmpty() || cabang.isEmpty()) {
             Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
@@ -144,7 +155,8 @@ class TambahPegawaiActivity : AppCompatActivity() {
             jabatanPegawai = jabatan,
             teleponPegawai = telp,
             passwordPegawai = password,
-            cabangPegawai = cabang
+            cabangPegawai = cabang,
+            statusPegawai = status
         )
 
         if (id != null) {

@@ -72,8 +72,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/location"
-                app:tint="@color/textColorSecondary" />
+                android:src="@drawable/location" />
 
             <TextView
                 android:id="@+id/tvKotaCabang"
@@ -100,8 +99,7 @@
             <ImageView
                 android:layout_width="12dp"
                 android:layout_height="12dp"
-                android:src="@drawable/location"
-                app:tint="@color/textColorSecondary" />
+                android:src="@drawable/location" />
 
             <TextView
                 android:id="@+id/tvAlamatCabang"
@@ -130,7 +128,7 @@
                 android:layout_width="14dp"
                 android:layout_height="14dp"
                 android:src="@drawable/employee"
-                app:tint="@color/colorSoftPurple" />
+                />
 
             <TextView
                 android:id="@+id/tvDaftarPegawai"

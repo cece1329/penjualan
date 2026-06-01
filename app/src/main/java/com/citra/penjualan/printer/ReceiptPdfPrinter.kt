@@ -27,9 +27,10 @@ import java.io.OutputStream
 
 @Parcelize
 data class ReceiptItem(
-    val namaProduk: String,
-    val jumlah: Int,
-    val harga: Int
+    val namaProduk: String = "",
+    val jumlah: Int = 0,
+    val harga: Int = 0,
+    val hargaBeli: Int = 0      // Harga modal untuk kalkulasi laba di laporan
 ) : Parcelable
 
 @Parcelize
@@ -222,7 +223,7 @@ class ReceiptPdfPrinter(private val context: Context) {
 
                 val text = buildTextReceipt(receipt)
                 outputStream.write(byteArrayOf(0x1B, 0x61, 0x00)) 
-                outputStream.write(text.toByteArray(java.nio.charset.Charset.forName("GBK")))
+                outputStream.write(text.toByteArray(java.nio.charset.StandardCharsets.UTF_8)) 
                 outputStream.write(byteArrayOf(0x0A, 0x0A, 0x0A, 0x0A)) 
                 
                 (context as? android.app.Activity)?.runOnUiThread {

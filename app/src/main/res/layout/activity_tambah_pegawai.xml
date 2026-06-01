@@ -133,6 +133,22 @@
             android:paddingHorizontal="16dp"
             android:layout_marginBottom="32dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Status Akun Pegawai"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="14sp"
+            android:layout_marginBottom="8dp"/>
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chipStatus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/msg_active"
+            android:layout_marginBottom="32dp"
+            style="@style/Widget.Material3.Chip.Filter" />
+
         <!-- Tombol Simpan -->
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btnSimpanPegawai"

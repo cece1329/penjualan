@@ -3,7 +3,7 @@ package com.citra.penjualan.kategori
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityTambahKategoriBinding
 import com.citra.penjualan.model.ModelKategori
@@ -12,26 +12,21 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class TambahKategoriActivity : AppCompatActivity() {
+class TambahKategoriActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTambahKategoriBinding
     private val db = FirebaseDatabase.getInstance().getReference("kategori")
     private val dbCabang = FirebaseDatabase.getInstance().getReference("cabang")
     private var dataEdit: ModelKategori? = null
-    
+
     private val listCabang = ArrayList<String>()
-    private lateinit var adapterCabang: ArrayAdapter<String>
+    private var selectedBranches = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityTambahKategoriBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Setup Spinner
-        adapterCabang = ArrayAdapter(this, R.layout.item_spinner_selected, listCabang)
-        adapterCabang.setDropDownViewResource(R.layout.item_spinner_dropdown)
-        binding.spinnerCabangKategori.adapter = adapterCabang
-
+        
         // Cek apakah ada data yang dikirim (berarti mode EDIT)
         dataEdit = intent.getParcelableExtra("DATA_KATEGORI")
 
@@ -45,6 +40,10 @@ class TambahKategoriActivity : AppCompatActivity() {
             } else {
                 binding.chipStatus.text = getString(R.string.msg_active)
             }
+        }
+
+        binding.btnPilihCabang.setOnClickListener {
+            showMultiBranchDialog()
         }
 
         // Tombol Simpan atau Update Data
@@ -78,8 +77,6 @@ class TambahKategoriActivity : AppCompatActivity() {
                 if (listCabang.isEmpty()) {
                     listCabang.add(getString(R.string.msg_center))
                 }
-                
-                adapterCabang.notifyDataSetChanged()
 
                 if (dataEdit != null) {
                     setupViewEdit()
@@ -97,12 +94,36 @@ class TambahKategoriActivity : AppCompatActivity() {
             etNamaKategori.setText(dataEdit?.namaKategori)
             chipStatus.text = dataEdit?.statusKategori ?: getString(R.string.msg_active)
             btnSimpan.text = getString(R.string.kategori_update_btn)
-
-            val branchIndex = listCabang.indexOf(dataEdit?.cabangKategori)
-            if (branchIndex != -1) {
-                spinnerCabangKategori.setSelection(branchIndex)
-            }
+            selectedBranches = dataEdit?.cabangKategori ?: ""
+            tvSelectedCabang.text = if (selectedBranches.isEmpty()) "Pilih Cabang" else selectedBranches
         }
+    }
+
+    private fun showMultiBranchDialog() {
+        val branchesArray = listCabang.toTypedArray()
+        val checkedItems = BooleanArray(branchesArray.size)
+        val currentList = selectedBranches.split(",").map { it.trim() }
+        
+        branchesArray.forEachIndexed { index, s ->
+            if (currentList.contains(s)) checkedItems[index] = true
+        }
+
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("Pilih Cabang")
+            .setMultiChoiceItems(branchesArray, checkedItems) { _, which, isChecked ->
+                checkedItems[which] = isChecked
+            }
+            .setPositiveButton("Simpan") { _, _ ->
+                val result = mutableListOf<String>()
+                checkedItems.forEachIndexed { index, b -> if (b) result.add(branchesArray[index]) }
+                if (result.isEmpty()) {
+                    Toast.makeText(this, "Minimal pilih 1 cabang", Toast.LENGTH_SHORT).show()
+                }
+                selectedBranches = if (result.size == listCabang.size) "Semua Cabang" else result.joinToString(", ")
+                binding.tvSelectedCabang.text = selectedBranches
+            }
+            .setNegativeButton("Batal", null)
+            .show()
     }
 
     private fun showDeleteConfirmation() {
@@ -111,7 +132,25 @@ class TambahKategoriActivity : AppCompatActivity() {
             .setMessage(getString(R.string.delete_confirm_msg))
             .setPositiveButton(getString(R.string.btn_delete)) { _, _ ->
                 dataEdit?.idKategori?.let { id ->
+                    val oldName = dataEdit?.namaKategori
                     db.child(id).removeValue().addOnSuccessListener {
+                        if (oldName != null) {
+                            val dbProduk = FirebaseDatabase.getInstance().getReference("produk")
+                            dbProduk.orderByChild("namaKategori").equalTo(oldName)
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        val updates = HashMap<String, Any>()
+                                        for (productSnap in snapshot.children) {
+                                            val productId = productSnap.key ?: continue
+                                            updates["$productId/statusProduk"] = getString(R.string.msg_inactive)
+                                        }
+                                        if (updates.isNotEmpty()) {
+                                            dbProduk.updateChildren(updates)
+                                        }
+                                    }
+                                    override fun onCancelled(error: DatabaseError) {}
+                                })
+                        }
                         Toast.makeText(this, "Kategori berhasil dihapus", Toast.LENGTH_SHORT).show()
                         finish()
                     }
@@ -123,14 +162,17 @@ class TambahKategoriActivity : AppCompatActivity() {
 
     private fun validateAndSave() {
         val nama = binding.etNamaKategori.text.toString().trim()
-        val cabang = binding.spinnerCabangKategori.selectedItem?.toString()?.trim() ?: ""
+        val cabang = selectedBranches
         val status = binding.chipStatus.text.toString()
         if (nama.isEmpty() || cabang.isEmpty()) {
-            Toast.makeText(this, getString(R.string.msg_complete_all_data), Toast.LENGTH_SHORT).show()
+            Toast.makeText(this, "Lengkapi data dan pilih minimal 1 cabang", Toast.LENGTH_SHORT).show()
             return
         }
 
         val id = dataEdit?.idKategori ?: db.push().key
+        val oldName = dataEdit?.namaKategori
+        val newName = nama
+        val isDeactivated = (status == getString(R.string.msg_inactive))
 
         val kategori = ModelKategori(
             idKategori = id,
@@ -141,6 +183,28 @@ class TambahKategoriActivity : AppCompatActivity() {
 
         if (id != null) {
             db.child(id).setValue(kategori).addOnSuccessListener {
+                if (dataEdit != null && oldName != null) {
+                    val dbProduk = FirebaseDatabase.getInstance().getReference("produk")
+                    dbProduk.orderByChild("namaKategori").equalTo(oldName)
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val updates = HashMap<String, Any>()
+                                for (productSnap in snapshot.children) {
+                                    val productId = productSnap.key ?: continue
+                                    if (oldName != newName) {
+                                        updates["$productId/namaKategori"] = newName
+                                    }
+                                    if (isDeactivated) {
+                                        updates["$productId/statusProduk"] = getString(R.string.msg_inactive)
+                                    }
+                                }
+                                if (updates.isNotEmpty()) {
+                                    dbProduk.updateChildren(updates)
+                                }
+                            }
+                            override fun onCancelled(error: DatabaseError) {}
+                        })
+                }
                 Toast.makeText(this, getString(R.string.kategori_save_success), Toast.LENGTH_SHORT).show()
                 finish() // Kembali ke halaman list
             }.addOnFailureListener {

@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityPegawaiBinding
@@ -15,7 +15,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-class PegawaiActivity : AppCompatActivity() {
+class PegawaiActivity : BaseActivity() {
 
     private lateinit var binding: ActivityPegawaiBinding
     private lateinit var adapter: PegawaiAdapter
@@ -26,6 +26,13 @@ class PegawaiActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPegawaiBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Cek hak akses: hanya Pemilik, Admin yang bisa akses
+        if (!canAccessPegawai()) {
+            Toast.makeText(this, "Akses ditolak: Anda tidak memiliki akses ke menu ini", Toast.LENGTH_SHORT).show()
+            finish()
+            return
+        }
 
         adapter = PegawaiAdapter(arrayListOf())
         binding.recyclerPegawai.apply {

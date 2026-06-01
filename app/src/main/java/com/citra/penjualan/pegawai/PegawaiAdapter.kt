@@ -2,6 +2,8 @@ package com.citra.penjualan.pegawai
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,6 +40,19 @@ class PegawaiAdapter(private var list: List<ModelPegawai>) : RecyclerView.Adapte
                 tvPinPegawai.visibility = View.VISIBLE
             } else {
                 tvPinPegawai.visibility = View.GONE
+            }
+
+            // Visualisasi Status Pegawai
+            if (p.statusPegawai?.equals("Tidak Aktif", ignoreCase = true) == true) {
+                chipStatus.text = "Tidak Aktif"
+                chipStatus.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#FFCDD2"))
+                chipStatus.setTextColor(Color.parseColor("#C62828"))
+                root.alpha = 0.6f // Efek buram untuk pegawai non-aktif
+            } else {
+                chipStatus.text = "Aktif"
+                chipStatus.chipBackgroundColor = ColorStateList.valueOf(Color.parseColor("#72C9FFBF"))
+                chipStatus.setTextColor(Color.parseColor("#2E7D32"))
+                root.alpha = 1.0f
             }
 
             root.setOnClickListener {

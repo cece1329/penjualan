@@ -15,7 +15,8 @@ import com.citra.penjualan.produk.TambahProdukActivity
 class ProdukAdapter(
     private var list: List<ModelProduk>,
     private val onItemClick: ((ModelProduk) -> Unit)? = null,
-    private var selectedCategory: String = "Semua"
+    private var selectedCategory: String = "Semua",
+    private val isReadOnly: Boolean = false   // true = karyawan tidak bisa edit
 ) : RecyclerView.Adapter<ProdukAdapter.ViewHolder>() {
 
     class ViewHolder(val binding: ItemDataProdukBinding) : RecyclerView.ViewHolder(binding.root)
@@ -58,16 +59,21 @@ class ProdukAdapter(
                 chipStatus.setChipIconResource(android.R.drawable.ic_menu_close_clear_cancel)
             }
 
-            // Tambahan agar item produk bisa diklik untuk diupdate
-            root.setOnClickListener {
-                if (onItemClick != null) {
-                    onItemClick.invoke(p)
-                } else {
-                    val context = holder.itemView.context
-                    val intent = Intent(context, TambahProdukActivity::class.java)
-                    intent.putExtra("DATA_PRODUK", p)
-                    context.startActivity(intent)
+            // Tambahan agar item produk bisa diklik untuk diupdate (hanya pemilik)
+            if (!isReadOnly) {
+                root.setOnClickListener {
+                    if (onItemClick != null) {
+                        onItemClick.invoke(p)
+                    } else {
+                        val context = holder.itemView.context
+                        val intent = Intent(context, TambahProdukActivity::class.java)
+                        intent.putExtra("DATA_PRODUK", p)
+                        context.startActivity(intent)
+                    }
                 }
+            } else {
+                root.setOnClickListener(null)
+                root.isClickable = false
             }
         }
     }

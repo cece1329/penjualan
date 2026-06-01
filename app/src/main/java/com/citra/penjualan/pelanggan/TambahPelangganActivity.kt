@@ -3,13 +3,13 @@ package com.citra.penjualan.pelanggan
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.R
 import com.citra.penjualan.databinding.ActivityTambahPelangganBinding
 import com.citra.penjualan.model.ModelPelanggan
 import com.google.firebase.database.FirebaseDatabase
 
-class TambahPelangganActivity : AppCompatActivity() {
+class TambahPelangganActivity : BaseActivity() {
 
     private lateinit var binding: ActivityTambahPelangganBinding
     private val db = FirebaseDatabase.getInstance().getReference("pelanggan")

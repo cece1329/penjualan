@@ -121,8 +121,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/customer"
-                android:scaleType="fitCenter"
-                app:tint="@color/colorSoftPurple"/>
+                android:scaleType="fitCenter" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -181,8 +180,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:src="@drawable/employee"
-                android:scaleType="fitCenter"
-                app:tint="@color/colorSoftPurple"/>
+                android:scaleType="fitCenter" />
 
             <LinearLayout
                 android:layout_width="0dp"

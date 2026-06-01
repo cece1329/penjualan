@@ -2,12 +2,12 @@ package com.citra.penjualan.transaksi
 
 import android.os.Bundle
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.databinding.ActivityNotaBinding
 import com.citra.penjualan.printer.ReceiptData
 import com.citra.penjualan.printer.ReceiptPdfPrinter
 
-class NotaActivity : AppCompatActivity() {
+class NotaActivity : BaseActivity() {
 
     private lateinit var binding: ActivityNotaBinding
     private var receiptData: ReceiptData? = null

@@ -16,7 +16,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import com.citra.penjualan.BaseActivity
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +27,7 @@ import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-class PrinterActivity : AppCompatActivity() {
+class PrinterActivity : BaseActivity() {
     private lateinit var binding: ActivityPrinterBinding
     private var bluetoothAdapter: BluetoothAdapter? = null
     private val dbTransaksi = FirebaseDatabase.getInstance().getReference("transaksi")
