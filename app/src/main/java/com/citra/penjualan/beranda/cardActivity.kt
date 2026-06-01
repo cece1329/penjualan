@@ -7,6 +7,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.ProgressBar
 import android.widget.TextView
+import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import com.citra.penjualan.BaseActivity
 import com.citra.penjualan.R
@@ -341,26 +342,26 @@ class cardActivity : BaseActivity() {
 
     private fun setupDrawerMenu() {
         findViewById<ImageView>(R.id.btnMenu).setOnClickListener {
-            drawerLayout.openDrawer(android.view.Gravity.START)
+            drawerLayout.openDrawer(GravityCompat.START)
         }
 
         findViewById<android.view.View>(R.id.menuNotifications).setOnClickListener {
-            drawerLayout.closeDrawer(android.view.Gravity.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(this, NotifikasiActivity::class.java))
         }
 
         findViewById<android.view.View>(R.id.menuAnnouncements).setOnClickListener {
-            drawerLayout.closeDrawer(android.view.Gravity.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(this, PengumumanActivity::class.java))
         }
 
         findViewById<android.view.View>(R.id.menuDailyNotes).setOnClickListener {
-            drawerLayout.closeDrawer(android.view.Gravity.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
             startActivity(Intent(this, CatatanHarianActivity::class.java))
         }
 
         findViewById<android.view.View>(R.id.menuLogout).setOnClickListener {
-            drawerLayout.closeDrawer(android.view.Gravity.START)
+            drawerLayout.closeDrawer(GravityCompat.START)
             // Exit app without clearing session (keep login state)
             finishAffinity()
         }

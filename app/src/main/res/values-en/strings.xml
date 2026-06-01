@@ -34,7 +34,7 @@
     <!-- Home UI (cardActivity.xml) -->
     <string name="home_welcome_fallback">Good Afternoon, Citra</string>
     <string name="home_estimasi_hari_ini">Today\'s Estimate</string>
-    <string name="home_persen_tercapai">65% Achieved</string>
+    <string name="home_persen_tercapai">65%% Achieved</string>
     <string name="home_target">Target: Rp 1,000,000</string>
     <string name="home_target_penjualan_hari_ini">Today\'s Sales Target</string>
     <string name="home_siap_melayani_pelanggan">Ready to serve customers</string>
